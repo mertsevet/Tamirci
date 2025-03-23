@@ -1,1 +1,1 @@
-# SineFinder
+# Tamirci
