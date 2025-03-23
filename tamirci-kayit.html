@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tamirci Kayıt Formu</title>
+    <link rel="stylesheet" href="tamirci-kayit.css">
+</head>
+<body>
+
+<div class="kayit-kutusu">
+    <h2>Tamirci Kayıt</h2>
+    <form id="tamirciKayitFormu" action="/tamirci-kayit-islem" method="post">
+        <div class="form-alan">
+            <label for="ad">Ad</label>
+            <input type="text" id="ad" name="ad" required>
+            <span class="hata-mesaji"></span>
+        </div>
+        <div class="form-alan">
+            <label for="soyad">Soyad</label>
+            <input type="text" id="soyad" name="soyad" required>
+            <span class="hata-mesaji"></span>
+        </div>
+        <div class="form-alan">
+            <label for="kullaniciAdi">Kullanıcı Adı</label>
+            <input type="text" id="kullaniciAdi" name="kullaniciAdi" required>
+            <span class="hata-mesaji"></span>
+        </div>
+        <div class="form-alan">
+            <label for="eposta">E-posta</label>
+            <input type="email" id="eposta" name="eposta" required>
+            <span class="hata-mesaji"></span>
+        </div>
+        <div class="form-alan">
+            <label for="sifre">Şifre</label>
+            <input type="password" id="sifre" name="sifre" required>
+            <span class="hata-mesaji"></span>
+        </div>
+        <div class="form-alan">
+            <label for="telefon">Telefon</label>
+            <input type="tel" id="telefon" name="telefon" required>
+            <span class="hata-mesaji"></span>
+        </div>
+        <div class="form-alan">
+            <label for="uzmanlikAlanlari">Uzmanlık Alanları (Virgülle ayırın)</label>
+            <input type="text" id="uzmanlikAlanlari" name="uzmanlikAlanlari" required>
+            <span class="hata-mesaji"></span>
+        </div>
+        <div class="form-alan">
+            <label for="tecrubeYili">Tecrübe Yılı</label>
+            <input type="number" id="tecrubeYili" name="tecrubeYili" required>
+            <span class="hata-mesaji"></span>
+        </div>
+        <div class="form-alan">
+            <label for="calismaBolgesi">Çalışma Bölgesi/Şehir</label>
+            <input type="text" id="calismaBolgesi" name="calismaBolgesi" required>
+            <span class="hata-mesaji"></span>
+        </div>
+        <div class="form-alan">
+            <label for="calismaSaatleri">Çalışma Saatleri/Günleri</label>
+            <input type="text" id="calismaSaatleri" name="calismaSaatleri" required>
+            <span class="hata-mesaji"></span>
+        </div>
+        <div class="form-alan">
+            <label for="profilFoto">Profil Fotoğrafı</label>
+            <input type="file" id="profilFoto" name="profilFoto" accept="image/*">
+            <span class="hata-mesaji"></span>
+        </div>
+        <div class="form-alan">
+            <label>
+                <input type="checkbox" name="sozlesme" required>
+                <a href="/kullanici-sozlesmesi" target="_blank">Kullanıcı Sözleşmesi</a>'ni ve <a href="/gizlilik-politikasi" target="_blank">Gizlilik Politikası</a>'nı okudum ve kabul ediyorum.
+            </label>
+            <span class="hata-mesaji"></span>
+        </div>
+        <button type="submit">Kayıt Ol</button>
+    </form>
+</div>
+
+<script src="tamirci-kayit.js"></script>
+</body>
+</html>

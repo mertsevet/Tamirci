@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Müşteri Kayıt</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="kayit-kutusu">
+    <div class="logo">
+        <img src="logo.png" alt="Tamirci Logo">
+    </div>
+    <div class="tamirci-giris">
+        <button class="tamirci-giris-btn">Tamirci Girişi</button>
+    </div>
+    <div class="giris-formu"> 
+        <h2>Hesabına erişmek için giriş yap</h2>
+        <form id="kayitFormu" action="/kayit-islem" method="post">
+            <div class="form-alan">
+                <label for="eposta">Email</label>
+                <input type="email" id="eposta" name="eposta" required>
+                <span class="hata-mesaji"></span>
+            </div>
+            <div class="form-alan">
+                <label for="sifre">Şifre</label>
+                <input type="password" id="sifre" name="sifre" required>
+                <span class="hata-mesaji"></span>
+            </div>
+            <div class="sifre-unuttum">
+                <a href="#">Şifremi bilmiyorum >></a>
+            </div>
+            <button type="submit">Giriş Yap</button>
+        </form>
+        <div class="telefon-giris">
+            <a href="#">Telefon numarası ile giriş yap</a>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
