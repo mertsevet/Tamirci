@@ -1,0 +1,135 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.kayit-kutusu {
+    background-color: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    text-align: center;
+    position: relative; /* Köşelere konumlandırmak için */
+}
+
+.logo {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #e0e0e0; /* Mavi ile işaretlediğiniz yer için arka plan rengi */
+    padding: 10px; /* Kenarlardan boşluk bırakır */
+    border-radius: 5px; /* Köşeleri yuvarlar */
+}
+
+.logo img {
+    width: 150px;
+}
+
+.tamirci-giris {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #e0e0e0; /* Mavi ile işaretlediğiniz yer için arka plan rengi */
+    padding: 10px; /* Kenarlardan boşluk bırakır */
+    border-radius: 5px; /* Köşeleri yuvarlar */
+}
+
+.tamirci-giris-btn {
+    background-color: transparent; /* Arka planı şeffaf yapar */
+    color: #dc3545; /* Yazı rengi kırmızı */
+    padding: 10px 15px;
+    border: 2px solid #dc3545; /* Çerçeve rengi kırmızı */
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.tamirci-giris-btn:hover {
+    background-color: #f8d7da; /* Fareyle üzerine gelince arka plan rengi */
+}
+
+.giris-formu {
+    margin-top: 60px; /* Logo ve tamirci giriş butonundan sonra boşluk bırakır */
+    width: 100%; /* Giriş formunun genişliğini ayarlar */
+}
+
+.giris-formu h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form-alan {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-alan label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+    font-weight: bold;
+}
+
+.form-alan input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.form-alan input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.hata-mesaji {
+    color: #dc3545;
+    font-size: 14px;
+    margin-top: 5px;
+    display: block;
+}
+
+.sifre-unuttum {
+    text-align: right;
+    margin-bottom: 15px;
+}
+
+.sifre-unuttum a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+button[type="submit"] {
+    background-color: #dc3545; /* Kırmızı renk */
+    color: white;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+button[type="submit"]:hover {
+    background-color: #c82333;
+}
+
+.telefon-giris {
+    margin-top: 20px;
+}
+
+.telefon-giris a {
+    color: #007bff;
+    text-decoration: none;
+}
