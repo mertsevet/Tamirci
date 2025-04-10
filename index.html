@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TAMIRCI - Profesyonel Tamir Hizmeti</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="TAMIRCI Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="login.html" class="nav-button">Giriş Yap</a></li>
+                <li><a href="#" class="nav-button" id="signup-button">Üye Ol</a></li>
+                <li><a href="#" class="nav-button red-button">İlanlar</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h2>Profesyonel</h2>
+                <h2 class="red-text">Tamir Hizmeti</h2>
+                <p>Aradığınız tamirci bir tık uzağınızda. Güvenilir ve profesyonel hizmet için hemen başlayın.</p>
+                
+                <div class="search-bar">
+                    <input type="text" placeholder="Ne tamir ettirmek istiyorsunuz?">
+                    <button class="search-button">
+                        <i class="fas fa-search"></i> Ara
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="services">
+            <h3 class="section-title">Tamir Kategorileri</h3>
+            <div class="service-icons">
+                <div class="service-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>Telefon</span>
+                </div>
+                <div class="service-icon">
+                    <i class="fas fa-laptop"></i>
+                    <span>Bilgisayar</span>
+                </div>
+                <div class="service-icon">
+                    <i class="fas fa-tv"></i>
+                    <span>Televizyon</span>
+                </div>
+                <div class="service-icon">
+                    <i class="fas fa-plug"></i>
+                    <span>Ev Aletleri</span>
+                </div>
+                <div class="service-icon">
+                    <i class="fas fa-wrench"></i>
+                    <span>Ev Onarım</span>
+                </div>
+                <div class="service-icon">
+                    <i class="fas fa-car"></i>
+                    <span>Araç</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="how-it-works">
+            <h3 class="section-title">Nasıl Çalışır?</h3>
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number"><i class="fas fa-clipboard-list"></i></div>
+                    <h4>Arızayı Tanımlayın</h4>
+                    <p>Tamir edilmesi gereken ürünü ve sorunu tarif edin, fotoğraf ekleyin.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number"><i class="fas fa-comment-dollar"></i></div>
+                    <h4>Teklifleri Alın</h4>
+                    <p>Uzman tamircilerden hızlıca fiyat teklifleri alın.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number"><i class="fas fa-user-check"></i></div>
+                    <h4>Tamirci Seçin</h4>
+                    <p>Profil, değerlendirme ve fiyatlara göre size en uygun tamirciyi seçin.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number"><i class="fas fa-tools"></i></div>
+                    <h4>Hizmet Alın</h4>
+                    <p>Tamirciniz sorununuzu çözsün, siz de değerlendirmenizi yapın.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="featured-listings">
+            <h3 class="section-title">Öne Çıkan İlanlar</h3>
+            <div class="listings-container">
+                <div class="listing-card">
+                    <div class="listing-image">
+                        <img src="https://via.placeholder.com/300x200" alt="İlan Görseli">
+                        <span class="listing-category">Telefon</span>
+                    </div>
+                    <div class="listing-content">
+                        <div class="listing-header">
+                            <h4>iPhone 12 Pro Ekran Tamiri</h4>
+                            <span class="listing-price">₺850 - ₺1200</span>
+                        </div>
+                        <p class="listing-description">Telefonumun ekranı kırıldı, değişim yapılması gerekiyor. Orijinal ekran tercihimdir.</p>
+                        <div class="listing-meta">
+                            <span><i class="fas fa-map-marker-alt"></i> İstanbul, Kadıköy</span>
+                            <span><i class="fas fa-clock"></i> 8 saat önce</span>
+                        </div>
+                        <a href="#" class="listing-button">Teklif Ver</a>
+                    </div>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-image">
+                        <img src="https://via.placeholder.com/300x200" alt="İlan Görseli">
+                        <span class="listing-category">Ev Aletleri</span>
+                    </div>
+                    <div class="listing-content">
+                        <div class="listing-header">
+                            <h4>Çamaşır Makinesi Arızası</h4>
+                            <span class="listing-price">₺300 - ₺600</span>
+                        </div>
+                        <p class="listing-description">Çamaşır makinem sık sık hata veriyor. Su alıyor ama çalkalamıyor. Yerinde bakım gerekiyor.</p>
+                        <div class="listing-meta">
+                            <span><i class="fas fa-map-marker-alt"></i> Ankara, Çankaya</span>
+                            <span><i class="fas fa-clock"></i> 3 gün önce</span>
+                        </div>
+                        <a href="#" class="listing-button">Teklif Ver</a>
+                    </div>
+                </div>
+
+                <div class="listing-card">
+                    <div class="listing-image">
+                        <img src="https://via.placeholder.com/300x200" alt="İlan Görseli">
+                        <span class="listing-category">Bilgisayar</span>
+                    </div>
+                    <div class="listing-content">
+                        <div class="listing-header">
+                            <h4>Laptop Fan Değişimi</h4>
+                            <span class="listing-price">₺200 - ₺400</span>
+                        </div>
+                        <p class="listing-description">Dell XPS 15 laptopumun fanı çok ses yapıyor, değiştirilmesi gerekiyor. Servis kalitesi önemli.</p>
+                        <div class="listing-meta">
+                            <span><i class="fas fa-map-marker-alt"></i> İzmir, Bornova</span>
+                            <span><i class="fas fa-clock"></i> Dün</span>
+                        </div>
+                        <a href="#" class="listing-button">Teklif Ver</a>
+                    </div>
+                </div>
+                
+                <div class="listing-card featured">
+                    <div class="listing-image">
+                        <img src="https://via.placeholder.com/300x200" alt="İlan Görseli">
+                        <span class="listing-category">Televizyon</span>
+                        <div class="listing-badge">Acil</div>
+                    </div>
+                    <div class="listing-content">
+                        <div class="listing-header">
+                            <h4>Samsung Smart TV Ses Sorunu</h4>
+                            <span class="listing-price">₺400 - ₺700</span>
+                        </div>
+                        <p class="listing-description">Samsung 55" Smart TV'min sesinde cızırtı var ve zaman zaman tamamen kesiliyor. Yerinde onarım tercihen.</p>
+                        <div class="listing-meta">
+                            <span><i class="fas fa-map-marker-alt"></i> İstanbul, Ataşehir</span>
+                            <span><i class="fas fa-clock"></i> 5 saat önce</span>
+                        </div>
+                        <a href="#" class="listing-button">Teklif Ver</a>
+                    </div>
+                </div>
+                
+                <div class="listing-card">
+                    <div class="listing-image">
+                        <img src="https://via.placeholder.com/300x200" alt="İlan Görseli">
+                        <span class="listing-category">Beyaz Eşya</span>
+                    </div>
+                    <div class="listing-content">
+                        <div class="listing-header">
+                            <h4>Buzdolabı Soğutma Problemi</h4>
+                            <span class="listing-price">₺500 - ₺900</span>
+                        </div>
+                        <p class="listing-description">Arçelik buzdolabım yeterince soğutmuyor. Termostat sorunu olabilir. Deneyimli teknisyen arıyorum.</p>
+                        <div class="listing-meta">
+                            <span><i class="fas fa-map-marker-alt"></i> Bursa, Nilüfer</span>
+                            <span><i class="fas fa-clock"></i> 2 gün önce</span>
+                        </div>
+                        <a href="#" class="listing-button">Teklif Ver</a>
+                    </div>
+                </div>
+                
+                <div class="listing-card">
+                    <div class="listing-image">
+                        <img src="https://via.placeholder.com/300x200" alt="İlan Görseli">
+                        <span class="listing-category">Bilgisayar</span>
+                    </div>
+                    <div class="listing-content">
+                        <div class="listing-header">
+                            <h4>Masaüstü Bilgisayar Format Atma</h4>
+                            <span class="listing-price">₺150 - ₺300</span>
+                        </div>
+                        <p class="listing-description">Windows 11 kurulumu yapılacak, oyun ve programlar yüklenecek. Bilgisayarı teslim edebilirim.</p>
+                        <div class="listing-meta">
+                            <span><i class="fas fa-map-marker-alt"></i> Ankara, Keçiören</span>
+                            <span><i class="fas fa-clock"></i> 1 hafta önce</span>
+                        </div>
+                        <a href="#" class="listing-button">Teklif Ver</a>
+                    </div>
+                </div>
+            </div>
+            <div class="view-all-button-container">
+                <a href="#" class="view-all-button">Tüm İlanları Gör</a>
+            </div>
+        </section>
+    </main>
+
+    <section class="blog-section">
+        <h3 class="section-title">Tamir İpuçları & Blog</h3>
+        <div class="blog-container">
+            <div class="blog-post">
+                <div class="blog-image">
+                    <img src="https://via.placeholder.com/400x250" alt="Blog Görseli">
+                </div>
+                <div class="blog-content">
+                    <span class="blog-date"><i class="far fa-calendar-alt"></i> 10 Haziran 2023</span>
+                    <h4>Telefonunuzu Hızlandırmanın 5 Yolu</h4>
+                    <p>Telefonunuzun yavaşlamaya başladığını fark ettiniz mi? İşte performansını artırmak için uygulayabileceğiniz basit adımlar...</p>
+                    <a href="#" class="blog-link">Devamını Oku <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="blog-post">
+                <div class="blog-image">
+                    <img src="https://via.placeholder.com/400x250" alt="Blog Görseli">
+                </div>
+                <div class="blog-content">
+                    <span class="blog-date"><i class="far fa-calendar-alt"></i> 5 Haziran 2023</span>
+                    <h4>Beyaz Eşya Tamirleri İçin Bilmeniz Gereken 3 Şey</h4>
+                    <p>Ev aletlerinizi tamir ettirmeden önce bilmeniz gereken önemli noktaları uzmanlarımız sizin için derledi...</p>
+                    <a href="#" class="blog-link">Devamını Oku <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="blog-post">
+                <div class="blog-image">
+                    <img src="https://via.placeholder.com/400x250" alt="Blog Görseli">
+                </div>
+                <div class="blog-content">
+                    <span class="blog-date"><i class="far fa-calendar-alt"></i> 28 Mayıs 2023</span>
+                    <h4>Bilgisayarınızı Kendiniz Nasıl Temizlersiniz?</h4>
+                    <p>Bilgisayarınızın ömrünü uzatmak ve performansını artırmak için düzenli temizlik önemlidir. İşte adım adım rehberimiz...</p>
+                    <a href="#" class="blog-link">Devamını Oku <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="view-all-button-container">
+            <a href="#" class="view-all-button">Tüm Blog Yazılarını Gör</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-column">
+                <h4>TAMIRCI</h4>
+                <p>Türkiye'nin en büyük tamir platformu</p>
+            </div>
+            <div class="footer-column">
+                <h4>Hızlı Linkler</h4>
+                <ul>
+                    <li><a href="#">Anasayfa</a></li>
+                    <li><a href="#">Kategoriler</a></li>
+                    <li><a href="#">İlanlar</a></li>
+                    <li><a href="#">Tamirci Ol</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Destek</h4>
+                <ul>
+                    <li><a href="#">Yardım Merkezi</a></li>
+                    <li><a href="#">Sıkça Sorulan Sorular</a></li>
+                    <li><a href="#">İletişim</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Bizi Takip Edin</h4>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 TAMIRCI. Tüm hakları saklıdır.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 
