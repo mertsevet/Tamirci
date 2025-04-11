@@ -56,4 +56,7 @@ Projeyi geliştirmek için:
 
 ## Katkıda Bulunanlar
 
-- İsim Soyisim - Geliştirici 
+- Mert Sevet - Scrum Master
+- Mustafa Emin Bahar - Ekip Üyesi
+- Ali Talip Hasar - Ekip Üyesi
+- Ali Arda Elmasulu - Ekip Üyesi
