@@ -64,11 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Üye ol butonuna tıklama
     const signupButton = document.getElementById('signup-button');
     if (signupButton) {
-        signupButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            // Üye olma tipini seçme modalını aç
-            createUserTypeModal();
-        });
+        // Modal açılmasını engellemek için event listener'ı kaldırıyoruz
     }
     
     // Üye olma tipi seçme modalını oluşturma
@@ -301,9 +297,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const ilanlarButton = document.querySelector('.red-button');
     if (ilanlarButton) {
         ilanlarButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            // İlan oluşturma modalını aç
-            createJobModal();
+            // Yönlendirmeyi engellemeyi kaldırıyoruz, href özelliğine göre çalışmasını sağlıyoruz
+            // e.preventDefault();
+            // createJobModal();
+            
+            // listings.html sayfasına yönlensin
+            window.location.href = 'listings.html';
         });
     }
     

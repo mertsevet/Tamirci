@@ -1,0 +1,73 @@
+/* CTA Section Styling */
+.cta-section {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    margin: 60px 0;
+}
+
+.user-cta, .tech-cta {
+    flex: 1;
+    padding: 30px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.user-cta:hover, .tech-cta:hover {
+    transform: translateY(-5px);
+}
+
+.user-cta {
+    background-color: #f7f7f7;
+}
+
+.tech-cta {
+    background-color: #eaf6ff;
+}
+
+.cta-section h3 {
+    margin-top: 0;
+    font-size: 24px;
+    color: #333;
+}
+
+.cta-section p {
+    margin-bottom: 25px;
+    color: #555;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+
+.cta-button:hover {
+    background-color: #3b8e3f;
+}
+
+.tech-button {
+    background-color: #2196F3;
+}
+
+.tech-button:hover {
+    background-color: #0b7dda;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .cta-section {
+        flex-direction: column;
+    }
+    
+    .user-cta, .tech-cta {
+        margin-bottom: 20px;
+    }
+} 

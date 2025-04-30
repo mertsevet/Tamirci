@@ -646,15 +646,15 @@ footer {
     
     .technician {
         width: 100%;
-        max-width: 280px;
+        max-width: 350px;
     }
     
-    .blog-post, .listing-card {
+    .listing-card {
         width: 100%;
         max-width: 350px;
     }
     
-    .blog-image, .listing-image {
+    .listing-image {
         height: 180px;
     }
     
@@ -760,8 +760,9 @@ footer {
         font-size: 24px;
     }
     
-    .testimonial-text, .blog-content p, .listing-description {
-        font-size: 13px;
+    .testimonial-text, .listing-description {
+        height: auto;
+        max-height: none;
     }
     
     header {
@@ -1142,113 +1143,6 @@ footer {
 .view-all-button:hover {
     background-color: #e53935;
     color: white;
-}
-
-/* Blog Section */
-.blog-section {
-    padding: 80px 0;
-    background-color: #f8f4f1;
-}
-
-.blog-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 30px;
-    max-width: 1200px;
-    margin: 0 auto 40px;
-}
-
-.blog-post {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    width: 350px;
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.blog-post:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-}
-
-.blog-image {
-    height: 200px;
-    overflow: hidden;
-}
-
-.blog-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.blog-post:hover .blog-image img {
-    transform: scale(1.05);
-}
-
-.blog-content {
-    padding: 20px;
-}
-
-.blog-date {
-    display: block;
-    font-size: 14px;
-    color: #888;
-    margin-bottom: 10px;
-}
-
-.blog-date i {
-    margin-right: 5px;
-}
-
-.blog-content h4 {
-    font-size: 18px;
-    color: #333;
-    margin-bottom: 10px;
-    line-height: 1.4;
-}
-
-.blog-content p {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 15px;
-    line-height: 1.5;
-    height: 63px;
-    overflow: hidden;
-}
-
-.blog-link {
-    color: #e53935;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 14px;
-    display: inline-flex;
-    align-items: center;
-    transition: color 0.3s ease;
-}
-
-.blog-link i {
-    margin-left: 5px;
-    transition: transform 0.3s ease;
-}
-
-.blog-link:hover {
-    color: #c62828;
-}
-
-.blog-link:hover i {
-    transform: translateX(3px);
-}
-
-/* Responsive adjustments for blog */
-@media (max-width: 768px) {
-    .blog-post {
-        width: 100%;
-        max-width: 350px;
-    }
 }
 
 .listings-filter {

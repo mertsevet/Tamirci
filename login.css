@@ -110,7 +110,7 @@ body.login-page {
 }
 
 .input-with-icon {
-    position: relative;
+    position: relative !important;
 }
 
 .input-with-icon i {
@@ -122,19 +122,38 @@ body.login-page {
 }
 
 .input-with-icon .password-toggle {
-    position: absolute;
-    left: auto;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    z-index: 10;
+    position: absolute !important;
+    left: auto !important;
+    right: 15px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    cursor: pointer !important;
+    z-index: 100 !important;
+    color: #999 !important;
+    transition: all 0.2s !important;
+    pointer-events: auto !important;
+    float: none !important;
+    display: block !important;
+    font-size: 16px !important;
+    background: none !important;
+    border: none !important;
+}
+
+.input-with-icon .password-toggle:hover {
+    color: #e53935 !important;
+}
+
+.input-with-icon input[type="password"] {
+    padding-right: 40px !important;
 }
 
 .login-form input[type="email"],
-.login-form input[type="password"] {
+.login-form input[type="password"],
+.login-form input[type="text"],
+.login-form input[type="tel"],
+.login-form input[type="number"] {
     width: 100%;
-    padding: 12px 15px 12px 40px;
+    padding: 12px 15px 12px 45px;
     border: 1px solid #ddd;
     border-radius: 6px;
     font-size: 15px;
@@ -315,4 +334,70 @@ body.login-page {
     .remember-me {
         margin-bottom: 15px;
     }
+}
+
+/* User Type Toggle */
+.user-type-toggle {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto 20px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    padding: 4px;
+    width: 70%;
+}
+
+.user-type-toggle span,
+.user-type-toggle a {
+    padding: 8px 20px;
+    flex: 1;
+    text-align: center;
+    font-weight: 500;
+    font-size: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.user-type-toggle .active {
+    background-color: #e53935;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.user-type-toggle .technician-link {
+    color: #555;
+    text-decoration: none;
+}
+
+.user-type-toggle .technician-link:hover {
+    background-color: rgba(229, 57, 53, 0.1);
+    color: #e53935;
+}
+
+/* Şifre göster/gizle butonu */
+.password-toggle-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    color: #999;
+    z-index: 100;
+}
+
+.password-toggle-btn:hover {
+    color: #e53935;
+}
+
+.password-toggle-btn:focus {
+    outline: none;
+}
+
+/* Şifre göster/gizle ikonu */
+.password-toggle {
+    font-size: 16px;
 } 

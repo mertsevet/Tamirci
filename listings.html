@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TAMIRCI - İlanlar</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="index.html">
+                <img src="logo.png" alt="TAMIRCI Logo">
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="login.html" class="nav-button">Giriş Yap</a></li>
+                <li><a href="musteri-kayit.html" class="nav-button" id="signup-button">Üye Ol</a></li>
+                <li><a href="listings.html" class="nav-button red-button">İlanlar</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="listings-header">
+            <div class="listings-header-content">
+                <h2>Tamir İlanları</h2>
+                <p>İhtiyacınıza uygun tamir ilanları veya tamirci aramanıza yardımcı oluyoruz</p>
+            </div>
+        </section>
+
+        <section class="listings-section">
+            <div class="listings-container-wrapper">
+                <div class="listings-sidebar">
+                    <div class="filter-box">
+                        <h3>Kategoriler</h3>
+                        <div class="filter-category">
+                            <label><input type="checkbox" value="ev_aletleri"> <span>Ev Aletleri</span></label>
+                            <label><input type="checkbox" value="elektronik"> <span>Elektronik</span></label>
+                            <label><input type="checkbox" value="bilgisayar"> <span>Bilgisayar</span></label>
+                            <label><input type="checkbox" value="telefon"> <span>Telefon</span></label>
+                            <label><input type="checkbox" value="elektrik"> <span>Elektrik</span></label>
+                            <label><input type="checkbox" value="su_tesisati"> <span>Su Tesisatı</span></label>
+                            <label><input type="checkbox" value="mobilya"> <span>Mobilya</span></label>
+                            <label><input type="checkbox" value="isi_sistemleri"> <span>Isı Sistemleri</span></label>
+                            <label><input type="checkbox" value="beyaz_esya"> <span>Beyaz Eşya</span></label>
+                            <label><input type="checkbox" value="diger"> <span>Diğer</span></label>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-box">
+                        <h3>Konum</h3>
+                        <div class="filter-location">
+                            <select id="city-filter">
+                                <option value="">Tüm Şehirler</option>
+                                <option value="istanbul">İstanbul</option>
+                                <option value="ankara">Ankara</option>
+                                <option value="izmir">İzmir</option>
+                                <option value="bursa">Bursa</option>
+                                <option value="adana">Adana</option>
+                                <option value="antalya">Antalya</option>
+                                <!-- Diğer şehirler eklenebilir -->
+                            </select>
+                            <select id="district-filter" disabled>
+                                <option value="">Tüm İlçeler</option>
+                                <!-- JavaScript ile doldurulacak -->
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-box">
+                        <h3>Fiyat Aralığı</h3>
+                        <div class="filter-price">
+                            <div class="price-inputs">
+                                <input type="number" id="min-price" placeholder="Min ₺">
+                                <span>-</span>
+                                <input type="number" id="max-price" placeholder="Max ₺">
+                            </div>
+                            <input type="range" id="price-range" min="0" max="10000" step="100" value="5000">
+                        </div>
+                    </div>
+                    
+                    <div class="filter-box">
+                        <h3>Aciliyet</h3>
+                        <div class="filter-urgency">
+                            <label><input type="checkbox" value="dusuk"> <span>Düşük</span></label>
+                            <label><input type="checkbox" value="orta"> <span>Orta</span></label>
+                            <label><input type="checkbox" value="yuksek"> <span>Yüksek</span></label>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-box">
+                        <h3>Durum</h3>
+                        <div class="filter-status">
+                            <label><input type="checkbox" value="beklemede"> <span>Beklemede</span></label>
+                            <label><input type="checkbox" value="atandi"> <span>Atandı</span></label>
+                            <label><input type="checkbox" value="devam_ediyor"> <span>Devam Ediyor</span></label>
+                            <label><input type="checkbox" value="tamamlandi"> <span>Tamamlandı</span></label>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-buttons">
+                        <button id="apply-filters" class="apply-filter-button">Filtrele</button>
+                        <button id="reset-filters" class="reset-filter-button">Temizle</button>
+                    </div>
+                </div>
+                
+                <div class="listings-main">
+                    <div class="listings-top-bar">
+                        <div class="listings-search">
+                            <input type="text" id="listings-search-input" placeholder="İlanlarda ara...">
+                            <button class="search-button"><i class="fas fa-search"></i></button>
+                        </div>
+                        <div class="listings-sort-container">
+                            <label for="listings-sort">Sırala:</label>
+                            <select id="listings-sort">
+                                <option value="newest">En Yeni</option>
+                                <option value="oldest">En Eski</option>
+                                <option value="price_low">Fiyat (Düşük-Yüksek)</option>
+                                <option value="price_high">Fiyat (Yüksek-Düşük)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-tags-container">
+                        <div class="active-filters">
+                            <span class="filter-tag">Bilgisayar <i class="fas fa-times"></i></span>
+                            <span class="filter-tag">İstanbul <i class="fas fa-times"></i></span>
+                            <span class="filter-tag">₺100 - ₺1000 <i class="fas fa-times"></i></span>
+                            <span class="filter-tag clear-all">Tümünü Temizle</span>
+                        </div>
+                    </div>
+                    
+                    <div class="listings-results">
+                        <p class="listings-count"><span>145</span> ilan bulundu</p>
+                        
+                        <div class="listings-grid">
+                            <!-- İlan Kartı 1 -->
+                            <div class="listing-card">
+                                <div class="listing-image">
+                                    <img src="images/listings/laptop-fan.jpg" alt="Laptop Fan Değişimi">
+                                    <span class="listing-category">Bilgisayar</span>
+                                    <span class="listing-badge urgent">Acil</span>
+                                </div>
+                                <div class="listing-content">
+                                    <div class="listing-header">
+                                        <h4>Laptop Fan Değişimi</h4>
+                                        <span class="listing-price">₺200 - ₺400</span>
+                                    </div>
+                                    <p class="listing-description">Dell XPS 15 laptopumun fanı çok ses yapıyor, değiştirilmesi gerekiyor. Servis kalitesi önemli.</p>
+                                    <div class="listing-meta">
+                                        <span><i class="fas fa-map-marker-alt"></i> İzmir, Bornova</span>
+                                        <span><i class="fas fa-clock"></i> Dün</span>
+                                    </div>
+                                    <a href="#" class="listing-button">Teklif Ver</a>
+                                </div>
+                            </div>
+                            
+                            <!-- İlan Kartı 2 -->
+                            <div class="listing-card featured">
+                                <div class="listing-image">
+                                    <img src="images/listings/iphone-tamiri.jpg" alt="iPhone Ekran Tamiri">
+                                    <span class="listing-category">Telefon</span>
+                                </div>
+                                <div class="listing-content">
+                                    <div class="listing-header">
+                                        <h4>iPhone 12 Pro Ekran Tamiri</h4>
+                                        <span class="listing-price">₺850 - ₺1200</span>
+                                    </div>
+                                    <p class="listing-description">Telefonumun ekranı kırıldı, değişim yapılması gerekiyor. Orijinal ekran tercihimdir.</p>
+                                    <div class="listing-meta">
+                                        <span><i class="fas fa-map-marker-alt"></i> İstanbul, Kadıköy</span>
+                                        <span><i class="fas fa-clock"></i> 8 saat önce</span>
+                                    </div>
+                                    <a href="#" class="listing-button">Teklif Ver</a>
+                                </div>
+                            </div>
+                            
+                            <!-- İlan Kartı 3 -->
+                            <div class="listing-card">
+                                <div class="listing-image">
+                                    <img src="images/listings/camasir-makinesi.jpg" alt="Çamaşır Makinesi Tamiri">
+                                    <span class="listing-category">Ev Aletleri</span>
+                                </div>
+                                <div class="listing-content">
+                                    <div class="listing-header">
+                                        <h4>Çamaşır Makinesi Arızası</h4>
+                                        <span class="listing-price">₺300 - ₺600</span>
+                                    </div>
+                                    <p class="listing-description">Çamaşır makinem sık sık hata veriyor. Su alıyor ama çalkalamıyor. Yerinde bakım gerekiyor.</p>
+                                    <div class="listing-meta">
+                                        <span><i class="fas fa-map-marker-alt"></i> Ankara, Çankaya</span>
+                                        <span><i class="fas fa-clock"></i> 3 gün önce</span>
+                                    </div>
+                                    <a href="#" class="listing-button">Teklif Ver</a>
+                                </div>
+                            </div>
+                            
+                            <!-- İlan Kartı 4 -->
+                            <div class="listing-card">
+                                <div class="listing-image">
+                                    <img src="images/listings/samsung-tv.jpg" alt="Samsung Smart TV Tamiri">
+                                    <span class="listing-category">Televizyon</span>
+                                </div>
+                                <div class="listing-content">
+                                    <div class="listing-header">
+                                        <h4>Samsung Smart TV Ses Sorunu</h4>
+                                        <span class="listing-price">₺400 - ₺700</span>
+                                    </div>
+                                    <p class="listing-description">Samsung 55" Smart TV'min sesinde cızırtı var ve zaman zaman tamamen kesiliyor. Yerinde onarım tercihen.</p>
+                                    <div class="listing-meta">
+                                        <span><i class="fas fa-map-marker-alt"></i> İstanbul, Ataşehir</span>
+                                        <span><i class="fas fa-clock"></i> 5 saat önce</span>
+                                    </div>
+                                    <a href="#" class="listing-button">Teklif Ver</a>
+                                </div>
+                            </div>
+                            
+                            <!-- İlan Kartı 5 -->
+                            <div class="listing-card">
+                                <div class="listing-image">
+                                    <img src="images/listings/buzdolabi.jpg" alt="Buzdolabı Tamiri">
+                                    <span class="listing-category">Beyaz Eşya</span>
+                                </div>
+                                <div class="listing-content">
+                                    <div class="listing-header">
+                                        <h4>Buzdolabı Soğutma Problemi</h4>
+                                        <span class="listing-price">₺500 - ₺900</span>
+                                    </div>
+                                    <p class="listing-description">Arçelik buzdolabım yeterince soğutmuyor. Termostat sorunu olabilir. Deneyimli teknisyen arıyorum.</p>
+                                    <div class="listing-meta">
+                                        <span><i class="fas fa-map-marker-alt"></i> Bursa, Nilüfer</span>
+                                        <span><i class="fas fa-clock"></i> 2 gün önce</span>
+                                    </div>
+                                    <a href="#" class="listing-button">Teklif Ver</a>
+                                </div>
+                            </div>
+                            
+                            <!-- İlan Kartı 6 -->
+                            <div class="listing-card">
+                                <div class="listing-image">
+                                    <img src="images/listings/masaustu-pc.jpg" alt="Masaüstü Bilgisayar Format">
+                                    <span class="listing-category">Bilgisayar</span>
+                                </div>
+                                <div class="listing-content">
+                                    <div class="listing-header">
+                                        <h4>Masaüstü Bilgisayar Format Atma</h4>
+                                        <span class="listing-price">₺150 - ₺300</span>
+                                    </div>
+                                    <p class="listing-description">Windows 11 kurulumu yapılacak, oyun ve programlar yüklenecek. Bilgisayarı teslim edebilirim.</p>
+                                    <div class="listing-meta">
+                                        <span><i class="fas fa-map-marker-alt"></i> Ankara, Keçiören</span>
+                                        <span><i class="fas fa-clock"></i> 1 hafta önce</span>
+                                    </div>
+                                    <a href="#" class="listing-button">Teklif Ver</a>
+                                </div>
+                            </div>
+                            
+                            <!-- İlan Kartı 7 -->
+                            <div class="listing-card">
+                                <div class="listing-image">
+                                    <img src="images/listings/klima-tamiri.jpg" alt="Klima Tamiri">
+                                    <span class="listing-category">Isı Sistemleri</span>
+                                </div>
+                                <div class="listing-content">
+                                    <div class="listing-header">
+                                        <h4>Klima Bakım ve Temizlik</h4>
+                                        <span class="listing-price">₺300 - ₺500</span>
+                                    </div>
+                                    <p class="listing-description">Klimam yeterince soğutmuyor ve koku yapıyor. Filtre değişimi ve genel bakım yapılması gerekiyor.</p>
+                                    <div class="listing-meta">
+                                        <span><i class="fas fa-map-marker-alt"></i> Antalya, Muratpaşa</span>
+                                        <span><i class="fas fa-clock"></i> 4 gün önce</span>
+                                    </div>
+                                    <a href="#" class="listing-button">Teklif Ver</a>
+                                </div>
+                            </div>
+                            
+                            <!-- İlan Kartı 8 -->
+                            <div class="listing-card featured">
+                                <div class="listing-image">
+                                    <img src="images/listings/elektrik-tesisati.jpg" alt="Elektrik Tesisatı">
+                                    <span class="listing-category">Elektrik</span>
+                                    <span class="listing-badge urgent">Acil</span>
+                                </div>
+                                <div class="listing-content">
+                                    <div class="listing-header">
+                                        <h4>Elektrik Tesisatı Tamiri</h4>
+                                        <span class="listing-price">₺600 - ₺1000</span>
+                                    </div>
+                                    <p class="listing-description">Evimde elektrik kesintileri oluyor, sigorta sürekli atıyor. Tesisatın kontrol edilmesi gerekiyor.</p>
+                                    <div class="listing-meta">
+                                        <span><i class="fas fa-map-marker-alt"></i> İzmir, Karşıyaka</span>
+                                        <span><i class="fas fa-clock"></i> 12 saat önce</span>
+                                    </div>
+                                    <a href="#" class="listing-button">Teklif Ver</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="listings-pagination">
+                            <span class="pagination-button active">1</span>
+                            <span class="pagination-button">2</span>
+                            <span class="pagination-button">3</span>
+                            <span class="pagination-button">4</span>
+                            <span class="pagination-button">5</span>
+                            <span class="pagination-button next"><i class="fas fa-chevron-right"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-column">
+                <h4>TAMIRCI</h4>
+                <p>Türkiye'nin en büyük tamir platformu</p>
+            </div>
+            <div class="footer-column">
+                <h4>Hızlı Linkler</h4>
+                <ul>
+                    <li><a href="index.html">Anasayfa</a></li>
+                    <li><a href="#">Kategoriler</a></li>
+                    <li><a href="listings.html">İlanlar</a></li>
+                    <li><a href="tamirci-kayit.html">Tamirci Ol</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Destek</h4>
+                <ul>
+                    <li><a href="#">Yardım Merkezi</a></li>
+                    <li><a href="#">Sıkça Sorulan Sorular</a></li>
+                    <li><a href="#">İletişim</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Bizi Takip Edin</h4>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 TAMIRCI. Tüm hakları saklıdır.</p>
+        </div>
+    </footer>
+
+    <script src="listings.js"></script>
+</body>
+</html> 

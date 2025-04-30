@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tamirci Kayıt - TAMIRCI</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <style>
+        .login-container {
+            max-width: 520px;
+        }
+        
+        /* Input ile simge arasındaki çakışmayı düzeltme */
+        .input-with-icon input[type="text"],
+        .input-with-icon input[type="email"],
+        .input-with-icon input[type="password"],
+        .input-with-icon input[type="tel"],
+        .input-with-icon input[type="number"] {
+            padding-left: 45px !important;
+        }
+        
+        .input-with-icon i {
+            left: 15px;
+        }
+        
+        .custom-select {
+            position: relative;
+            width: 100%;
+        }
+        
+        .custom-select select {
+            width: 100%;
+            padding: 12px 15px 12px 40px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 15px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        
+        .custom-select select:focus {
+            border-color: #e53935;
+            box-shadow: 0 0 0 2px rgba(229, 57, 53, 0.1);
+            outline: none;
+        }
+        
+        .custom-select::after {
+            content: '\f107';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            pointer-events: none;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            background-color: #f5f5f5;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .checkbox-item:hover {
+            background-color: #eee;
+        }
+        
+        .checkbox-item input {
+            margin-right: 8px;
+            accent-color: #e53935;
+        }
+        
+        .form-info {
+            font-size: 12px;
+            color: #777;
+            margin-top: 5px;
+        }
+        
+        /* Şifre göster/gizle simgesi düzeltmesi */
+        .input-with-icon .password-toggle {
+            position: absolute;
+            left: auto !important;
+            right: 15px !important;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            z-index: 10;
+            color: #999;
+        }
+        
+        .input-with-icon .password-toggle:hover {
+            color: #e53935;
+        }
+        
+        .expertise-selection {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .checkbox-item i {
+            margin-right: 5px;
+            color: #e53935;
+        }
+        
+        .custom-expertise-area {
+            margin-top: 5px;
+            padding-top: 15px;
+            border-top: 1px dashed #ddd;
+        }
+        
+        .custom-tag-input {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .tag-add-button {
+            background-color: #e53935;
+            color: white;
+            border: none;
+            padding: 0 15px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            white-space: nowrap;
+        }
+        
+        .tag-add-button:hover {
+            background-color: #c62828;
+        }
+        
+        .custom-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .tag {
+            background-color: #f5f5f5;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .tag i {
+            color: #e53935;
+            cursor: pointer;
+        }
+        
+        .tag i:hover {
+            color: #c62828;
+        }
+        
+        .expertise-suggestions {
+            margin-top: 15px;
+        }
+        
+        .suggestion-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .suggestion {
+            background-color: #f8f8f8;
+            border: 1px solid #e0e0e0;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .suggestion:hover {
+            background-color: #e8f4fe;
+            border-color: #c8e1fb;
+            color: #1a73e8;
+        }
+    </style>
+</head>
+<body class="login-page">
+    <header class="login-header">
+        <div class="logo">
+            <a href="index.html"><img src="logo.png" alt="TAMIRCI Logo"></a>
+        </div>
+        <nav class="login-nav">
+            <a href="login.html" class="nav-button red-button">Giriş Yap</a>
+        </nav>
+    </header>
+
+    <div class="login-main">
+        <div class="login-container">
+            <div class="login-form-container">
+                <h2>Tamirci Kayıt</h2>
+                
+                <div class="user-type-toggle">
+                    <a href="musteri-kayit.html" class="technician-link">Müşteri</a>
+                    <span class="active">Tamirci</span>
+                </div>
+                
+                <form class="login-form" action="#" method="POST">
+                    <div class="form-group">
+                        <label for="firstName">Ad</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="firstName" name="firstName" placeholder="Adınız" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="lastName">Soyad</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="lastName" name="lastName" placeholder="Soyadınız" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">E-posta Adresi</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="email" name="email" placeholder="E-posta adresiniz" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Telefon Numarası</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-phone"></i>
+                            <input type="tel" id="phone" name="phone" placeholder="0555 555 55 55" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Şifre</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" name="password" placeholder="Şifreniz" required>
+                            <button type="button" class="password-toggle-btn">
+                                <i class="fas fa-eye password-toggle"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirmPassword">Şifre Tekrar</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Şifrenizi tekrar girin" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="location">Hizmet Verdiğiniz Bölge</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <input type="text" id="location" name="location" placeholder="İstanbul, Kadıköy" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="expertise">Uzmanlık Alanları</label>
+                        <p class="form-info">Hizmet verebileceğiniz alanları ekleyin</p>
+                        <div class="expertise-selection">
+                            <div class="custom-tag-input">
+                                <div class="input-with-icon">
+                                    <i class="fas fa-tools"></i>
+                                    <input type="text" id="customExpertise" placeholder="Örn: Telefon Tamiri, Bilgisayar Tamiri, Televizyon Tamiri">
+                                </div>
+                                <button type="button" id="addExpertiseBtn" class="tag-add-button">Ekle</button>
+                            </div>
+                            <div id="customTags" class="custom-tags"></div>
+                            <input type="hidden" id="customExpertiseList" name="expertiseList">
+                        </div>
+                        <div class="expertise-suggestions">
+                            <p class="form-info">Önerilen alanlar:</p>
+                            <div class="suggestion-tags">
+                                <span class="suggestion" data-value="Telefon Tamiri">Telefon Tamiri</span>
+                                <span class="suggestion" data-value="Bilgisayar Tamiri">Bilgisayar Tamiri</span>
+                                <span class="suggestion" data-value="Televizyon Tamiri">Televizyon Tamiri</span>
+                                <span class="suggestion" data-value="Beyaz Eşya Tamiri">Beyaz Eşya Tamiri</span>
+                                <span class="suggestion" data-value="Ev Aletleri Tamiri">Ev Aletleri Tamiri</span>
+                                <span class="suggestion" data-value="Elektronik Kart Tamiri">Elektronik Kart Tamiri</span>
+                                <span class="suggestion" data-value="Araç Tamiri">Araç Tamiri</span>
+                                <span class="suggestion" data-value="Ev Onarım">Ev Onarım</span>
+                                <span class="suggestion" data-value="Klima Tamiri">Klima Tamiri</span>
+                                <span class="suggestion" data-value="Bisiklet Tamiri">Bisiklet Tamiri</span>
+                                <span class="suggestion" data-value="Mobilya Tamiri">Mobilya Tamiri</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="experience">Deneyim (Yıl)</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-briefcase"></i>
+                            <input type="number" id="experience" name="experience" min="0" max="50" placeholder="Deneyim yılınız" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="hourlyRate">Saatlik Ücret (₺)</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <input type="number" id="hourlyRate" name="hourlyRate" min="0" placeholder="Saatlik ücretiniz" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="about">Kendinizi Tanıtın</label>
+                        <textarea id="about" name="about" rows="3" placeholder="Deneyimlerinizi ve becerilerinizi kısaca anlatın..." style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; resize: vertical;"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="input-with-icon" style="margin-top: 10px;">
+                            <input type="checkbox" id="terms" name="terms" required style="width: auto; margin-right: 10px;">
+                            <label for="terms" style="display: inline;">Kullanım şartlarını ve gizlilik politikasını kabul ediyorum</label>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="login-button">Tamirci Olarak Kayıt Ol</button>
+                </form>
+                
+                <div class="login-divider">
+                    <span>veya</span>
+                </div>
+                
+                <div class="social-login">
+                    <button class="social-button google">
+                        <i class="fab fa-google"></i>
+                        Google ile Kayıt Ol
+                    </button>
+                </div>
+                
+                <p class="signup-text">
+                    Zaten hesabınız var mı? <a href="login.html">Giriş Yapın</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="login-footer">
+        <p>&copy; 2023 TAMIRCI. Tüm hakları saklıdır.</p>
+    </footer>
+
+    <script src="login.js"></script>
+    <script src="password-toggle.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Şifre eşleşme kontrolü
+            const form = document.querySelector('.login-form');
+            form.addEventListener('submit', function(event) {
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                if (password !== confirmPassword) {
+                    event.preventDefault();
+                    alert('Şifreler eşleşmiyor! Lütfen kontrol ediniz.');
+                }
+            });
+            
+            // Özel uzmanlık alanları için işlevsellik
+            const customExpertiseInput = document.getElementById('customExpertise');
+            const addExpertiseBtn = document.getElementById('addExpertiseBtn');
+            const customTagsContainer = document.getElementById('customTags');
+            const customExpertiseList = document.getElementById('customExpertiseList');
+            
+            // Özel alanlar için dizi
+            let customExpertises = [];
+            
+            // Ekleme butonu işlevselliği
+            addExpertiseBtn.addEventListener('click', function() {
+                addCustomExpertise();
+            });
+            
+            // Enter tuşu ile ekleme
+            customExpertiseInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault(); // Form gönderimini engelle
+                    addCustomExpertise();
+                }
+            });
+            
+            // Önerilen alanlar
+            const suggestionTags = document.querySelectorAll('.suggestion');
+            suggestionTags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    const expertise = this.getAttribute('data-value');
+                    customExpertiseInput.value = expertise;
+                    addCustomExpertise();
+                });
+            });
+            
+            // Özel uzmanlık alanı ekleme fonksiyonu
+            function addCustomExpertise() {
+                const expertise = customExpertiseInput.value.trim();
+                
+                if (expertise && !customExpertises.includes(expertise)) {
+                    // Yeni etiket oluştur
+                    const tag = document.createElement('div');
+                    tag.className = 'tag';
+                    tag.innerHTML = `
+                        <span>${expertise}</span>
+                        <i class="fas fa-times" data-expertise="${expertise}"></i>
+                    `;
+                    
+                    // Etiket silme işlevselliği
+                    const removeIcon = tag.querySelector('i');
+                    removeIcon.addEventListener('click', function() {
+                        const expertiseToRemove = this.getAttribute('data-expertise');
+                        customExpertises = customExpertises.filter(item => item !== expertiseToRemove);
+                        updateCustomExpertisesField();
+                        tag.remove();
+                    });
+                    
+                    // Etiketi ekle ve input alanını temizle
+                    customTagsContainer.appendChild(tag);
+                    customExpertises.push(expertise);
+                    updateCustomExpertisesField();
+                    customExpertiseInput.value = '';
+                } else if (expertise && customExpertises.includes(expertise)) {
+                    alert('Bu uzmanlık alanı zaten eklenmiş!');
+                    customExpertiseInput.value = '';
+                }
+            }
+            
+            // Gizli input alanını güncelleme
+            function updateCustomExpertisesField() {
+                customExpertiseList.value = JSON.stringify(customExpertises);
+            }
+        });
+    </script>
+</body>
+</html> 

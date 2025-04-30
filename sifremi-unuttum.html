@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Şifremi Unuttum - TAMIRCI</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <style>
+        /* Input ile simge arasındaki çakışmayı düzeltme */
+        .input-with-icon input[type="text"],
+        .input-with-icon input[type="email"],
+        .input-with-icon input[type="password"],
+        .input-with-icon input[type="tel"],
+        .input-with-icon input[type="number"] {
+            padding-left: 45px !important;
+        }
+        
+        .input-with-icon i {
+            left: 15px;
+        }
+        
+        .reset-steps {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .step {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+            color: #999;
+            position: relative;
+        }
+        
+        .step.active {
+            color: #e53935;
+            font-weight: 600;
+        }
+        
+        .step::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #eee;
+        }
+        
+        .step.active::after {
+            background-color: #e53935;
+        }
+        
+        .success-message {
+            text-align: center;
+            color: #388e3c;
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            display: none;
+        }
+        
+        .success-message i {
+            font-size: 48px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .form-section {
+            display: none;
+        }
+        
+        .form-section.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="login-page">
+    <header class="login-header">
+        <div class="logo">
+            <a href="index.html"><img src="logo.png" alt="TAMIRCI Logo"></a>
+        </div>
+        <nav class="login-nav">
+            <a href="musteri-kayit.html" class="nav-button red-button">Üye Ol</a>
+        </nav>
+    </header>
+
+    <div class="login-main">
+        <div class="login-container">
+            <div class="login-form-container">
+                <h2>Şifremi Unuttum</h2>
+                
+                <div class="reset-steps">
+                    <div class="step step1 active">1. Hesap Doğrulama</div>
+                    <div class="step step2">2. Doğrulama Kodu</div>
+                    <div class="step step3">3. Yeni Şifre</div>
+                </div>
+                
+                <!-- Adım 1: Hesap Bilgilerini Doğrulama -->
+                <div class="form-section section1 active">
+                    <p>Şifrenizi yenilemek için hesap bilgilerinizi girin.</p>
+                    <form class="login-form" id="accountVerifyForm">
+                        <div class="form-group">
+                            <label for="email">E-posta Adresi</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="email" name="email" placeholder="E-posta adresiniz" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Telefon Numarası (İsteğe Bağlı)</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-phone"></i>
+                                <input type="tel" id="phone" name="phone" placeholder="Kayıt olurken belirttiğiniz telefon">
+                            </div>
+                            <small style="color: #666; font-size: 12px; margin-top: 5px;">Kayıt olurken telefon belirttiyseniz, doğrulama için girmenizi öneririz.</small>
+                        </div>
+                        
+                        <button type="button" id="verifyAccountBtn" class="login-button">Doğrulama Kodu Gönder</button>
+                    </form>
+                </div>
+                
+                <!-- Adım 2: Doğrulama Kodu -->
+                <div class="form-section section2">
+                    <p>E-posta adresinize gönderilen doğrulama kodunu girin.</p>
+                    <form class="login-form" id="verificationForm">
+                        <div class="form-group">
+                            <label for="verificationCode">Doğrulama Kodu</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-key"></i>
+                                <input type="text" id="verificationCode" name="verificationCode" placeholder="6 haneli kod" required>
+                            </div>
+                        </div>
+                        
+                        <button type="button" id="verifyCodeBtn" class="login-button">Doğrula</button>
+                        <button type="button" id="resendCodeBtn" style="background: none; border: none; color: #e53935; cursor: pointer; display: block; margin: 15px auto 0; text-decoration: underline;">Kodu Tekrar Gönder</button>
+                    </form>
+                </div>
+                
+                <!-- Adım 3: Yeni Şifre Belirleme -->
+                <div class="form-section section3">
+                    <p>Hesabınız için yeni bir şifre belirleyin.</p>
+                    <form class="login-form" id="newPasswordForm">
+                        <div class="form-group">
+                            <label for="newPassword">Yeni Şifre</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="newPassword" name="newPassword" placeholder="Yeni şifreniz" required>
+                                <button type="button" class="password-toggle-btn">
+                                    <i class="fas fa-eye password-toggle"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirmPassword">Şifre Tekrar</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Şifreyi tekrar girin" required>
+                            </div>
+                        </div>
+                        
+                        <button type="button" id="resetPasswordBtn" class="login-button">Şifreyi Sıfırla</button>
+                    </form>
+                </div>
+                
+                <!-- Başarı Mesajı -->
+                <div class="success-message" id="successMessage">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>Şifreniz Başarıyla Sıfırlandı!</h3>
+                    <p>Yeni şifreniz ile giriş yapabilirsiniz.</p>
+                    <a href="login.html" class="login-button" style="display: inline-block; margin-top: 15px; width: auto; padding: 10px 20px;">Giriş Yap</a>
+                </div>
+                
+                <div class="login-divider">
+                    <span>veya</span>
+                </div>
+                
+                <p class="signup-text">
+                    <a href="login.html">Giriş Sayfasına Dön</a> | <a href="musteri-kayit.html">Yeni Hesap Oluştur</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="login-footer">
+        <p>&copy; 2023 TAMIRCI. Tüm hakları saklıdır.</p>
+    </footer>
+
+    <script src="password-toggle.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Adımlar arası geçiş
+            const step1 = document.querySelector('.step1');
+            const step2 = document.querySelector('.step2');
+            const step3 = document.querySelector('.step3');
+            
+            const section1 = document.querySelector('.section1');
+            const section2 = document.querySelector('.section2');
+            const section3 = document.querySelector('.section3');
+            
+            const verifyAccountBtn = document.getElementById('verifyAccountBtn');
+            const verifyCodeBtn = document.getElementById('verifyCodeBtn');
+            const resetPasswordBtn = document.getElementById('resetPasswordBtn');
+            const resendCodeBtn = document.getElementById('resendCodeBtn');
+            const successMessage = document.getElementById('successMessage');
+            
+            // 1. adımdan 2. adıma geçiş
+            verifyAccountBtn.addEventListener('click', function() {
+                const email = document.getElementById('email').value;
+                
+                if (!email) {
+                    alert('Lütfen e-posta adresinizi girin.');
+                    return;
+                }
+                
+                // Burada normalde sunucuya istek gönderilir
+                // Şimdilik sadece adım geçişi simüle ediyoruz
+                
+                step1.classList.remove('active');
+                step2.classList.add('active');
+                
+                section1.classList.remove('active');
+                section2.classList.add('active');
+                
+                // Simülasyon: E-posta gönderildiğini göster
+                alert(`${email} adresine doğrulama kodu gönderildi. Lütfen e-posta kutunuzu kontrol edin.`);
+            });
+            
+            // 2. adımdan 3. adıma geçiş
+            verifyCodeBtn.addEventListener('click', function() {
+                const code = document.getElementById('verificationCode').value;
+                
+                if (!code) {
+                    alert('Lütfen doğrulama kodunu girin.');
+                    return;
+                }
+                
+                // Burada normalde sunucuya istek gönderilir ve kod doğrulanır
+                // Şimdilik sadece adım geçişi simüle ediyoruz
+                
+                step2.classList.remove('active');
+                step3.classList.add('active');
+                
+                section2.classList.remove('active');
+                section3.classList.add('active');
+            });
+            
+            // Şifre sıfırlama işlemi
+            resetPasswordBtn.addEventListener('click', function() {
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                if (!newPassword || !confirmPassword) {
+                    alert('Lütfen tüm alanları doldurun.');
+                    return;
+                }
+                
+                if (newPassword !== confirmPassword) {
+                    alert('Şifreler eşleşmiyor!');
+                    return;
+                }
+                
+                // Burada normalde sunucuya şifre sıfırlama isteği gönderilir
+                // Şimdilik sadece başarılı mesajı gösteriyoruz
+                
+                section3.classList.remove('active');
+                successMessage.style.display = 'block';
+            });
+            
+            // Kodu tekrar gönderme
+            resendCodeBtn.addEventListener('click', function() {
+                // Burada normalde sunucuya tekrar kod gönderme isteği yapılır
+                alert('Doğrulama kodu tekrar gönderildi. Lütfen e-posta kutunuzu kontrol edin.');
+            });
+        });
+    </script>
+</body>
+</html> 

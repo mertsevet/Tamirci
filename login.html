@@ -8,6 +8,20 @@
     <link rel="stylesheet" href="login.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <style>
+        /* Input ile simge arasındaki çakışmayı düzeltme */
+        .input-with-icon input[type="text"],
+        .input-with-icon input[type="email"],
+        .input-with-icon input[type="password"],
+        .input-with-icon input[type="tel"],
+        .input-with-icon input[type="number"] {
+            padding-left: 45px !important;
+        }
+        
+        .input-with-icon i {
+            left: 15px;
+        }
+    </style>
 </head>
 <body class="login-page">
     <header class="login-header">
@@ -15,7 +29,7 @@
             <a href="index.html"><img src="logo.png" alt="TAMIRCI Logo"></a>
         </div>
         <nav class="login-nav">
-            <a href="#" class="nav-button red-button" id="signup-button">Üye Ol</a>
+            <a href="musteri-kayit.html" class="nav-button red-button" id="signup-button">Üye Ol</a>
         </nav>
     </header>
 
@@ -38,7 +52,9 @@
                         <div class="input-with-icon">
                             <i class="fas fa-lock"></i>
                             <input type="password" id="password" name="password" placeholder="Şifreniz" required>
-                            <i class="fas fa-eye password-toggle"></i>
+                            <button type="button" class="password-toggle-btn">
+                                <i class="fas fa-eye password-toggle"></i>
+                            </button>
                         </div>
                     </div>
                     
@@ -47,7 +63,7 @@
                             <input type="checkbox" id="remember" name="remember">
                             <label for="remember">Beni Hatırla</label>
                         </div>
-                        <a href="#" class="forgot-password">Şifremi Unuttum</a>
+                        <a href="sifremi-unuttum.html" class="forgot-password">Şifremi Unuttum</a>
                     </div>
                     
                     <button type="submit" class="login-button">Giriş Yap</button>
@@ -65,7 +81,7 @@
                 </div>
                 
                 <p class="signup-text">
-                    Henüz hesabınız yok mu? <a href="#" id="signup-link">Hemen Üye Olun</a>
+                    Henüz hesabınız yok mu? <a href="musteri-kayit.html" id="signup-link">Hemen Üye Olun</a>
                 </p>
             </div>
         </div>
@@ -76,5 +92,6 @@
     </footer>
 
     <script src="login.js"></script>
+    <script src="password-toggle.js"></script>
 </body>
 </html> 

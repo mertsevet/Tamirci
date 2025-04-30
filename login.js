@@ -63,19 +63,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Üye Ol bağlantısı
     const signupLink = document.getElementById('signup-link');
     if (signupLink) {
-        signupLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            alert('Üye ol sayfası henüz hazır değil.');
-        });
+        // Üye ol sayfasına yönlendirme artık doğrudan HTML href ile yapılıyor
+        // Buradaki event listener'ı kaldırıyoruz
     }
     
     // Şifremi Unuttum bağlantısı
     const forgotPasswordLink = document.querySelector('.forgot-password');
     if (forgotPasswordLink) {
-        forgotPasswordLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            alert('Şifre sıfırlama sayfası henüz hazır değil.');
-        });
+        // Şifremi unuttum sayfasına yönlendirme artık doğrudan HTML href ile yapılıyor
+        // Buradaki event listener'ı kaldırıyoruz
     }
     
     // Sosyal medya giriş butonları
