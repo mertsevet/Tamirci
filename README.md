@@ -19,7 +19,7 @@ Bu proje, profesyonel tamir hizmeti veren bir web sitesinin ön yüz tasarımıd
 
 1. Repoyu klonlayın:
    ```
-   git clone https://github.com/kullanici/tamirci-arayuz.git
+   git clone https://github.com/mertsevet/Tamirci.git
    ```
 
 2. Proje klasörüne gidin:
