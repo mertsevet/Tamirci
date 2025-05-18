@@ -37,6 +37,44 @@
         .input-with-icon .password-toggle:hover {
             color: #e53935;
         }
+        
+        /* Hata mesajları için stil */
+        .error-message {
+            color: #e53935;
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .form-group.has-error input {
+            border-color: #e53935;
+        }
+        
+        .form-group.has-error .error-message {
+            display: block;
+        }
+        
+        /* Yükleniyor animasyonu */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+            vertical-align: middle;
+            display: none;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .login-button.loading .spinner {
+            display: inline-block;
+        }
     </style>
 </head>
 <body class="login-page">
@@ -59,13 +97,14 @@
                     <a href="tamirci-kayit.html" class="technician-link">Tamirci</a>
                 </div>
                 
-                <form class="login-form" action="#" method="POST">
+                <form class="login-form" id="registerForm">
                     <div class="form-group">
                         <label for="firstName">Ad</label>
                         <div class="input-with-icon">
                             <i class="fas fa-user"></i>
                             <input type="text" id="firstName" name="firstName" placeholder="Adınız" required>
                         </div>
+                        <div class="error-message" id="firstNameError"></div>
                     </div>
                     
                     <div class="form-group">
@@ -74,6 +113,7 @@
                             <i class="fas fa-user"></i>
                             <input type="text" id="lastName" name="lastName" placeholder="Soyadınız" required>
                         </div>
+                        <div class="error-message" id="lastNameError"></div>
                     </div>
                     
                     <div class="form-group">
@@ -82,6 +122,16 @@
                             <i class="fas fa-envelope"></i>
                             <input type="email" id="email" name="email" placeholder="E-posta adresiniz" required>
                         </div>
+                        <div class="error-message" id="emailError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Telefon Numarası</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-phone"></i>
+                            <input type="tel" id="phone" name="phone" placeholder="Telefon numaranız" required>
+                        </div>
+                        <div class="error-message" id="phoneError"></div>
                     </div>
                     
                     <div class="form-group">
@@ -93,6 +143,7 @@
                                 <i class="fas fa-eye password-toggle"></i>
                             </button>
                         </div>
+                        <div class="error-message" id="passwordError"></div>
                     </div>
                     
                     <div class="form-group">
@@ -101,9 +152,13 @@
                             <i class="fas fa-lock"></i>
                             <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Şifrenizi tekrar girin" required>
                         </div>
+                        <div class="error-message" id="confirmPasswordError"></div>
                     </div>
                     
-                    <button type="submit" class="login-button">Kayıt Ol</button>
+                    <button type="submit" class="login-button">
+                        Kayıt Ol
+                        <span class="spinner"></span>
+                    </button>
                 </form>
                 
                 <div class="login-divider">
@@ -128,23 +183,220 @@
         <p>&copy; 2023 TAMIRCI. Tüm hakları saklıdır.</p>
     </footer>
 
-    <script src="login.js"></script>
     <script src="password-toggle.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // API URL
+            const API_URL = 'http://localhost:5000/api';
+            
+            // Form elemanları
+            const form = document.getElementById('registerForm');
+            const submitButton = document.querySelector('.login-button');
+            
             // Şifre eşleşme kontrolü
-            const form = document.querySelector('.login-form');
-            if (form) {
-                form.addEventListener('submit', function(event) {
-                    const password = document.getElementById('password').value;
-                    const confirmPassword = document.getElementById('confirmPassword').value;
+            form.addEventListener('submit', async function(event) {
+                event.preventDefault();
+                
+                // Form değerlerini al
+                const firstName = document.getElementById('firstName').value;
+                const lastName = document.getElementById('lastName').value;
+                const email = document.getElementById('email').value;
+                const phone = document.getElementById('phone').value;
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                // Hata mesajlarını sıfırla
+                resetErrors();
+                
+                // Doğrulama kontrolü
+                let valid = true;
+                
+                if (firstName.trim() === '') {
+                    showError('firstName', 'Lütfen adınızı girin');
+                    valid = false;
+                }
+                
+                if (lastName.trim() === '') {
+                    showError('lastName', 'Lütfen soyadınızı girin');
+                    valid = false;
+                }
+                
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    showError('email', 'Lütfen geçerli bir e-posta adresi girin');
+                    valid = false;
+                }
+                
+                const phoneRegex = /^[0-9]{10}$/;
+                if (!phoneRegex.test(phone.replace(/\D/g, ''))) {
+                    showError('phone', 'Lütfen geçerli bir telefon numarası girin (10 hane)');
+                    valid = false;
+                }
+                
+                if (password.length < 6) {
+                    showError('password', 'Şifre en az 6 karakter olmalıdır');
+                    valid = false;
+                }
+                
+                if (password !== confirmPassword) {
+                    showError('confirmPassword', 'Şifreler eşleşmiyor');
+                    valid = false;
+                }
+                
+                if (!valid) {
+                    return;
+                }
+                
+                // Yükleniyor durumu
+                submitButton.classList.add('loading');
+                submitButton.disabled = true;
+                
+                try {
+                    // API bağlantısı olmadığı için geçici olarak localStorage'da simüle ediyoruz
+                    const userData = {
+                        _id: 'cust_' + Date.now(),
+                        firstName,
+                        lastName,
+                        email,
+                        phone,
+                        password, // Güvenli olmasa da test amaçlı şifreyi localStorage'da saklıyoruz
+                        role: 'customer',
+                        createdAt: new Date().toISOString()
+                    };
                     
-                    if (password !== confirmPassword) {
-                        event.preventDefault();
-                        alert('Şifreler eşleşmiyor! Lütfen kontrol ediniz.');
+                    // Varolan kullanıcıları kontrol et
+                    const existingUsers = JSON.parse(localStorage.getItem('registered_users') || '[]');
+                    
+                    // Email adresi daha önce kayıtlı mı kontrol et
+                    const emailExists = existingUsers.some(user => user.email.toLowerCase() === email.toLowerCase());
+                    if (emailExists) {
+                        showError('email', 'Bu e-posta adresi zaten kullanılıyor');
+                        submitButton.classList.remove('loading');
+                        submitButton.disabled = false;
+                        return;
                     }
+                    
+                    // Yeni kullanıcıyı ekle
+                    existingUsers.push(userData);
+                    localStorage.setItem('registered_users', JSON.stringify(existingUsers));
+                    
+                    // Oturum token ve kullanıcı bilgilerini oluştur (şifre olmadan)
+                    const token = 'simulated_token_' + Date.now();
+                    const userToStore = { ...userData };
+                    delete userToStore.password; // Şifreyi client tarafında saklamayalım
+                    
+                    localStorage.setItem('token', token);
+                    localStorage.setItem('user', JSON.stringify(userToStore));
+                    
+                    // Başarılı mesajı
+                    showSuccessAlert('Kaydınız başarıyla tamamlandı! Anasayfaya yönlendiriliyorsunuz...');
+                    
+                    // 2 saniye sonra anasayfaya yönlendir
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 2000);
+                } catch (error) {
+                    console.error('Registration error:', error);
+                    showErrorAlert('Kayıt sırasında bir hata oluştu. Lütfen daha sonra tekrar deneyin.');
+                    submitButton.classList.remove('loading');
+                    submitButton.disabled = false;
+                }
+            });
+            
+            // Hata gösterme fonksiyonu
+            function showError(fieldId, message) {
+                const field = document.getElementById(fieldId);
+                const errorElement = document.getElementById(fieldId + 'Error');
+                
+                field.closest('.form-group').classList.add('has-error');
+                errorElement.textContent = message;
+            }
+            
+            // Tüm hataları sıfırlama
+            function resetErrors() {
+                document.querySelectorAll('.form-group.has-error').forEach(el => {
+                    el.classList.remove('has-error');
+                });
+                
+                document.querySelectorAll('.error-message').forEach(el => {
+                    el.textContent = '';
                 });
             }
+            
+            // Başarı alert mesajı
+            function showSuccessAlert(message) {
+                const alertElement = document.createElement('div');
+                alertElement.className = 'alert alert-success';
+                alertElement.textContent = message;
+                
+                // Form konteynerının üstüne ekle
+                const formContainer = document.querySelector('.login-form-container');
+                formContainer.insertBefore(alertElement, formContainer.firstChild);
+                
+                // 4 saniye sonra kaldır
+                setTimeout(() => {
+                    alertElement.remove();
+                }, 4000);
+            }
+            
+            // Hata alert mesajı
+            function showErrorAlert(message) {
+                const alertElement = document.createElement('div');
+                alertElement.className = 'alert alert-error';
+                alertElement.textContent = message;
+                
+                // Form konteynerının üstüne ekle
+                const formContainer = document.querySelector('.login-form-container');
+                formContainer.insertBefore(alertElement, formContainer.firstChild);
+                
+                // 4 saniye sonra kaldır
+                setTimeout(() => {
+                    alertElement.remove();
+                }, 4000);
+            }
+            
+            // Alert stilleri ekle
+            const style = document.createElement('style');
+            style.textContent = `
+                .alert {
+                    padding: 12px 15px;
+                    margin-bottom: 20px;
+                    border-radius: 4px;
+                    font-size: 14px;
+                }
+                .alert-success {
+                    background-color: #d4edda;
+                    color: #155724;
+                    border: 1px solid #c3e6cb;
+                }
+                .alert-error {
+                    background-color: #f8d7da;
+                    color: #721c24;
+                    border: 1px solid #f5c6cb;
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Oturum kontrolü
+            function checkSession() {
+                const token = localStorage.getItem('token');
+                if (token) {
+                    window.location.href = 'index.html';
+                }
+            }
+            
+            // Sayfa yüklendiğinde oturum kontrolü yap
+            checkSession();
+            
+            // Sosyal giriş butonları
+            const socialButtons = document.querySelectorAll('.social-button');
+            socialButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const provider = this.classList.contains('google') ? 'Google' : 'Facebook';
+                    showErrorAlert(`${provider} ile kayıt işlevi henüz entegre edilmedi.`);
+                });
+            });
         });
     </script>
 </body>

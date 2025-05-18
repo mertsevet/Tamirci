@@ -1231,4 +1231,396 @@ footer {
         width: 100%;
         max-width: 350px;
     }
+}
+
+/* Kullanıcı Menüsü Stilleri */
+.user-menu {
+    position: relative;
+    margin-right: 10px;
+}
+
+.user-menu-trigger {
+    display: flex;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 20px;
+    background-color: #f8f8f8;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.user-menu-trigger:hover {
+    background-color: #f0f0f0;
+}
+
+.user-menu-trigger i.fa-chevron-down {
+    font-size: 12px;
+    margin-left: 5px;
+    color: #666;
+}
+
+.user-menu-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 280px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s;
+    z-index: 1000;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.user-menu-dropdown.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.user-info {
+    display: flex;
+    padding: 15px;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #eee;
+    align-items: center;
+}
+
+.user-avatar-small {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #e73c33;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+.user-avatar-large {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #e73c33;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 20px;
+    margin-right: 15px;
+}
+
+.user-details {
+    flex: 1;
+}
+
+.user-name {
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+
+.user-role {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 3px;
+}
+
+.user-email {
+    font-size: 12px;
+    color: #999;
+    word-break: break-all;
+}
+
+.user-menu-dropdown ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.user-menu-dropdown ul li {
+    padding: 0;
+    margin: 0;
+}
+
+.user-menu-dropdown ul li a {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.user-menu-dropdown ul li a:hover {
+    background-color: #f5f5f5;
+}
+
+.user-menu-dropdown ul li a i {
+    margin-right: 10px;
+    color: #666;
+    width: 20px;
+    text-align: center;
+}
+
+.user-menu-dropdown ul li.divider {
+    height: 1px;
+    background-color: #eee;
+    margin: 5px 0;
+}
+
+/* Panel Modal Stilleri */
+.panel-modal .modal-content {
+    max-width: 900px;
+    width: 90%;
+}
+
+.wide-modal {
+    max-width: 900px !important;
+}
+
+.panel-header {
+    padding: 20px;
+    background-color: #f8f8f8;
+    border-radius: 8px 8px 0 0;
+    margin: -20px -20px 20px -20px;
+    border-bottom: 1px solid #eee;
+}
+
+.panel-header h2 {
+    margin-bottom: 5px;
+}
+
+.panel-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 15px;
+    width: calc(25% - 15px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.stat-icon {
+    width: 45px;
+    height: 45px;
+    background-color: #e73c33;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+}
+
+.stat-icon i {
+    color: white;
+    font-size: 20px;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    line-height: 1;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 13px;
+    color: #666;
+}
+
+.panel-tabs {
+    display: flex;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 20px;
+}
+
+.tab {
+    padding: 12px 20px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s;
+    font-weight: 500;
+}
+
+.tab:hover {
+    color: #e73c33;
+}
+
+.tab.active {
+    color: #e73c33;
+    border-bottom-color: #e73c33;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+}
+
+.empty-state-icon {
+    width: 80px;
+    height: 80px;
+    background-color: rgba(231, 60, 51, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.empty-state-icon i {
+    font-size: 32px;
+    color: #e73c33;
+}
+
+.empty-state h3 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.empty-state p {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.panel-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #e73c33;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.panel-button:hover {
+    background-color: #c5352e;
+}
+
+/* Profil Modal Stilleri */
+.profile-modal .modal-content {
+    max-width: 500px;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.profile-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #e73c33;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 20px;
+    margin-right: 15px;
+}
+
+.profile-form .form-row {
+    display: flex;
+    gap: 20px;
+}
+
+.profile-form .form-row .form-group {
+    flex: 1;
+}
+
+.profile-form .form-group {
+    margin-bottom: 20px;
+}
+
+.profile-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.profile-form input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.profile-form input[readonly] {
+    background-color: #f8f8f8;
+    cursor: not-allowed;
+}
+
+.profile-form small {
+    font-size: 12px;
+    color: #999;
+}
+
+.profile-save-button {
+    background-color: #e73c33;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.profile-save-button:hover {
+    background-color: #c5352e;
+}
+
+.profile-footer {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    text-align: center;
+}
+
+.delete-account-button {
+    background-color: transparent;
+    color: #e73c33;
+    border: 1px solid #e73c33;
+    border-radius: 4px;
+    padding: 10px 15px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.delete-account-button:hover {
+    background-color: #e73c33;
+    color: white;
 } 
