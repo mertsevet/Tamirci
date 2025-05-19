@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <header>
@@ -39,16 +40,16 @@
                     <div class="filter-box">
                         <h3>Kategoriler</h3>
                         <div class="filter-category">
-                            <label><input type="checkbox" value="ev_aletleri"> <span>Ev Aletleri</span></label>
-                            <label><input type="checkbox" value="elektronik"> <span>Elektronik</span></label>
-                            <label><input type="checkbox" value="bilgisayar"> <span>Bilgisayar</span></label>
-                            <label><input type="checkbox" value="telefon"> <span>Telefon</span></label>
-                            <label><input type="checkbox" value="elektrik"> <span>Elektrik</span></label>
-                            <label><input type="checkbox" value="su_tesisati"> <span>Su Tesisatı</span></label>
-                            <label><input type="checkbox" value="mobilya"> <span>Mobilya</span></label>
-                            <label><input type="checkbox" value="isi_sistemleri"> <span>Isı Sistemleri</span></label>
-                            <label><input type="checkbox" value="beyaz_esya"> <span>Beyaz Eşya</span></label>
-                            <label><input type="checkbox" value="diger"> <span>Diğer</span></label>
+                            <label><input type="checkbox" class="category-filter" value="ev_aletleri"> <span>Ev Aletleri</span></label>
+                            <label><input type="checkbox" class="category-filter" value="elektronik"> <span>Elektronik</span></label>
+                            <label><input type="checkbox" class="category-filter" value="bilgisayar"> <span>Bilgisayar</span></label>
+                            <label><input type="checkbox" class="category-filter" value="telefon"> <span>Telefon</span></label>
+                            <label><input type="checkbox" class="category-filter" value="elektrik"> <span>Elektrik</span></label>
+                            <label><input type="checkbox" class="category-filter" value="su_tesisati"> <span>Su Tesisatı</span></label>
+                            <label><input type="checkbox" class="category-filter" value="mobilya"> <span>Mobilya</span></label>
+                            <label><input type="checkbox" class="category-filter" value="isi_sistemleri"> <span>Isı Sistemleri</span></label>
+                            <label><input type="checkbox" class="category-filter" value="beyaz_esya"> <span>Beyaz Eşya</span></label>
+                            <label><input type="checkbox" class="category-filter" value="diger"> <span>Diğer</span></label>
                         </div>
                     </div>
                     
@@ -85,15 +86,6 @@
                     </div>
                     
                     <div class="filter-box">
-                        <h3>Aciliyet</h3>
-                        <div class="filter-urgency">
-                            <label><input type="checkbox" value="dusuk"> <span>Düşük</span></label>
-                            <label><input type="checkbox" value="orta"> <span>Orta</span></label>
-                            <label><input type="checkbox" value="yuksek"> <span>Yüksek</span></label>
-                        </div>
-                    </div>
-                    
-                    <div class="filter-box">
                         <h3>Durum</h3>
                         <div class="filter-status">
                             <label><input type="checkbox" value="beklemede"> <span>Beklemede</span></label>
@@ -104,15 +96,15 @@
                     </div>
                     
                     <div class="filter-buttons">
-                        <button id="apply-filters" class="apply-filter-button">Filtrele</button>
-                        <button id="reset-filters" class="reset-filter-button">Temizle</button>
+                        <button id="apply-filter" class="apply-filter-button">Filtrele</button>
+                        <button id="reset-filter" class="reset-filter-button">Temizle</button>
                     </div>
                 </div>
                 
                 <div class="listings-main">
                     <div class="listings-top-bar">
                         <div class="listings-search">
-                            <input type="text" id="listings-search-input" placeholder="İlanlarda ara...">
+                            <input type="text" id="searchInput" placeholder="İlanlarda ara...">
                             <button class="search-button"><i class="fas fa-search"></i></button>
                         </div>
                         <div class="listings-sort-container">
@@ -140,11 +132,10 @@
                         
                         <div class="listings-grid">
                             <!-- İlan Kartı 1 -->
-                            <div class="listing-card">
+                            <div class="listing-card" data-category="bilgisayar" data-city="izmir" data-price="300">
                                 <div class="listing-image">
                                     <img src="images/listings/laptop-fan.jpg" alt="Laptop Fan Değişimi">
                                     <span class="listing-category">Bilgisayar</span>
-                                    <span class="listing-badge urgent">Acil</span>
                                 </div>
                                 <div class="listing-content">
                                     <div class="listing-header">
@@ -161,7 +152,7 @@
                             </div>
                             
                             <!-- İlan Kartı 2 -->
-                            <div class="listing-card featured">
+                            <div class="listing-card" data-category="telefon" data-city="istanbul" data-price="1000">
                                 <div class="listing-image">
                                     <img src="images/listings/iphone-tamiri.jpg" alt="iPhone Ekran Tamiri">
                                     <span class="listing-category">Telefon</span>
@@ -181,7 +172,7 @@
                             </div>
                             
                             <!-- İlan Kartı 3 -->
-                            <div class="listing-card">
+                            <div class="listing-card" data-category="ev_aletleri" data-city="ankara" data-price="450">
                                 <div class="listing-image">
                                     <img src="images/listings/camasir-makinesi.jpg" alt="Çamaşır Makinesi Tamiri">
                                     <span class="listing-category">Ev Aletleri</span>
@@ -201,7 +192,7 @@
                             </div>
                             
                             <!-- İlan Kartı 4 -->
-                            <div class="listing-card">
+                            <div class="listing-card" data-category="elektronik" data-city="istanbul" data-price="550">
                                 <div class="listing-image">
                                     <img src="images/listings/samsung-tv.jpg" alt="Samsung Smart TV Tamiri">
                                     <span class="listing-category">Televizyon</span>
@@ -221,7 +212,7 @@
                             </div>
                             
                             <!-- İlan Kartı 5 -->
-                            <div class="listing-card">
+                            <div class="listing-card" data-category="beyaz_esya" data-city="bursa" data-price="700">
                                 <div class="listing-image">
                                     <img src="images/listings/buzdolabi.jpg" alt="Buzdolabı Tamiri">
                                     <span class="listing-category">Beyaz Eşya</span>
@@ -241,7 +232,7 @@
                             </div>
                             
                             <!-- İlan Kartı 6 -->
-                            <div class="listing-card">
+                            <div class="listing-card" data-category="bilgisayar" data-city="ankara" data-price="200">
                                 <div class="listing-image">
                                     <img src="images/listings/masaustu-pc.jpg" alt="Masaüstü Bilgisayar Format">
                                     <span class="listing-category">Bilgisayar</span>
@@ -261,7 +252,7 @@
                             </div>
                             
                             <!-- İlan Kartı 7 -->
-                            <div class="listing-card">
+                            <div class="listing-card" data-category="isi_sistemleri" data-city="antalya" data-price="400">
                                 <div class="listing-image">
                                     <img src="images/listings/klima-tamiri.jpg" alt="Klima Tamiri">
                                     <span class="listing-category">Isı Sistemleri</span>
@@ -281,11 +272,10 @@
                             </div>
                             
                             <!-- İlan Kartı 8 -->
-                            <div class="listing-card featured">
+                            <div class="listing-card" data-category="elektrik" data-city="izmir" data-price="800">
                                 <div class="listing-image">
                                     <img src="images/listings/elektrik-tesisati.jpg" alt="Elektrik Tesisatı">
                                     <span class="listing-category">Elektrik</span>
-                                    <span class="listing-badge urgent">Acil</span>
                                 </div>
                                 <div class="listing-content">
                                     <div class="listing-header">
@@ -300,14 +290,91 @@
                                     <a href="#" class="listing-button">İncele</a>
                                 </div>
                             </div>
+                            
+                            <!-- İlan Kartı 9 -->
+                            <div class="listing-card" data-category="mobilya" data-city="istanbul" data-price="350">
+                                <div class="listing-image">
+                                    <img src="images/listings/buzdolabi.jpg" alt="Mobilya Tamiri">
+                                    <span class="listing-category">Mobilya</span>
+                                </div>
+                                <div class="listing-content">
+                                    <div class="listing-header">
+                                        <h4>Dolap Kapak Tamiri</h4>
+                                        <span class="listing-price">₺250 - ₺450</span>
+                                    </div>
+                                    <p class="listing-description">Yatak odası dolabımın kapağı yerinden çıktı, menteşeleri değiştirilmesi ve sabitlenmesi gerekiyor.</p>
+                                    <div class="listing-meta">
+                                        <span><i class="fas fa-map-marker-alt"></i> İstanbul, Beşiktaş</span>
+                                        <span><i class="fas fa-clock"></i> 2 gün önce</span>
+                                    </div>
+                                    <a href="#" class="listing-button">İncele</a>
+                                </div>
+                            </div>
+                            
+                            <!-- İlan Kartı 10 -->
+                            <div class="listing-card" data-category="su_tesisati" data-city="ankara" data-price="250">
+                                <div class="listing-image">
+                                    <img src="images/listings/camasir-makinesi.jpg" alt="Su Tesisatı">
+                                    <span class="listing-category">Su Tesisatı</span>
+                                </div>
+                                <div class="listing-content">
+                                    <div class="listing-header">
+                                        <h4>Lavabo Tıkanıklığı Açma</h4>
+                                        <span class="listing-price">₺200 - ₺300</span>
+                                    </div>
+                                    <p class="listing-description">Mutfak lavabom tıkandı, ev tipi açıcılar işe yaramadı. Profesyonel yardıma ihtiyacım var.</p>
+                                    <div class="listing-meta">
+                                        <span><i class="fas fa-map-marker-alt"></i> Ankara, Batıkent</span>
+                                        <span><i class="fas fa-clock"></i> 5 saat önce</span>
+                                    </div>
+                                    <a href="#" class="listing-button">İncele</a>
+                                </div>
+                            </div>
+                            
+                            <!-- İlan Kartı 11 -->
+                            <div class="listing-card" data-category="elektronik" data-city="izmir" data-price="600">
+                                <div class="listing-image">
+                                    <img src="images/listings/samsung-tv.jpg" alt="Projeksiyon Tamiri">
+                                    <span class="listing-category">Elektronik</span>
+                                </div>
+                                <div class="listing-content">
+                                    <div class="listing-header">
+                                        <h4>Projeksiyon Cihazı Tamiri</h4>
+                                        <span class="listing-price">₺500 - ₺700</span>
+                                    </div>
+                                    <p class="listing-description">Epson marka projeksiyon cihazım çalışıyor ancak görüntüde lekeler var. Lens temizliği ve ayarı gerekiyor.</p>
+                                    <div class="listing-meta">
+                                        <span><i class="fas fa-map-marker-alt"></i> İzmir, Konak</span>
+                                        <span><i class="fas fa-clock"></i> 3 gün önce</span>
+                                    </div>
+                                    <a href="#" class="listing-button">İncele</a>
+                                </div>
+                            </div>
+                            
+                            <!-- İlan Kartı 12 -->
+                            <div class="listing-card" data-category="beyaz_esya" data-city="bursa" data-price="350">
+                                <div class="listing-image">
+                                    <img src="images/listings/buzdolabi.jpg" alt="Fırın Tamiri">
+                                    <span class="listing-category">Beyaz Eşya</span>
+                                </div>
+                                <div class="listing-content">
+                                    <div class="listing-header">
+                                        <h4>Ankastre Fırın Tamiri</h4>
+                                        <span class="listing-price">₺300 - ₺400</span>
+                                    </div>
+                                    <p class="listing-description">Bosch marka ankastre fırınımın rezistansı yanıyor, değiştirilmesi gerekiyor. Garanti dışı onarım.</p>
+                                    <div class="listing-meta">
+                                        <span><i class="fas fa-map-marker-alt"></i> Bursa, Osmangazi</span>
+                                        <span><i class="fas fa-clock"></i> 1 gün önce</span>
+                                    </div>
+                                    <a href="#" class="listing-button">İncele</a>
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="listings-pagination">
                             <span class="pagination-button active">1</span>
                             <span class="pagination-button">2</span>
-                            <span class="pagination-button">3</span>
-                            <span class="pagination-button">4</span>
-                            <span class="pagination-button">5</span>
                             <span class="pagination-button next"><i class="fas fa-chevron-right"></i></span>
                         </div>
                     </div>
@@ -353,6 +420,7 @@
         </div>
     </footer>
 
+    <script src="filtreleme_yedek.js"></script>
     <script src="listings.js"></script>
     
     <script>

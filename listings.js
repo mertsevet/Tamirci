@@ -1,12 +1,16 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Sayfa yüklendiğinde çalışacak kodlar
-    initializeFilters();
-    setupEventListeners();
+    // Not: Filtreleme işlemleri artık filtreleme_yedek.js'den yönetiliyor
+    // initializeFilters();
+    // setupEventListeners();
     loadListings();
+    setupPagination();
 });
 
 // Sayfa ilk yüklendiğinde çalışacak işlemler
 function initializeFilters() {
+    // jQuery filtreleme işlevi kullanıldığından bu fonksiyon devre dışı bırakıldı
+    /*
     // Kategori filtrelerini oluştur
     const filterCategory = document.querySelector('.filter-category');
     const filterStatus = document.querySelector('.filter-status');
@@ -46,6 +50,7 @@ function initializeFilters() {
     
     // Şehir ve ilçe bilgilerini yükle
     loadCityDistricts();
+    */
 }
 
 // Şehir seçildiğinde ilçeleri yükleme
@@ -96,6 +101,8 @@ function getCityDistricts(city) {
 
 // Olay dinleyicilerini ayarla
 function setupEventListeners() {
+    // jQuery filtreleme işlevi kullanıldığından bu fonksiyon devre dışı bırakıldı
+    /*
     // Filtreleri uygula butonu
     const applyFiltersButton = document.getElementById('apply-filters');
     if (applyFiltersButton) {
@@ -196,10 +203,13 @@ function setupEventListeners() {
             applyFilters();
         });
     }
+    */
 }
 
 // Filtreleri uygula
 function applyFilters() {
+    // jQuery filtreleme işlevi kullanıldığından bu fonksiyon devre dışı bırakıldı
+    /*
     // Seçili kategorileri al
     const selectedCategories = Array.from(document.querySelectorAll('.filter-category input:checked')).map(input => input.value);
     
@@ -242,10 +252,13 @@ function applyFilters() {
             sort: sortOption
         });
     }, 600);
+    */
 }
 
 // Aktif filtre etiketlerini güncelle
 function updateActiveFilterTags(categories, city, district, minPrice, maxPrice, urgency, status, searchText) {
+    // jQuery filtreleme işlevi kullanıldığından bu fonksiyon devre dışı bırakıldı
+    /*
     const activeFilters = document.querySelector('.active-filters');
     
     // Tümünü temizle butonu hariç tüm etiketleri temizle
@@ -307,18 +320,24 @@ function updateActiveFilterTags(categories, city, district, minPrice, maxPrice, 
     } else {
         activeFilters.parentElement.style.display = 'none';
     }
-    
-    // Yardımcı fonksiyon: Filtre etiketi ekle
-    function addFilterTag(text) {
-        const tag = document.createElement('span');
-        tag.className = 'filter-tag';
-        tag.innerHTML = `${text} <i class="fas fa-times"></i>`;
-        activeFilters.appendChild(tag);
-    }
+    */
+}
+
+// Yardımcı fonksiyon: Filtre etiketi ekle
+function addFilterTag(text) {
+    // jQuery filtreleme işlevi kullanıldığından bu fonksiyon devre dışı bırakıldı
+    /*
+    const tag = document.createElement('span');
+    tag.className = 'filter-tag';
+    tag.innerHTML = `${text} <i class="fas fa-times"></i>`;
+    activeFilters.appendChild(tag);
+    */
 }
 
 // Filtreleri sıfırla
 function resetFilters() {
+    // jQuery filtreleme işlevi kullanıldığından bu fonksiyon devre dışı bırakıldı
+    /*
     // Tüm filtreleri sıfırla
     document.querySelectorAll('.filter-category input').forEach(input => input.checked = false);
     document.querySelectorAll('.filter-urgency input').forEach(input => input.checked = false);
@@ -351,6 +370,7 @@ function resetFilters() {
     setTimeout(() => {
         loadListings();
     }, 300);
+    */
 }
 
 // Yükleniyor durumunu göster
@@ -461,26 +481,28 @@ style.textContent = `
 
 .listings-container-wrapper {
     display: flex;
-    max-width: 1200px;
+    max-width: 1300px;
     margin: 0 auto;
     gap: 30px;
 }
 
 .listings-sidebar {
-    width: 25%;
+    width: 22%;
     padding-right: 15px;
+    margin-left: -45px;
 }
 
 .listings-main {
-    width: 75%;
+    width: 78%;
+    padding-left: 25px;
 }
 
 .filter-box {
     background-color: white;
     border-radius: 8px;
-    padding: 15px;
+    padding: 16px;
     margin-bottom: 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
 .filter-box h3 {
@@ -666,9 +688,60 @@ style.textContent = `
 
 .listings-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
     margin-bottom: 30px;
+}
+
+.listing-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    width: 100%;
+    max-width: none;
+}
+
+.listing-image {
+    position: relative;
+    height: 180px;
+    overflow: hidden;
+}
+
+.listing-image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+}
+
+.listing-content {
+    padding: 15px;
+}
+
+.listing-header h4 {
+    font-size: 16px;
+    color: #333;
+    margin: 0;
+}
+
+.listing-description {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 15px;
+    line-height: 1.4;
+    height: 54px;
+    overflow: hidden;
+}
+
+.listing-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 12px;
 }
 
 .listings-pagination {
@@ -710,7 +783,7 @@ style.textContent = `
     }
     
     .listings-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
     }
     
     .listings-top-bar {
@@ -747,6 +820,170 @@ style.textContent = `
         height: 30px;
         font-size: 12px;
     }
-}`;
+    
+    .listings-grid {
+        grid-template-columns: 1fr;
+    }
+}
 
-document.head.appendChild(style); 
+// Featured sınıflı ilan kartlarının stillerini düzenleme
+.listing-card.featured {
+    border: none;
+    transform: none;
+}
+
+// Aciliyet ve diğer rozetleri gizleme
+.listing-badge {
+    display: none;
+}
+`;
+
+document.head.appendChild(style);
+
+// Sayfalama fonksiyonunu ayarla
+function setupPagination() {
+    const paginationButtons = document.querySelectorAll('.pagination-button');
+    
+    paginationButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Aktif sınıfı kaldır
+            document.querySelector('.pagination-button.active').classList.remove('active');
+            
+            // Tıklanan butona aktif sınıf ekle
+            this.classList.add('active');
+            
+            // İlgili sayfayı yükle
+            const pageText = this.textContent.trim();
+            if (!isNaN(pageText) && pageText !== '') {
+                const page = parseInt(pageText);
+                showPage(page);
+            } else if (this.classList.contains('next')) {
+                // Bir sonraki sayfa
+                const activePage = parseInt(document.querySelector('.pagination-button.active').textContent);
+                if (activePage < 2) { // Toplam 2 sayfa
+                    const nextButton = document.querySelector(`.pagination-button:nth-child(${activePage + 1})`);
+                    if (nextButton) {
+                        nextButton.classList.add('active');
+                        document.querySelector('.pagination-button.active').classList.remove('active');
+                        showPage(activePage + 1);
+                    }
+                }
+            }
+            
+            // Sayfa değişiminde sayfayı yukarı kaydır
+            window.scrollTo({
+                top: document.querySelector('.listings-section').offsetTop - 100,
+                behavior: 'smooth'
+            });
+        });
+    });
+}
+
+// Belirli sayfadaki ilanları göster
+function showPage(page) {
+    console.log("Sayfa değiştiriliyor: " + page);
+    
+    // İlan kartlarını seç
+    const allCards = document.querySelectorAll('.listing-card');
+    
+    // Sayfa 1 için orijinal ilanları göster
+    if (page === 1) {
+        console.log("Sayfa 1 gösteriliyor");
+        allCards.forEach(card => {
+            card.style.display = '';
+        });
+        updateListingCount(1);
+    }
+    // Sayfa 2 için içeriği değiştir
+    else if (page === 2) {
+        console.log("Sayfa 2 gösteriliyor");
+        // Yeni içerik oluştur
+        createSecondPageListings();
+        updateListingCount(2);
+    }
+}
+
+// Sayfa 2 için yeni ilanlar oluştur
+function createSecondPageListings() {
+    const listingsGrid = document.querySelector('.listings-grid');
+    
+    // Önce grid içeriğini temizle
+    listingsGrid.innerHTML = '';
+    
+    // Sayfa 2 için örnek ilanlar
+    const page2Listings = [
+        { category: 'bilgisayar', city: 'istanbul', price: 450, image: 'laptop-fan.jpg', title: 'MacBook Batarya Değişimi', priceRange: '₺400 - ₺500', description: 'MacBook Pro 2019 model laptopumun bataryası şişti, değiştirilmesi gerekiyor.', location: 'İstanbul, Şişli', time: '1 gün önce' },
+        { category: 'telefon', city: 'ankara', price: 750, image: 'iphone-tamiri.jpg', title: 'Samsung S23 Ekran Değişimi', priceRange: '₺700 - ₺800', description: 'Telefonumun ekranı çatladı, orijinal parça ile değişim istiyorum.', location: 'Ankara, Yenimahalle', time: '3 gün önce' },
+        { category: 'beyaz_esya', city: 'izmir', price: 350, image: 'camasir-makinesi.jpg', title: 'Çamaşır Makinesi Kart Tamiri', priceRange: '₺300 - ₺400', description: 'Arçelik çamaşır makinemin elektronik kartı arızalandı, su alıyor ancak çalışmıyor.', location: 'İzmir, Balçova', time: '5 saat önce' },
+        { category: 'elektronik', city: 'bursa', price: 550, image: 'samsung-tv.jpg', title: 'Hoparlör Sistemi Tamiri', priceRange: '₺500 - ₺600', description: 'Logitech 5+1 ses sistemi ara ara cızırtı yapıyor, genel bakım ve tamir gerekiyor.', location: 'Bursa, İnegöl', time: '6 gün önce' },
+        { category: 'elektrik', city: 'istanbul', price: 480, image: 'elektrik-tesisati.jpg', title: 'Avize Montajı ve Elektrik Arızası', priceRange: '₺400 - ₺550', description: 'Yeni taşındığım evde 3 avize takılacak ve elektrik hatlarında kontrol gerekiyor.', location: 'İstanbul, Ümraniye', time: '1 gün önce' },
+        { category: 'bilgisayar', city: 'antalya', price: 280, image: 'masaustu-pc.jpg', title: 'Oyun PC Termal Macun Değişimi', priceRange: '₺250 - ₺300', description: 'Gaming bilgisayarım çok ısınıyor, termal macun değişimi ve fan temizliği istiyorum.', location: 'Antalya, Konyaaltı', time: '4 gün önce' },
+        { category: 'isi_sistemleri', city: 'ankara', price: 650, image: 'klima-tamiri.jpg', title: 'Kombi Bakımı ve Arıza Giderme', priceRange: '₺600 - ₺700', description: 'Demirdöküm kombim sürekli kendini kapatıyor, komple bakım ve onarım gerekiyor.', location: 'Ankara, Mamak', time: '2 gün önce' },
+        { category: 'mobilya', city: 'izmir', price: 420, image: 'buzdolabi.jpg', title: 'Mutfak Dolabı Menteşe Tamiri', priceRange: '₺400 - ₺450', description: 'Mutfak dolabımda 5 kapağın menteşeleri bozuldu, değiştirilmesi gerekiyor.', location: 'İzmir, Karşıyaka', time: '3 gün önce' },
+        { category: 'su_tesisati', city: 'adana', price: 280, image: 'elektrik-tesisati.jpg', title: 'Banyo Tesisatı Yenileme', priceRange: '₺250 - ₺300', description: 'Banyomdaki su tesisatında sızıntı var, borular değişecek ve fayans onarılacak.', location: 'Adana, Seyhan', time: '1 hafta önce' },
+        { category: 'telefon', city: 'istanbul', price: 200, image: 'iphone-tamiri.jpg', title: 'Huawei Şarj Soketi Değişimi', priceRange: '₺180 - ₺220', description: 'Telefonum şarj olmuyor, şarj soketi değişimi yapılması gerekiyor.', location: 'İstanbul, Maltepe', time: '2 gün önce' },
+        { category: 'ev_aletleri', city: 'bursa', price: 180, image: 'camasir-makinesi.jpg', title: 'Ütü Tamiri', priceRange: '₺150 - ₺200', description: 'Buharlı ütüm su sızdırıyor ve yeterince ısıtmıyor, tamir edilmesi gerekiyor.', location: 'Bursa, Mudanya', time: '5 gün önce' },
+        { category: 'elektronik', city: 'antalya', price: 320, image: 'samsung-tv.jpg', title: 'Dijital Kamera Lens Tamiri', priceRange: '₺300 - ₺350', description: 'Canon DSLR kameramın lensi sıkışıyor, mekanik aksamda sorun var.', location: 'Antalya, Muratpaşa', time: '3 gün önce' }
+    ];
+    
+    // İlanları oluştur ve ekle
+    page2Listings.forEach(listing => {
+        const listingCard = document.createElement('div');
+        listingCard.className = 'listing-card';
+        listingCard.setAttribute('data-category', listing.category);
+        listingCard.setAttribute('data-city', listing.city);
+        listingCard.setAttribute('data-price', listing.price);
+        
+        listingCard.innerHTML = `
+            <div class="listing-image">
+                <img src="images/listings/${listing.image}" alt="${listing.title}">
+                <span class="listing-category">${getCategoryName(listing.category)}</span>
+            </div>
+            <div class="listing-content">
+                <div class="listing-header">
+                    <h4>${listing.title}</h4>
+                    <span class="listing-price">${listing.priceRange}</span>
+                </div>
+                <p class="listing-description">${listing.description}</p>
+                <div class="listing-meta">
+                    <span><i class="fas fa-map-marker-alt"></i> ${listing.location}</span>
+                    <span><i class="fas fa-clock"></i> ${listing.time}</span>
+                </div>
+                <a href="#" class="listing-button">İncele</a>
+            </div>
+        `;
+        
+        listingsGrid.appendChild(listingCard);
+    });
+}
+
+// Kategori değerini insanların okuyabileceği hale getir
+function getCategoryName(category) {
+    const categoryNames = {
+        'bilgisayar': 'Bilgisayar',
+        'telefon': 'Telefon',
+        'beyaz_esya': 'Beyaz Eşya',
+        'elektronik': 'Elektronik',
+        'elektrik': 'Elektrik',
+        'su_tesisati': 'Su Tesisatı',
+        'mobilya': 'Mobilya',
+        'isi_sistemleri': 'Isı Sistemleri',
+        'ev_aletleri': 'Ev Aletleri'
+    };
+    
+    return categoryNames[category] || category;
+}
+
+// İlan sayısını güncelle
+function updateListingCount(page) {
+    const listingsCount = document.querySelector('.listings-count span');
+    if (listingsCount) {
+        // Farklı sayfalara göre farklı sayılar gösterelim
+        const counts = {
+            1: 145,
+            2: 132
+        };
+        
+        listingsCount.textContent = counts[page] || 145;
+    }
+} 
