@@ -1,6 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Login script loaded');
 
+    // Test kullanıcısı ile form doldurma
+    const fillTestButton = document.getElementById('fill-test-button');
+    if (fillTestButton) {
+        fillTestButton.addEventListener('click', function() {
+            document.getElementById('email').value = 'test@example.com';
+            document.getElementById('password').value = 'test123';
+        });
+    }
+
     // Şifre göster/gizle işlevselliği
     const passwordToggle = document.querySelector('.password-toggle');
     const passwordInput = document.getElementById('password');
@@ -37,36 +46,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         try {
-            // LocalStorage'dan kullanıcı bilgilerini al
-            const registeredUsers = JSON.parse(localStorage.getItem('registered_users') || '[]');
-            const user = registeredUsers.find(u => u.email.toLowerCase() === email.toLowerCase());
+            // API'den giriş işlemi
+            console.log("window.loginUser'a erişim denetleniyor:", typeof window.loginUser);
+            const result = await window.loginUser(email, password);
+            console.log('Giriş sonucu:', result);
             
-            if (user) {
-                // Gerçek bir backend olmadığı için şifre kontrolü basit yapılıyor
-                // Gerçek uygulamada şifre hashlenerek karşılaştırılmalı
-                if (password === user.password) {
-                    console.log('Login successful, redirecting...');
-                    
-                    // Giriş başarılı gösterimi
-                    showAlert('Giriş başarılı! Yönlendiriliyorsunuz...', 'success');
-                    
-                    // Token ve kullanıcı bilgilerini kaydet (şifre olmadan)
-                    const token = 'simulated_token_' + Date.now();
-                    const userToStore = { ...user };
-                    delete userToStore.password; // Şifreyi client tarafında saklamayalım
-                    
-                    localStorage.setItem('token', token);
-                    localStorage.setItem('user', JSON.stringify(userToStore));
-                    
-                    // Kullanıcı rolüne göre yönlendirme
-                    setTimeout(() => {
-                        window.location.href = 'index.html';
-                    }, 1500);
-                } else {
-                    showAlert('Şifre hatalı. Lütfen tekrar deneyin.', 'error');
-                }
+            if (result.success) {
+                // Giriş başarılı gösterimi
+                showAlert('Giriş başarılı! Yönlendiriliyorsunuz...', 'success');
+                
+                // Kullanıcı rolüne göre yönlendirme
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
             } else {
-                showAlert('Bu e-posta adresine ait kayıt bulunamadı. Lütfen üye olun.', 'error');
+                showAlert(result.message || 'Giriş başarısız. Lütfen bilgilerinizi kontrol edin.', 'error');
             }
         } catch (error) {
             console.error('Login error:', error);
@@ -119,10 +113,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Oturum kontrolü
     function checkSession() {
-        const token = localStorage.getItem('token');
-        if (token) {
-            console.log('User already logged in, redirecting...');
-            window.location.href = 'index.html';
+        console.log('checkSession fonksiyonu çağrıldı, window.checkUserSession:', typeof window.checkUserSession);
+        try {
+            const session = window.checkUserSession();
+            console.log('Oturum kontrolü sonucu:', session);
+            if (session.loggedIn) {
+                console.log('User already logged in, redirecting...');
+                window.location.href = 'index.html';
+            }
+        } catch (error) {
+            console.error('Oturum kontrolü hatası:', error);
         }
     }
     
@@ -177,6 +177,29 @@ document.addEventListener('DOMContentLoaded', function() {
             background-color: #d1ecf1;
             color: #0c5460;
             border: 1px solid #bee5eb;
+        }
+        .test-user-info {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .fill-test-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .fill-test-button:hover {
+            background-color: #0069d9;
         }
     `;
     document.head.appendChild(style);

@@ -1,0 +1,20 @@
+{
+  "name": "tamirci",
+  "version": "1.0.0",
+  "description": "Tamirci hizmetleri web uygulaması",
+  "main": "index.html",
+  "scripts": {
+    "api": "json-server --watch db.json --port 3001",
+    "web": "http-server -p 8081",
+    "start": "concurrently \"npm run api\" \"npm run web\""
+  },
+  "dependencies": {
+    "json-server": "^1.0.0",
+    "http-server": "^14.1.1"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "author": "",
+  "license": "ISC"
+}

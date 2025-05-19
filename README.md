@@ -1,62 +1,113 @@
-# TAMIRCI - Profesyonel Tamir Hizmeti Arayüzü
+# Tamirci Web Uygulaması
 
-Bu proje, profesyonel tamir hizmeti veren bir web sitesinin ön yüz tasarımıdır. Modern ve kullanıcı dostu bir arayüz ile tamir hizmetlerini bulmayı ve iletişime geçmeyi kolaylaştırır.
+Bu proje, tamirci hizmetlerini arayanlar ve tamircilerin buluştuğu bir web platformudur. Kullanıcılar tamir ilanları oluşturabilir, tamirciler de bu ilanlara teklif verebilir.
 
-## Özellikler
+## Gereksinimler
 
-- Responsive tasarım (mobil ve masaüstü uyumlu)
-- Arama işlevselliği
-- Kategori ikonları
-- Modern ve kullanıcı dostu arayüz
-
-## Teknolojiler
-
-- HTML5
-- CSS3
-- JavaScript (ES6+)
+- [Node.js](https://nodejs.org/) (en az v14.x veya üzeri)
+- npm (Node.js ile birlikte gelir)
 
 ## Kurulum
 
-1. Repoyu klonlayın:
-   ```
-   git clone https://github.com/mertsevet/Tamirci.git
-   ```
+Projeyi yeni bir bilgisayara taşıdıktan sonra şu adımları izleyin:
 
-2. Proje klasörüne gidin:
+1. Terminal veya komut istemcisini açın ve proje klasörüne gidin:
    ```
-   cd tamirci-arayuz
+   cd yol/Tamirci
    ```
 
-3. `index.html` dosyasını tarayıcınızda açın.
-
-## Ekran Görüntüleri
-
-Proje tamamlandığında ekran görüntüleri burada yer alacaktır.
-
-## Geliştirme
-
-Projeyi geliştirmek için:
-
-1. Yeni bir branch oluşturun:
+2. Gerekli paketleri kurun:
    ```
-   git checkout -b ozellik/yeni-ozellik
+   npm install
    ```
 
-2. Değişikliklerinizi commit edin:
-   ```
-   git commit -m 'Yeni özellik eklendi'
-   ```
+## Uygulamayı Çalıştırma
 
-3. Branch'inizi push edin:
-   ```
-   git push origin ozellik/yeni-ozellik
-   ```
+### Tek Komutla Başlatma (Önerilen Yöntem)
 
-4. Pull Request oluşturun.
+Hem API sunucusunu hem de web sunucusunu tek bir komutla başlatabilirsiniz:
+```
+npm start
+```
 
-## Katkıda Bulunanlar
+Bu komut, hem JSON-Server API'sini (port 3001) hem de HTTP sunucusunu (port 8081) aynı anda başlatacaktır.
 
-- Mert Sevet - Scrum Master
-- Mustafa Emin Bahar - Ekip Üyesi
-- Ali Talip Hasar - Ekip Üyesi
-- Ali Arda Elmasulu - Ekip Üyesi
+### Ayrı Ayrı Başlatma
+
+Alternatif olarak, uygulamayı iki ayrı terminal/komut istemi penceresi açarak başlatabilirsiniz:
+
+#### 1. API Sunucusu
+
+İlk terminalde JSON-Server API sunucusunu başlatın:
+```
+npm run api
+```
+veya
+```
+npx json-server --watch db.json --port 3001
+```
+
+Başarılı olursa şu şekilde bir çıktı göreceksiniz:
+```
+JSON Server started on PORT :3001
+Press CTRL-C to stop
+Watching db.json...
+```
+
+#### 2. Web Sunucusu
+
+İkinci terminalde web sunucusunu başlatın:
+```
+npm run web
+```
+veya
+```
+npx http-server -p 8081
+```
+
+Başarılı olursa şu şekilde bir çıktı göreceksiniz:
+```
+Starting up http-server, serving ./
+Available on:
+  http://127.0.0.1:8081
+```
+
+### 3. Uygulamayı Tarayıcıda Açma
+
+Web tarayıcınızı açın ve şu adresi ziyaret edin:
+```
+http://localhost:8081
+```
+
+### Not: Port Sorunları
+
+Eğer yukarıdaki portlar başka uygulamalar tarafından kullanılıyorsa farklı port numaraları deneyebilirsiniz:
+```
+npx json-server --watch db.json --port 3002
+npx http-server -p 8082
+```
+
+## Test Kullanıcısı
+
+Sisteme giriş yapmak için önceden tanımlanmış bir test kullanıcısı mevcuttur:
+
+- E-posta: test@example.com
+- Şifre: test123
+
+## Özellikler
+
+- Kullanıcı kaydı ve girişi
+- Tamir ilanları görüntüleme
+- Tamir ilanı oluşturma
+- Tamirci profili oluşturma
+- Tamircilerin ilanlar için teklif vermesi
+- Kullanıcı profili yönetimi
+
+## Sorun Giderme
+
+Eğer uygulama beklendiği gibi çalışmazsa:
+
+1. Node.js'in doğru versiyonunun yüklü olduğundan emin olun
+2. `npm install` komutunun başarıyla tamamlandığını kontrol edin
+3. Port çakışması olup olmadığını kontrol edin
+4. Tarayıcı konsolunda hata mesajlarını kontrol edin

@@ -1,0 +1,52 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "firstName": "Admin",
+      "lastName": "Kullanıcı",
+      "email": "admin@tamirci.com",
+      "password": "admin123",
+      "role": "admin",
+      "phone": "5551234567",
+      "createdAt": "2023-05-01T10:00:00Z"
+    },
+    {
+      "id": 2,
+      "firstName": "mert",
+      "lastName": "sevet",
+      "email": "mertsevet@gmail.com",
+      "phone": "5555555555",
+      "password": "25802580",
+      "role": "customer",
+      "createdAt": "2025-05-19T16:12:21.981Z"
+    }
+  ],
+  "listings": [
+    {
+      "id": "1",
+      "title": "iPhone 12 Pro Ekran Tamiri",
+      "category": "telefon",
+      "description": "Telefonumun ekranı kırıldı, değişim yapılması gerekiyor. Orijinal ekran tercihimdir.",
+      "priceRange": "₺850 - ₺1200",
+      "city": "istanbul",
+      "district": "Kadıköy",
+      "image": "images/listings/iphone-tamiri.jpg",
+      "userId": 1,
+      "createdAt": "2023-06-15T14:30:00Z",
+      "status": "active"
+    },
+    {
+      "id": "2",
+      "title": "Çamaşır Makinesi Arızası",
+      "category": "ev_aletleri",
+      "description": "Çamaşır makinem sık sık hata veriyor. Su alıyor ama çalkalamıyor. Yerinde bakım gerekiyor.",
+      "priceRange": "₺300 - ₺600",
+      "city": "ankara",
+      "district": "Çankaya",
+      "image": "images/listings/camasir-makinesi.jpg",
+      "userId": 1,
+      "createdAt": "2023-06-12T09:15:00Z",
+      "status": "active"
+    }
+  ]
+}

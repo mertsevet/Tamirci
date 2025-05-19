@@ -75,6 +75,24 @@
         .login-button.loading .spinner {
             display: inline-block;
         }
+        
+        /* Alert stilleri */
+        .alert {
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
     </style>
 </head>
 <body class="login-page">
@@ -184,11 +202,9 @@
     </footer>
 
     <script src="password-toggle.js"></script>
+    <script src="auth.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // API URL
-            const API_URL = 'http://localhost:5000/api';
-            
             // Form elemanları
             const form = document.getElementById('registerForm');
             const submitButton = document.querySelector('.login-button');
@@ -252,49 +268,33 @@
                 submitButton.disabled = true;
                 
                 try {
-                    // API bağlantısı olmadığı için geçici olarak localStorage'da simüle ediyoruz
+                    // Kullanıcı verilerini hazırla
                     const userData = {
-                        _id: 'cust_' + Date.now(),
                         firstName,
                         lastName,
                         email,
                         phone,
-                        password, // Güvenli olmasa da test amaçlı şifreyi localStorage'da saklıyoruz
-                        role: 'customer',
-                        createdAt: new Date().toISOString()
+                        password,
+                        role: 'customer'
                     };
                     
-                    // Varolan kullanıcıları kontrol et
-                    const existingUsers = JSON.parse(localStorage.getItem('registered_users') || '[]');
+                    // API'ye kullanıcıyı kaydet
+                    const result = await registerUser(userData);
                     
-                    // Email adresi daha önce kayıtlı mı kontrol et
-                    const emailExists = existingUsers.some(user => user.email.toLowerCase() === email.toLowerCase());
-                    if (emailExists) {
-                        showError('email', 'Bu e-posta adresi zaten kullanılıyor');
+                    if (result.success) {
+                        // Başarılı mesajı
+                        showSuccessAlert('Kaydınız başarıyla tamamlandı! Anasayfaya yönlendiriliyorsunuz...');
+                        
+                        // 2 saniye sonra anasayfaya yönlendir
+                        setTimeout(() => {
+                            window.location.href = 'index.html';
+                        }, 2000);
+                    } else {
+                        // Hata mesajı
+                        showErrorAlert(result.message || 'Kayıt sırasında bir hata oluştu.');
                         submitButton.classList.remove('loading');
                         submitButton.disabled = false;
-                        return;
                     }
-                    
-                    // Yeni kullanıcıyı ekle
-                    existingUsers.push(userData);
-                    localStorage.setItem('registered_users', JSON.stringify(existingUsers));
-                    
-                    // Oturum token ve kullanıcı bilgilerini oluştur (şifre olmadan)
-                    const token = 'simulated_token_' + Date.now();
-                    const userToStore = { ...userData };
-                    delete userToStore.password; // Şifreyi client tarafında saklamayalım
-                    
-                    localStorage.setItem('token', token);
-                    localStorage.setItem('user', JSON.stringify(userToStore));
-                    
-                    // Başarılı mesajı
-                    showSuccessAlert('Kaydınız başarıyla tamamlandı! Anasayfaya yönlendiriliyorsunuz...');
-                    
-                    // 2 saniye sonra anasayfaya yönlendir
-                    setTimeout(() => {
-                        window.location.href = 'index.html';
-                    }, 2000);
                 } catch (error) {
                     console.error('Registration error:', error);
                     showErrorAlert('Kayıt sırasında bir hata oluştu. Lütfen daha sonra tekrar deneyin.');
@@ -355,32 +355,10 @@
                 }, 4000);
             }
             
-            // Alert stilleri ekle
-            const style = document.createElement('style');
-            style.textContent = `
-                .alert {
-                    padding: 12px 15px;
-                    margin-bottom: 20px;
-                    border-radius: 4px;
-                    font-size: 14px;
-                }
-                .alert-success {
-                    background-color: #d4edda;
-                    color: #155724;
-                    border: 1px solid #c3e6cb;
-                }
-                .alert-error {
-                    background-color: #f8d7da;
-                    color: #721c24;
-                    border: 1px solid #f5c6cb;
-                }
-            `;
-            document.head.appendChild(style);
-            
             // Oturum kontrolü
             function checkSession() {
-                const token = localStorage.getItem('token');
-                if (token) {
+                const session = checkUserSession();
+                if (session.loggedIn) {
                     window.location.href = 'index.html';
                 }
             }

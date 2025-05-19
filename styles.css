@@ -83,7 +83,7 @@ nav ul {
 .hero-content {
     max-width: 800px;
     padding: 0 20px;
-    opacity: 0;
+    opacity: 1;
     transition: opacity 1s ease;
 }
 
@@ -910,22 +910,24 @@ footer {
 }
 
 .listings-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 30px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
     max-width: 1200px;
     margin: 0 auto 40px;
 }
 
 .listing-card {
+    width: 100%;
+    max-width: none;
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    width: 350px;
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     position: relative;
+    transform: none;
+    margin: initial;
 }
 
 .listing-card.featured {
@@ -944,14 +946,15 @@ footer {
 
 .listing-image {
     position: relative;
-    height: 200px;
-    overflow: hidden;
+    height: auto;
+    overflow: visible;
+    max-height: none;
 }
 
 .listing-image img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
+    object-fit: contain;
     transition: transform 0.3s ease;
 }
 
@@ -1046,6 +1049,27 @@ footer {
 .listing-button:hover {
     background-color: #e53935;
     color: white;
+}
+
+/* Şimdi öne çıkan ilanlar için özel stiller ekliyorum */
+.featured-listings .listing-card {
+    /* Özel stiller kaldırıldı */
+}
+
+.featured-listings .listing-image {
+    /* Özel stiller kaldırıldı */
+}
+
+.featured-listings .listing-content {
+    /* Özel stiller kaldırıldı */
+}
+
+.featured-listings .listing-header h4 {
+    /* Özel stiller kaldırıldı */
+}
+
+.featured-listings .listing-description {
+    /* Özel stiller kaldırıldı */
 }
 
 /* Technicians Section */
@@ -1199,29 +1223,28 @@ footer {
 }
 
 /* Improve listings appearance on mobile */
-@media (max-width: 768px) {
-    .listings-filter {
-        flex-direction: column;
-        align-items: flex-start;
+@media (max-width: 992px) {
+    .listings-sidebar, .listings-main {
+        width: 100% !important;
+        padding-left: 0;
+        padding-right: 0;
+        margin-left: 0;
     }
     
-    .filter-tags {
-        margin-bottom: 15px;
-        width: 100%;
-        overflow-x: auto;
-        padding-bottom: 10px;
-        flex-wrap: nowrap;
+    .listings-grid, .listings-container {
+        grid-template-columns: repeat(2, 1fr) !important;
     }
-    
-    .listings-sort {
-        width: 100%;
+}
+
+@media (max-width: 576px) {
+    .listings-grid, .listings-container {
+        grid-template-columns: 1fr !important;
     }
-    
-    .listing-card.featured {
-        transform: none;
-        width: 100%;
-        max-width: 350px;
-    }
+}
+
+/* İkinci sayfa için ilan listesini oluştur */
+.listings-grid.page-2 {
+    display: none;
 }
 
 /* Kullanıcı Menüsü Stilleri */
@@ -1333,11 +1356,15 @@ footer {
     list-style: none;
     padding: 0;
     margin: 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 .user-menu-dropdown ul li {
     padding: 0;
     margin: 0;
+    width: 100%;
 }
 
 .user-menu-dropdown ul li a {
@@ -1347,6 +1374,7 @@ footer {
     color: #333;
     text-decoration: none;
     transition: background-color 0.2s;
+    width: 100%;
 }
 
 .user-menu-dropdown ul li a:hover {
@@ -1645,7 +1673,7 @@ footer {
 
 /* İlan kartlarının içeriğini düzenle */
 .listing-image {
-    height: 180px !important;
+    height: auto !important;
 }
 
 .listing-content {
@@ -1693,29 +1721,4 @@ footer {
 .apply-filter-button {
     padding: 12px 15px !important;
     font-weight: bold !important;
-}
-
-/* Mobil görünüm için düzenlemeler */
-@media (max-width: 992px) {
-    .listings-sidebar, .listings-main {
-        width: 100% !important;
-        padding-left: 0;
-        padding-right: 0;
-        margin-left: 0;
-    }
-    
-    .listings-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-    }
-}
-
-@media (max-width: 576px) {
-    .listings-grid {
-        grid-template-columns: 1fr !important;
-    }
-}
-
-/* İkinci sayfa için ilan listesini oluştur */
-.listings-grid.page-2 {
-    display: none;
 } 

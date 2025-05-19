@@ -1,9 +1,10 @@
 // Sayfa yüklendiğinde çalışacak
 document.addEventListener('DOMContentLoaded', function() {
     // API URL
-    const API_URL = 'http://localhost:5000/api';
+    const API_URL = 'http://localhost:3001';
 
-    // Kullanıcı oturumunu kontrol et
+    // Kullanıcı oturumunu kontrol et ve header'ı güncelle
+    console.log('Sayfa yüklendi, kullanıcı oturumu kontrol ediliyor...');
     checkUserSession();
 
     // Arama çubuğu işlevselliği
@@ -325,143 +326,200 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Kullanıcı oturumunu kontrol eden fonksiyon
 function checkUserSession() {
-    const token = localStorage.getItem('token');
-    const userJSON = localStorage.getItem('user');
-    
-    if (token && userJSON) {
-        const user = JSON.parse(userJSON);
-        console.log('Kullanıcı oturumu aktif:', user);
-        updateHeaderForLoggedInUser(user);
+    try {
+        console.log('script.js: checkUserSession çağrılıyor');
+        // localStorage'dan doğrudan kontrol yapalım
+        const token = localStorage.getItem('token');
+        const userJSON = localStorage.getItem('user');
+        
+        if (token && userJSON) {
+            try {
+                const user = JSON.parse(userJSON);
+                console.log('script.js: Kullanıcı oturumu aktif:', user);
+                updateHeaderForLoggedInUser(user);
+                return { loggedIn: true, user };
+            } catch (e) {
+                console.error('script.js: JSON parse hatası:', e);
+            }
+        } else {
+            console.log('script.js: Kullanıcı oturumu aktif değil');
+        }
+        
+        return { loggedIn: false };
+    } catch (error) {
+        console.error('script.js: checkUserSession hatası:', error);
+        return { loggedIn: false };
     }
 }
 
 // Header'ı giriş yapmış kullanıcıya göre güncelle
 function updateHeaderForLoggedInUser(user) {
-    const nav = document.querySelector('header nav ul');
+    console.log('updateHeaderForLoggedInUser çağrıldı, user:', user);
     
-    // Eski butonları temizle
-    const loginButton = document.querySelector('a[href="login.html"]');
-    const signupButton = document.getElementById('signup-button');
-    
-    if (loginButton && signupButton) {
-        const loginLi = loginButton.parentElement;
-        const signupLi = signupButton.parentElement;
+    try {
+        const nav = document.querySelector('header nav ul');
+        if (!nav) {
+            console.error('Nav elementi bulunamadı!');
+            return;
+        }
         
-        if (loginLi) loginLi.remove();
-        if (signupLi) signupLi.remove();
+        // Önceki login ve signup butonlarını temizle
+        const loginButton = document.querySelector('a[href="login.html"]');
+        const signupButton = document.querySelector('a[href="musteri-kayit.html"]');
         
-        // Kullanıcı menüsünü ekle
-        const userMenuItem = document.createElement('li');
-        userMenuItem.classList.add('user-menu');
+        console.log('Login butonu:', loginButton);
+        console.log('Signup butonu:', signupButton);
         
-        const role = user.role === 'technician' ? 'Tamirci' : 'Müşteri';
-        const dashboardLink = user.role === 'technician' ? 'tamirci-panel.html' : 'musteri-panel.html';
-        
-        // Profil resmi için ilk harfler
-        // Kullanıcı adı firstName ve lastName olarak bölünmüşse
-        let initials = '';
-        if (user.firstName && user.lastName) {
-            initials = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`;
-        } else if (user.name) {
-            // Eğer tam isim bir alanda tutuluyorsa
-            const nameParts = user.name.split(' ');
-            if (nameParts.length > 1) {
-                initials = `${nameParts[0].charAt(0)}${nameParts[nameParts.length - 1].charAt(0)}`;
-            } else {
-                initials = nameParts[0].charAt(0);
+        // Ebeveyn li elementlerini bulup kaldır
+        if (loginButton) {
+            const loginLi = loginButton.closest('li');
+            if (loginLi) {
+                console.log('Login li elementi kaldırılıyor');
+                loginLi.remove();
             }
-        } else {
-            // Eğer isim bilgisi yoksa e-postanın ilk harfini kullan
-            initials = user.email.charAt(0).toUpperCase();
         }
         
-        // Tam isim oluştur
-        let fullName = '';
-        if (user.firstName && user.lastName) {
-            fullName = `${user.firstName} ${user.lastName}`;
-        } else if (user.name) {
-            fullName = user.name;
-        } else {
-            fullName = user.email.split('@')[0];
+        if (signupButton) {
+            const signupLi = signupButton.closest('li');
+            if (signupLi) {
+                console.log('Signup li elementi kaldırılıyor');
+                signupLi.remove();
+            }
         }
         
-        userMenuItem.innerHTML = `
-            <div class="user-menu-trigger">
-                <div class="user-avatar-small">
-                    <span>${initials}</span>
-                </div>
-                <span>${user.firstName || fullName.split(' ')[0]}</span>
-                <i class="fas fa-chevron-down"></i>
-            </div>
-            <div class="user-menu-dropdown">
-                <div class="user-info">
-                    <div class="user-avatar-large">
+        // Kullanıcı menüsünü ekle (eğer daha önce eklenmemişse)
+        if (!document.querySelector('.user-menu')) {
+            const userMenuItem = document.createElement('li');
+            userMenuItem.classList.add('user-menu');
+            
+            // Kullanıcı rolünü belirle
+            const role = user.role === 'technician' ? 'Tamirci' : 'Müşteri';
+            
+            // Profil için baş harfler
+            let initials = '';
+            if (user.firstName && user.lastName) {
+                initials = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`;
+            } else if (user.name) {
+                const nameParts = user.name.split(' ');
+                if (nameParts.length > 1) {
+                    initials = `${nameParts[0].charAt(0)}${nameParts[nameParts.length - 1].charAt(0)}`;
+                } else {
+                    initials = nameParts[0].charAt(0);
+                }
+            } else {
+                initials = user.email.charAt(0).toUpperCase();
+            }
+            
+            // Tam isim oluştur
+            let fullName = '';
+            if (user.firstName && user.lastName) {
+                fullName = `${user.firstName} ${user.lastName}`;
+            } else if (user.name) {
+                fullName = user.name;
+            } else {
+                fullName = user.email.split('@')[0];
+            }
+            
+            // Kullanıcı menüsü HTML'i
+            userMenuItem.innerHTML = `
+                <div class="user-menu-trigger">
+                    <div class="user-avatar-small">
                         <span>${initials}</span>
                     </div>
-                    <div class="user-details">
-                        <div class="user-name">${fullName}</div>
-                        <div class="user-role">${role}</div>
-                        <div class="user-email">${user.email}</div>
-                    </div>
+                    <span>${user.firstName || fullName.split(' ')[0]}</span>
+                    <i class="fas fa-chevron-down"></i>
                 </div>
-                <ul>
-                    <li><a href="#" id="panel-link"><i class="fas fa-tachometer-alt"></i> Panel</a></li>
-                    <li><a href="#" id="profile-link"><i class="fas fa-user-cog"></i> Profil</a></li>
-                    <li><a href="#" id="notifications-link"><i class="fas fa-bell"></i> Bildirimler</a></li>
-                    <li class="divider"></li>
-                    <li><a href="#" id="logout-button"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</a></li>
-                </ul>
-            </div>
-        `;
-        
-        nav.prepend(userMenuItem);
-        
-        // Kullanıcı menüsü açma/kapama
-        const userMenuTrigger = document.querySelector('.user-menu-trigger');
-        const userMenuDropdown = document.querySelector('.user-menu-dropdown');
-        
-        userMenuTrigger.addEventListener('click', function(e) {
-            e.preventDefault();
-            userMenuDropdown.classList.toggle('active');
-        });
-        
-        // Sayfa herhangi bir yerine tıklandığında menüyü kapat
-        document.addEventListener('click', function(event) {
-            if (!userMenuItem.contains(event.target)) {
-                userMenuDropdown.classList.remove('active');
+                <div class="user-menu-dropdown">
+                    <div class="user-info">
+                        <div class="user-avatar-large">
+                            <span>${initials}</span>
+                        </div>
+                        <div class="user-details">
+                            <div class="user-name">${fullName}</div>
+                            <div class="user-role">${role}</div>
+                            <div class="user-email">${user.email}</div>
+                        </div>
+                    </div>
+                    <ul>
+                        <li><a href="#" id="panel-link"><i class="fas fa-tachometer-alt"></i> Panel</a></li>
+                        <li><a href="#" id="profile-link"><i class="fas fa-user-cog"></i> Profil</a></li>
+                        <li><a href="#" id="notifications-link"><i class="fas fa-bell"></i> Bildirimler</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#" id="logout-button"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</a></li>
+                    </ul>
+                </div>
+            `;
+            
+            // Menüyü nav içine ekle (ilk sıraya)
+            if (nav.children.length > 0) {
+                nav.insertBefore(userMenuItem, nav.firstChild);
+            } else {
+                nav.appendChild(userMenuItem);
             }
-        });
-
-        // Panel butonuna tıklandığında
-        const panelLink = document.getElementById('panel-link');
-        panelLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            createOrRedirectToPanel(e, user);
-        });
-
-        // Profil butonuna tıklandığında
-        const profileLink = document.getElementById('profile-link');
-        profileLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            createProfileModal(user);
-        });
-
-        // Bildirimler butonuna tıklandığında
-        const notificationsLink = document.getElementById('notifications-link');
-        notificationsLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            alert('Şu anda yeni bildiriminiz bulunmamaktadır.');
-        });
-        
-        // Çıkış yapma işlevi
-        const logoutButton = document.getElementById('logout-button');
-        logoutButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            window.location.reload();
-        });
+            
+            console.log('Kullanıcı menüsü eklendi');
+            
+            // Event listeners ekle
+            setupUserMenuEventListeners(userMenuItem, user);
+        } else {
+            console.log('Kullanıcı menüsü zaten mevcut');
+        }
+    } catch (error) {
+        console.error('updateHeaderForLoggedInUser hatası:', error);
     }
+}
+
+// Kullanıcı menüsü için event listener'ları ekle
+function setupUserMenuEventListeners(userMenuItem, user) {
+    // Menü açma/kapama
+    const userMenuTrigger = userMenuItem.querySelector('.user-menu-trigger');
+    const userMenuDropdown = userMenuItem.querySelector('.user-menu-dropdown');
+    
+    userMenuTrigger.addEventListener('click', function(e) {
+        e.preventDefault();
+        userMenuDropdown.classList.toggle('active');
+    });
+    
+    // Sayfa herhangi bir yerine tıklandığında menüyü kapat
+    document.addEventListener('click', function(event) {
+        if (!userMenuItem.contains(event.target)) {
+            userMenuDropdown.classList.remove('active');
+        }
+    });
+    
+    // Panel butonuna tıklandığında
+    const panelLink = userMenuItem.querySelector('#panel-link');
+    panelLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        createOrRedirectToPanel(e, user);
+    });
+    
+    // Profil butonuna tıklandığında
+    const profileLink = userMenuItem.querySelector('#profile-link');
+    profileLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        createProfileModal(user);
+    });
+    
+    // Bildirimler butonuna tıklandığında
+    const notificationsLink = userMenuItem.querySelector('#notifications-link');
+    notificationsLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        alert('Şu anda yeni bildiriminiz bulunmamaktadır.');
+    });
+    
+    // Çıkış yapma işlevi
+    const logoutButton = userMenuItem.querySelector('#logout-button');
+    logoutButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Local storage'dan kullanıcı bilgilerini temizle
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        
+        // Sayfayı yenile
+        window.location.reload();
+    });
 }
 
 // Panel sayfasına yönlendirme veya oluşturma

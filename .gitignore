@@ -1,0 +1,37 @@
+# Node.js dosyaları
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+.pnpm-debug.log
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE ve editör dosyaları
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# İşletim sistemi dosyaları
+.DS_Store
+Thumbs.db
+
+# Paket yöneticisi dosyaları
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# build çıktıları
+dist/
+build/
+
+# Logs
+logs
+*.log
+npm-debug.log* 
