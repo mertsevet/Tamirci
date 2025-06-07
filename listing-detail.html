@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İlan Detayı - TAMIRCI</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="black-cursor.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+        <style>
+        /* Header navigation button overrides for listing detail page */
+        header .nav-button {
+            color: #333 !important;
+            border: 2px solid #333 !important;
+        }
+        
+        header .nav-button:hover {
+            opacity: 0.7 !important;
+        }
+        
+        header .red-button {
+            background-color: transparent !important;
+            border: 2px solid #e53935 !important;
+            color: #e53935 !important;
+        }
+        
+        header .red-button:hover {
+            opacity: 0.7 !important;
+        }
+        
+        header .orange-button {
+            background-color: #ff9800 !important;
+            border: 2px solid #ff9800 !important;
+            color: white !important;
+        }
+        
+        header .orange-button:hover {
+            opacity: 0.7 !important;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .detail-container {
+            max-width: 1200px;
+            margin: 140px auto 20px;
+            padding: 0;
+            background: transparent;
+        }
+
+        .detail-content {
+            background: transparent;
+        }
+
+        .detail-header {
+            display: none;
+        }
+
+        .detail-body {
+            padding: 0;
+        }
+
+        .user-listing-badge {
+            background: #ff9800;
+            color: white;
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 20px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .main-layout {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .left-column {
+            flex: 0 0 60%;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .right-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Fotoğraf Bölümü */
+        .image-gallery {
+            position: relative;
+        }
+
+        .main-image-container {
+            position: relative;
+            background: #333;
+            height: 400px;
+        }
+
+
+
+        .main-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #fff;
+        }
+
+        .image-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.9);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #333;
+            z-index: 2;
+        }
+
+        .image-nav.prev {
+            left: 15px;
+        }
+
+        .image-nav.next {
+            right: 15px;
+        }
+
+        .share-buttons {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 10px;
+            z-index: 2;
+        }
+
+        .share-btn {
+            background: rgba(255,255,255,0.9);
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+
+        .thumbnails {
+            display: flex;
+            gap: 8px;
+            padding: 15px;
+            background: #f8f8f8;
+            overflow-x: auto;
+        }
+
+        .thumbnail {
+            flex: 0 0 60px;
+            height: 60px;
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .thumbnail.active {
+            border-color: #ff4757;
+        }
+
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Sağ Kolon - Kullanıcı Bilgileri */
+        .user-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .user-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #ff4757;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .user-info h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .user-date {
+            font-size: 12px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+
+        .chat-button, .offer-button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: all 0.2s;
+        }
+
+        .chat-button {
+            background: white;
+            color: #ff4757;
+            border: 1px solid #ff4757;
+        }
+
+        .chat-button:hover {
+            background: #ff4757;
+            color: white;
+        }
+
+        .offer-button {
+            background: #ff4757;
+            color: white;
+        }
+
+        .offer-button:hover {
+            background: #ff3742;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 1% auto;
+            padding: 30px;
+            border-radius: 12px;
+            width: 95%;
+            max-width: 800px;
+            max-height: 95vh;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow-y: auto;
+        }
+
+        .close-button {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .close-button:hover {
+            color: #000;
+        }
+
+        /* Chat Modal Styles */
+        .chat-container {
+            max-height: 800px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+
+        .chat-user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ff4757;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .online-status {
+            color: #4caf50;
+            font-size: 12px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            max-height: 600px;
+            overflow-y: auto;
+            padding: 10px 0;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 12px 15px;
+            border-radius: 18px;
+            max-width: 80%;
+        }
+
+        .message.received {
+            background: #f1f3f4;
+            align-self: flex-start;
+        }
+
+        .message.sent {
+            background: #ff4757;
+            color: white;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+
+        .message p {
+            margin: 0 0 5px 0;
+        }
+
+        .message-time {
+            font-size: 11px;
+            opacity: 0.7;
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            outline: none;
+        }
+
+        .chat-input-area button {
+            background: #ff4757;
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Offer Modal Styles */
+        .offer-form {
+            margin-top: 20px;
+        }
+
+        .offer-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .offer-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .offer-form input,
+        .offer-form textarea,
+        .offer-form select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .offer-form textarea {
+            height: 80px;
+            resize: vertical;
+        }
+
+        .offer-form input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .submit-offer-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .submit-offer-btn:hover {
+            background: #ff3742;
+        }
+
+        .location-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .location-link {
+            color: #ff4757;
+            text-decoration: none;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+        }
+
+        .location-link i {
+            margin-right: 5px;
+        }
+
+        /* Alt Bölüm - Ürün Bilgileri */
+        .product-info {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .price-section {
+            margin-bottom: 20px;
+        }
+
+        .price {
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .product-title {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .product-meta {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .product-meta i {
+            margin-right: 5px;
+        }
+
+
+
+        .product-specs {
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        .specs-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .specs-table {
+            width: 100%;
+        }
+
+        .spec-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .spec-row:last-child {
+            border-bottom: none;
+        }
+
+        .spec-label {
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .spec-value {
+            font-size: 14px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .detail-container {
+                margin: 100px 10px 20px;
+            }
+
+            .main-layout {
+                flex-direction: column;
+            }
+
+            .main-image-container {
+                height: 300px;
+            }
+
+            .price {
+                font-size: 28px;
+            }
+
+            .thumbnails {
+                padding: 10px;
+            }
+
+            .thumbnail {
+                flex: 0 0 50px;
+                height: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header style="position: fixed; top: 0; left: 0; right: 0; background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000; padding: 15px 50px;">
+        <div class="logo">
+            <a href="index.html">
+                <img src="logo.png" alt="TAMIRCI Logo">
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="listings.html" class="nav-button red-button">İlanlar</a></li>
+                <li><a href="create-listing.html" class="nav-button orange-button">İlan Ver</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="detail-container">
+            <div class="detail-content">
+                <div id="userListingBadge" class="user-listing-badge" style="display: none;">
+                    BENİM İLANIM
+                </div>
+
+                <div class="detail-body">
+                    <div class="main-layout">
+                        <!-- Sol Kolon - Fotoğraflar -->
+                        <div class="left-column">
+                            <div class="image-gallery">
+                                <div class="main-image-container">
+                                    <img id="listingImage" class="main-image" src="images/listings/laptop-fan.jpg" alt="İlan Resmi">
+                                    <button class="image-nav prev">‹</button>
+                                    <button class="image-nav next">›</button>
+                                    <div class="share-buttons">
+                                        <button class="share-btn" title="Paylaş">
+                                            <i class="fas fa-share"></i>
+                                        </button>
+                                        <button class="share-btn" title="Favorile">
+                                            <i class="far fa-heart"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="thumbnails">
+                                    <div class="thumbnail active">
+                                        <img id="thumbnail1" src="images/listings/laptop-fan.jpg" alt="">
+                                    </div>
+                                    <div class="thumbnail">
+                                        <img id="thumbnail2" src="images/listings/laptop-fan.jpg" alt="">
+                                    </div>
+                                    <div class="thumbnail">
+                                        <img id="thumbnail3" src="images/listings/laptop-fan.jpg" alt="">
+                                    </div>
+                                    <div class="thumbnail">
+                                        <img id="thumbnail4" src="images/listings/laptop-fan.jpg" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sağ Kolon - Kullanıcı Bilgileri -->
+                        <div class="right-column">
+                            <div class="user-card">
+                                <div class="user-header">
+                                    <div class="user-avatar" id="sellerAvatar">T</div>
+                                    <div class="user-info">
+                                        <h3 id="sellerName">Kapıbanada</h3>
+                                        <div class="user-date">Kas 2022 tarihinden beri üye</div>
+                                    </div>
+                                </div>
+                                
+                                <button class="chat-button" onclick="openChatModal()">
+                                    <i class="fas fa-comment"></i> Sohbet Et
+                                </button>
+                                <button class="offer-button" onclick="checkAndOpenOffer()">
+                                    <i class="fas fa-handshake"></i> Teklif Ver
+                                </button>
+
+                                <div class="location-links">
+                                    <a href="#" class="location-link">
+                                        <i class="fas fa-map-marker-alt"></i> Harita
+                                    </a>
+                                </div>
+
+                                <div class="action-buttons" id="userListingActions" style="display: none; margin-top: 15px;">
+                                    <a href="#" class="action-button btn-success" id="editButton">
+                                        <i class="fas fa-edit"></i> İlanı Düzenle
+                                    </a>
+                                    <a href="#" class="action-button btn-secondary" id="deleteButton">
+                                        <i class="fas fa-trash"></i> İlanı Sil
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Alt Bölüm - Ürün Bilgileri -->
+                    <div class="product-info">
+                        <div class="price-section">
+                            <div class="price" id="priceAmount">3.600 TL</div>
+                            <div class="product-title" id="listingTitle">Huawei P40 Lite TR</div>
+                            <div class="product-meta">
+                                <span><i class="fas fa-map-marker-alt"></i><span id="locationInfo">Beyoğlu, İstanbul</span></span>
+                                <span><i class="fas fa-clock"></i><span id="timeInfo">6 Haz 2025</span></span>
+                            </div>
+
+                        </div>
+
+                        <div class="product-specs">
+                            <div class="specs-title">Ürün Özellikleri</div>
+                            <div class="specs-table">
+                                <div class="spec-row">
+                                    <span class="spec-label">Ürün No</span>
+                                    <span class="spec-value" id="listingId">1709106033</span>
+                                </div>
+                                <div class="spec-row">
+                                    <span class="spec-label">Marka</span>
+                                    <span class="spec-value">Huawei</span>
+                                </div>
+                                <div class="spec-row">
+                                    <span class="spec-label">Model</span>
+                                    <span class="spec-value">Huawei P40 Lite</span>
+                                </div>
+                                <div class="spec-row">
+                                    <span class="spec-label">Hafıza</span>
+                                    <span class="spec-value">128 GB</span>
+                                </div>
+                                <div class="spec-row">
+                                    <span class="spec-label">Kategori</span>
+                                    <span class="spec-value" id="categoryBadge">Telefon</span>
+                                </div>
+                                <div class="spec-row">
+                                    <span class="spec-label">Açıklama</span>
+                                    <span class="spec-value" id="listingDescription">Temiz kullanılmış telefon, kutulu ve ekstra aksesuarları ile birlikte.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-column">
+                <h4>TAMIRCI</h4>
+                <p>Türkiye'nin en büyük tamir platformu</p>
+            </div>
+            <div class="footer-column">
+                <h4>Hızlı Linkler</h4>
+                <ul>
+                    <li><a href="index.html">Anasayfa</a></li>
+                    <li><a href="listings.html">İlanlar</a></li>
+                    <li><a href="create-listing.html">İlan Ver</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Destek</h4>
+                <ul>
+                    <li><a href="#">Yardım Merkezi</a></li>
+                    <li><a href="#">İletişim</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 TAMIRCI. Tüm hakları saklıdır.</p>
+        </div>
+    </footer>
+
+    <!-- Sohbet Modal -->
+    <div id="chatModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeChatModal()">&times;</span>
+            <h2>Sohbet Et</h2>
+            <div class="chat-container">
+                <div class="chat-header">
+                    <div class="chat-user-info">
+                        <div class="chat-avatar">T</div>
+                        <div>
+                            <h4 id="chatUserName">Tamirci Kullanıcısı</h4>
+                            <span class="online-status">Çevrimiçi</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Mesajlar buraya dinamik olarak eklenecek -->
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" id="messageInput" placeholder="Mesajınızı yazın..." onkeypress="handleEnter(event)">
+                    <button onclick="sendMessage()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Teklif Ver Modal -->
+    <div id="offerModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeOfferModal()">&times;</span>
+            <h2>Teklif Ver</h2>
+            <div class="offer-form">
+                <div class="form-group">
+                    <label>Teklif Miktarı (₺)</label>
+                    <input type="number" id="offerAmount" placeholder="Örn: 500" min="1">
+                </div>
+                <div class="form-group">
+                    <label>Teklif Açıklaması</label>
+                    <textarea id="offerDescription" placeholder="Yapacağınız işi detaylı olarak açıklayın..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Tahmini Süre</label>
+                    <select id="estimatedTime">
+                        <option value="">Süre seçin</option>
+                        <option value="1-2 saat">1-2 saat</option>
+                        <option value="2-4 saat">2-4 saat</option>
+                        <option value="4-8 saat">4-8 saat</option>
+                        <option value="1 gün">1 gün</option>
+                        <option value="2-3 gün">2-3 gün</option>
+                        <option value="1 hafta">1 hafta</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="guarantee"> 
+                        Yaptığım iş için 30 gün garanti veriyorum
+                    </label>
+                </div>
+                <button class="submit-offer-btn" onclick="submitOffer()">Teklif Gönder</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="cursor-fix.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadListingDetail();
+            
+            // Test için basit buton kontrolleri
+            console.log('Sohbet butonu:', document.querySelector('.chat-button'));
+            console.log('Teklif butonu:', document.querySelector('.offer-button'));
+        });
+
+        function loadListingDetail() {
+            // URL'den ilan ID'sini al
+            const urlParams = new URLSearchParams(window.location.search);
+            const listingId = urlParams.get('id');
+            const isUserListing = urlParams.get('user') === 'true';
+
+            if (!listingId) {
+                alert('İlan bulunamadı!');
+                window.location.href = 'listings.html';
+                return;
+            }
+
+            let listing = null;
+
+            if (isUserListing) {
+                // Kullanıcı ilanından gel
+                const userListings = JSON.parse(localStorage.getItem('user_listings') || '[]');
+                listing = userListings.find(l => l.id == listingId);
+                
+                if (listing) {
+                    // Kullanıcı ilanı rozetini göster
+                    document.getElementById('userListingBadge').style.display = 'block';
+                }
+            } else {
+                // Sistem ilanlarından (varsayılan ilanlar) - ID'yi kullanarak mock data oluştur
+                listing = createMockListing(listingId);
+            }
+
+            if (!listing) {
+                alert('İlan bulunamadı!');
+                window.location.href = 'listings.html';
+                return;
+            }
+
+            // Sayfa başlığını güncelle
+            document.title = `${listing.title} - TAMIRCI`;
+
+            // İlan bilgilerini doldur
+            fillListingDetails(listing, isUserListing);
+        }
+
+        function fillListingDetails(listing, isUserListing) {
+            // Kategori isimleri
+            const categoryNames = {
+                'ev_aletleri': 'Ev Aletleri',
+                'elektronik': 'Elektronik',
+                'bilgisayar': 'Bilgisayar',
+                'telefon': 'Telefon',
+                'elektrik': 'Elektrik',
+                'su_tesisati': 'Su Tesisatı',
+                'mobilya': 'Mobilya',
+                'isi_sistemleri': 'Isı Sistemleri',
+                'beyaz_esya': 'Beyaz Eşya',
+                'diger': 'Diğer'
+            };
+
+            // Şehir isimleri
+            const cityNames = {
+                'istanbul': 'İstanbul',
+                'ankara': 'Ankara',
+                'izmir': 'İzmir',
+                'bursa': 'Bursa',
+                'adana': 'Adana',
+                'antalya': 'Antalya'
+            };
+
+            // Temel bilgileri doldur
+            document.getElementById('listingTitle').textContent = listing.title;
+            document.getElementById('categoryBadge').textContent = categoryNames[listing.category] || listing.category;
+            document.getElementById('listingDescription').textContent = listing.description;
+
+            // Konum bilgisi
+            const cityName = cityNames[listing.city] || listing.city;
+            const locationText = listing.district ? `${cityName}, ${listing.district}` : cityName;
+            document.getElementById('locationInfo').textContent = locationText;
+
+            // Fiyat bilgisi
+            let priceText = '';
+            if (listing.minBudget && listing.maxBudget) {
+                priceText = `₺${listing.minBudget} - ₺${listing.maxBudget}`;
+            } else if (listing.minBudget) {
+                priceText = `₺${listing.minBudget}+`;
+            } else if (listing.maxBudget) {
+                priceText = `₺${listing.maxBudget}'e kadar`;
+            } else if (listing.priceRange) {
+                priceText = listing.priceRange;
+            } else {
+                priceText = 'Belirtilmedi';
+            }
+            document.getElementById('priceAmount').textContent = priceText;
+
+            // Zaman bilgisi
+            if (listing.createdAt) {
+                const createdDate = new Date(listing.createdAt);
+                const now = new Date();
+                const diffTime = Math.abs(now - createdDate);
+                const diffHours = Math.ceil(diffTime / (1000 * 60 * 60));
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                let timeText = '';
+                if (diffHours < 1) {
+                    timeText = 'Az önce';
+                } else if (diffHours < 24) {
+                    timeText = `${diffHours} saat önce`;
+                } else if (diffDays === 1) {
+                    timeText = 'Dün';
+                } else {
+                    timeText = `${diffDays} gün önce`;
+                }
+                document.getElementById('timeInfo').textContent = timeText;
+                document.getElementById('publishDate').textContent = createdDate.toLocaleDateString('tr-TR');
+            } else if (listing.time) {
+                document.getElementById('timeInfo').textContent = listing.time;
+                document.getElementById('publishDate').textContent = listing.time;
+            }
+
+            // Fotoğraf sayısı
+            const photoCount = listing.photos || 1;
+            document.getElementById('photoCount').textContent = photoCount;
+
+            // Satıcı bilgilerini doldur
+            let sellerName;
+            if (isUserListing) {
+                sellerName = 'Sen';
+            } else {
+                // Sistem ilanları için rastgele isimler
+                const sellerNames = [
+                    'Ahmet Yılmaz',
+                    'Mehmet Demir', 
+                    'Ali Kaya',
+                    'Fatma Özkan',
+                    'Ayşe Şahin',
+                    'Mustafa Çelik',
+                    'Zeynep Arslan',
+                    'Hüseyin Doğan'
+                ];
+                sellerName = sellerNames[parseInt(listingId) % sellerNames.length];
+            }
+            
+            const sellerInitial = sellerName.charAt(0).toUpperCase();
+            document.getElementById('sellerName').textContent = sellerName;
+            document.getElementById('sellerAvatar').textContent = sellerInitial;
+
+            // Konum detaylarını doldur
+            document.querySelector('#locationDetail').textContent = locationText;
+
+            // Görüntülenme sayısını doldur
+            document.getElementById('viewCount').textContent = `${Math.floor(Math.random() * 50) + 1} kez`;
+
+            // Buton davranışlarını ayarla
+            if (isUserListing) {
+                // Kullanıcının kendi ilanı - düzenleme butonları
+                document.getElementById('userListingActions').style.display = 'block';
+                
+                // Sohbet ve teklif butonlarını gizle (kendi ilanında gerek yok)
+                document.querySelector('.chat-button').style.display = 'none';
+                document.querySelector('.offer-button').style.display = 'none';
+                
+                document.getElementById('editButton').onclick = function(e) {
+                    e.preventDefault();
+                    alert('İlan düzenleme özelliği yakında eklenecek!');
+                };
+
+                document.getElementById('deleteButton').onclick = function(e) {
+                    e.preventDefault();
+                    if (confirm('İlanı silmek istediğinize emin misiniz?')) {
+                        deleteListing(listing.id);
+                    }
+                };
+            } else {
+                // Sistem ilanı - kullanıcı tipini kontrol et
+                setTimeout(checkUserTypeAndSetupButtons, 100);
+            }
+        }
+
+        function createMockListing(id) {
+            // Varsayılan ilanlar için mock data oluştur
+            const mockListings = [
+                {
+                    id: 1,
+                    title: 'Laptop Fan Değişimi',
+                    category: 'bilgisayar',
+                    description: 'Dell XPS 15 laptopumun fanı çok ses yapıyor, değiştirilmesi gerekiyor. Servis kalitesi önemli.',
+                    city: 'izmir',
+                    district: 'Bornova',
+                    priceRange: '₺200 - ₺400',
+                    time: 'Dün',
+                    photos: 3
+                },
+                {
+                    id: 2,
+                    title: 'iPhone 12 Pro Ekran Tamiri',
+                    category: 'telefon',
+                    description: 'Telefonumun ekranı kırıldı, değişim yapılması gerekiyor. Orijinal ekran tercihimdir.',
+                    city: 'istanbul',
+                    district: 'Kadıköy',
+                    priceRange: '₺850 - ₺1200',
+                    time: '8 saat önce',
+                    photos: 2
+                },
+                {
+                    id: 3,
+                    title: 'Çamaşır Makinesi Arızası',
+                    category: 'ev_aletleri',
+                    description: 'Çamaşır makinem sık sık hata veriyor. Su alıyor ama çalkalamıyor. Yerinde bakım gerekiyor.',
+                    city: 'ankara',
+                    district: 'Çankaya',
+                    priceRange: '₺300 - ₺600',
+                    time: '3 gün önce',
+                    photos: 1
+                },
+                {
+                    id: 4,
+                    title: 'Beyaz Eşya Tamiri',
+                    category: 'beyaz_esya',
+                    description: 'Buzdolabım soğutmuyor, tamiri gerekiyor.',
+                    city: 'bursa',
+                    district: 'Nilüfer',
+                    priceRange: '₺150 - ₺300',
+                    time: '5 gün önce',
+                    photos: 2
+                },
+                {
+                    id: 5,
+                    title: 'TV Tamiri',
+                    category: 'elektronik',
+                    description: 'Samsung TV açılmıyor, bakım gerekiyor.',
+                    city: 'adana',
+                    district: 'Seyhan',
+                    priceRange: '₺200 - ₺500',
+                    time: '1 hafta önce',
+                    photos: 1
+                }
+            ];
+
+            return mockListings.find(l => l.id == id) || mockListings[0];
+        }
+
+        function deleteListing(listingId) {
+            const userListings = JSON.parse(localStorage.getItem('user_listings') || '[]');
+            const updatedListings = userListings.filter(l => l.id != listingId);
+            localStorage.setItem('user_listings', JSON.stringify(updatedListings));
+            
+            alert('İlan başarıyla silindi!');
+            window.location.href = 'listings.html';
+        }
+
+        function checkUserTypeAndSetupButtons() {
+            // Kullanıcı bilgilerini localStorage'dan al
+            const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+            const userType = loggedInUser.userType;
+
+            // Teklif ver butonu - sadece tamirci üyeler için göster
+            if (userType !== 'tamirci') {
+                // Müşteri ise teklif ver butonunu gizle
+                const offerButton = document.querySelector('.offer-button');
+                if (offerButton) {
+                    offerButton.style.display = 'none';
+                }
+            }
+        }
+
+        function checkAndOpenOffer() {
+            // Kullanıcı bilgilerini localStorage'dan al
+            const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+            const userType = loggedInUser.userType;
+
+            if (userType === 'tamirci') {
+                openOfferModal();
+            } else {
+                alert('Teklif vermek için tamirci üyesi olmanız gerekiyor!');
+            }
+        }
+
+        // Sohbet Modal Fonksiyonları
+        function openChatModal() {
+            // İlan sahibinin ismini al ve modal'da göster
+            const listingOwnerName = document.getElementById('sellerName').textContent;
+            document.getElementById('chatUserName').textContent = listingOwnerName;
+            
+            // Chat avatar'ını güncelle
+            const firstLetter = listingOwnerName.charAt(0).toUpperCase();
+            document.querySelector('.chat-avatar').textContent = firstLetter;
+            
+            document.getElementById('chatModal').style.display = 'block';
+        }
+
+        function closeChatModal() {
+            document.getElementById('chatModal').style.display = 'none';
+        }
+
+        function handleEnter(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+            
+            if (message) {
+                const chatMessages = document.getElementById('chatMessages');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message sent';
+                messageDiv.innerHTML = `
+                    <p>${message}</p>
+                    <span class="message-time">Şimdi</span>
+                `;
+                chatMessages.appendChild(messageDiv);
+                
+                messageInput.value = '';
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Otomatik cevap simülasyonu
+                setTimeout(() => {
+                    const autoReply = document.createElement('div');
+                    autoReply.className = 'message received';
+                    autoReply.innerHTML = `
+                        <p>Mesajınızı aldım, kısa süre içinde detaylı cevap vereceğim.</p>
+                        <span class="message-time">Şimdi</span>
+                    `;
+                    chatMessages.appendChild(autoReply);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 1500);
+            }
+        }
+
+        // Teklif Modal Fonksiyonları
+        function openOfferModal() {
+            document.getElementById('offerModal').style.display = 'block';
+        }
+
+        function closeOfferModal() {
+            document.getElementById('offerModal').style.display = 'none';
+        }
+
+        function submitOffer() {
+            const amount = document.getElementById('offerAmount').value;
+            const description = document.getElementById('offerDescription').value;
+            const estimatedTime = document.getElementById('estimatedTime').value;
+            const guarantee = document.getElementById('guarantee').checked;
+
+            if (!amount || !description || !estimatedTime) {
+                alert('Lütfen tüm alanları doldurun!');
+                return;
+            }
+
+            if (parseFloat(amount) <= 0) {
+                alert('Lütfen geçerli bir miktar girin!');
+                return;
+            }
+
+            // Teklifi localStorage'a kaydet (gerçek uygulamada API'ye gönderilir)
+            const offer = {
+                id: Date.now(),
+                amount: parseFloat(amount),
+                description: description,
+                estimatedTime: estimatedTime,
+                guarantee: guarantee,
+                createdAt: new Date().toISOString(),
+                status: 'pending'
+            };
+
+            const existingOffers = JSON.parse(localStorage.getItem('user_offers') || '[]');
+            existingOffers.push(offer);
+            localStorage.setItem('user_offers', JSON.stringify(existingOffers));
+
+            alert(`Teklifiniz başarıyla gönderildi!\n\nMiktar: ₺${amount}\nTahmini Süre: ${estimatedTime}\nGaranti: ${guarantee ? 'Evet' : 'Hayır'}`);
+            closeOfferModal();
+            
+            // Formu temizle
+            document.getElementById('offerAmount').value = '';
+            document.getElementById('offerDescription').value = '';
+            document.getElementById('estimatedTime').value = '';
+            document.getElementById('guarantee').checked = false;
+        }
+
+        // Modal dışına tıklandığında kapatma
+        window.onclick = function(event) {
+            const chatModal = document.getElementById('chatModal');
+            const offerModal = document.getElementById('offerModal');
+            
+            if (event.target === chatModal) {
+                closeChatModal();
+            }
+            if (event.target === offerModal) {
+                closeOfferModal();
+            }
+        }
+    </script>
+</body>
+</html> 

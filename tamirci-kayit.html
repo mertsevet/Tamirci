@@ -6,6 +6,7 @@
     <title>Tamirci Kayıt - TAMIRCI</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="black-cursor.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <style>
@@ -13,17 +14,139 @@
             max-width: 520px;
         }
         
-        /* Input ile simge arasındaki çakışmayı düzeltme */
-        .input-with-icon input[type="text"],
-        .input-with-icon input[type="email"],
-        .input-with-icon input[type="password"],
-        .input-with-icon input[type="tel"],
-        .input-with-icon input[type="number"] {
-            padding-left: 45px !important;
+        /* Form satırı yan yana düzeni */
+        .form-row {
+            display: flex;
+            gap: 15px;
+            width: 100%;
         }
         
-        .input-with-icon i {
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        /* Mobilde alt alta geçsin */
+        @media (max-width: 568px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+        
+        /* Müşteri/Tamirci Seçim Toggle Tasarımı */
+        .user-type-toggle {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 6px;
+            margin-bottom: 30px;
+            display: flex;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(229, 57, 53, 0.1);
+        }
+        
+        .user-type-toggle span,
+        .user-type-toggle a {
+            flex: 1;
+            text-align: center;
+            padding: 12px 20px;
+            text-decoration: none;
+            color: #666;
+            font-weight: 500;
+            font-size: 15px;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 2;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        
+        .user-type-toggle .active {
+            background: linear-gradient(135deg, #e53935 0%, #c62828 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(229, 57, 53, 0.3);
+            transform: translateY(-1px);
+        }
+        
+        .user-type-toggle a:hover:not(.active) {
+            color: #e53935;
+            background: rgba(229, 57, 53, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        /* Input ile simge arasındaki çakışmayı düzeltme */
+        .input-with-icon {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .input-with-icon input[type="text"],
+        .input-with-icon input[type="email"],
+        .input-with-icon input[type="tel"],
+        .input-with-icon input[type="number"] {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 15px;
+            line-height: 1.4;
+            transition: border-color 0.3s;
+        }
+        
+        .input-with-icon input[type="password"] {
+            width: 100%;
+            padding: 12px 50px 12px 45px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 15px;
+            line-height: 1.4;
+            transition: border-color 0.3s;
+        }
+        
+        .input-with-icon input:focus {
+            border-color: #e53935;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(229, 57, 53, 0.1);
+        }
+        
+        .input-with-icon input {
+            cursor: text !important;
+            caret-color: #333 !important;
+        }
+        
+        .input-with-icon input:hover {
+            cursor: text !important;
+        }
+        
+        /* Genel input cursor düzeltmesi */
+        input[type="text"],
+        input[type="email"], 
+        input[type="password"],
+        input[type="tel"],
+        input[type="number"] {
+            cursor: text !important;
+            caret-color: #333 !important;
+        }
+        
+        input[type="text"]:hover,
+        input[type="email"]:hover, 
+        input[type="password"]:hover,
+        input[type="tel"]:hover,
+        input[type="number"]:hover {
+            cursor: text !important;
+        }
+        
+        .input-with-icon i.fas {
+            position: absolute;
             left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 16px;
+            z-index: 2;
         }
         
         .custom-select {
@@ -94,19 +217,44 @@
             margin-top: 5px;
         }
         
-        /* Şifre göster/gizle simgesi düzeltmesi */
-        .input-with-icon .password-toggle {
+        /* Şifre göster/gizle butonu düzeltmesi */
+        .password-toggle-btn {
             position: absolute;
-            left: auto !important;
-            right: 15px !important;
+            right: 15px;
             top: 50%;
             transform: translateY(-50%);
+            background: none;
+            border: none;
             cursor: pointer;
-            z-index: 10;
-            color: #999;
+            padding: 8px;
+            z-index: 3;
+            outline: none;
+            border-radius: 4px;
+            transition: all 0.2s;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
-        .input-with-icon .password-toggle:hover {
+        .password-toggle-btn:hover {
+            background-color: transparent;
+        }
+        
+        .password-toggle-btn:focus {
+            outline: none;
+            box-shadow: none;
+        }
+        
+        .password-toggle {
+            color: #999;
+            font-size: 16px;
+            transition: color 0.2s;
+            pointer-events: none;
+        }
+        
+        .password-toggle-btn:hover .password-toggle {
             color: #e53935;
         }
         
@@ -225,22 +373,24 @@
                 </div>
                 
                 <form class="login-form" id="technicianRegisterForm">
-                    <div class="form-group">
-                        <label for="firstName">Ad</label>
-                        <div class="input-with-icon">
-                            <i class="fas fa-user"></i>
-                            <input type="text" id="firstName" name="firstName" placeholder="Adınız" required>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">Ad</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-user"></i>
+                                <input type="text" id="firstName" name="firstName" placeholder="Adınız" required>
+                            </div>
+                            <div class="error-message" id="firstNameError"></div>
                         </div>
-                        <div class="error-message" id="firstNameError"></div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="lastName">Soyad</label>
-                        <div class="input-with-icon">
-                            <i class="fas fa-user"></i>
-                            <input type="text" id="lastName" name="lastName" placeholder="Soyadınız" required>
+                        
+                        <div class="form-group">
+                            <label for="lastName">Soyad</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-user"></i>
+                                <input type="text" id="lastName" name="lastName" placeholder="Soyadınız" required>
+                            </div>
+                            <div class="error-message" id="lastNameError"></div>
                         </div>
-                        <div class="error-message" id="lastNameError"></div>
                     </div>
                     
                     <div class="form-group">
@@ -331,14 +481,6 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="hourlyRate">Saatlik Ücret (₺)</label>
-                        <div class="input-with-icon">
-                            <i class="fas fa-money-bill-wave"></i>
-                            <input type="number" id="hourlyRate" name="hourlyRate" min="0" placeholder="Saatlik ücretiniz" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
                         <label for="about">Kendinizi Tanıtın</label>
                         <textarea id="about" name="about" rows="3" placeholder="Deneyimlerinizi ve becerilerinizi kısaca anlatın..." style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; resize: vertical;"></textarea>
                     </div>
@@ -356,17 +498,6 @@
                     </button>
                 </form>
                 
-                <div class="login-divider">
-                    <span>veya</span>
-                </div>
-                
-                <div class="social-login">
-                    <button class="social-button google">
-                        <i class="fab fa-google"></i>
-                        Google ile Kayıt Ol
-                    </button>
-                </div>
-                
                 <p class="signup-text">
                     Zaten hesabınız var mı? <a href="login.html">Giriş Yapın</a>
                 </p>
@@ -379,6 +510,7 @@
     </footer>
 
     <script src="password-toggle.js"></script>
+    <script src="cursor-fix.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // API URL

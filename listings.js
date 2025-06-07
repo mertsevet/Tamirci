@@ -3,8 +3,18 @@ document.addEventListener('DOMContentLoaded', function() {
     // Not: Filtreleme işlemleri artık filtreleme_yedek.js'den yönetiliyor
     // initializeFilters();
     // setupEventListeners();
+    
+    // URL parametresini kontrol et ve arama yap
+    checkURLSearchParameter();
+    
     loadListings();
     setupPagination();
+    
+    // Kullanıcı ilanlarını yükle (biraz gecikmeli ki grid hazır olsun)
+    setTimeout(() => {
+        loadUserListings();
+        setupListingButtons();
+    }, 500);
 });
 
 // Sayfa ilk yüklendiğinde çalışacak işlemler
@@ -986,4 +996,145 @@ function updateListingCount(page) {
         
         listingsCount.textContent = counts[page] || 145;
     }
-} 
+}
+
+// URL'den arama parametresini oku ve arama yap
+function checkURLSearchParameter() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchTerm = urlParams.get('search');
+    
+    if (searchTerm) {
+        // Arama kutusuna terimi yaz
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.value = decodeURIComponent(searchTerm);
+            
+            // jQuery filtreleme fonksiyonunu tetikle
+            setTimeout(() => {
+                $(searchInput).trigger('keyup');
+            }, 100);
+        }
+    }
+}
+
+// Kullanıcı ilanlarını localStorage'dan yükle ve göster
+function loadUserListings() {
+    const userListings = JSON.parse(localStorage.getItem('user_listings') || '[]');
+    console.log('Kullanıcı ilanları yüklendi:', userListings);
+    
+    if (userListings.length > 0) {
+        const listingsGrid = document.querySelector('.listings-grid');
+        
+        if (!listingsGrid) {
+            console.error('Listings grid bulunamadı');
+            return;
+        }
+        
+        // Kullanıcı ilanlarını en başa ekle
+        userListings.reverse().forEach(listing => {
+            const listingCard = document.createElement('div');
+            listingCard.className = 'listing-card user-listing';
+            listingCard.setAttribute('data-category', listing.category);
+            listingCard.setAttribute('data-city', listing.city);
+            listingCard.setAttribute('data-price', listing.maxBudget || listing.minBudget || 0);
+            
+            // Fiyat aralığını oluştur
+            let priceRange = '';
+            if (listing.minBudget && listing.maxBudget) {
+                priceRange = `₺${listing.minBudget} - ₺${listing.maxBudget}`;
+            } else if (listing.minBudget) {
+                priceRange = `₺${listing.minBudget}+`;
+            } else if (listing.maxBudget) {
+                priceRange = `₺${listing.maxBudget}'e kadar`;
+            } else {
+                priceRange = 'Belirtilmedi';
+            }
+            
+            // Zaman formatı
+            const createdDate = new Date(listing.createdAt);
+            const now = new Date();
+            const diffTime = Math.abs(now - createdDate);
+            const diffHours = Math.ceil(diffTime / (1000 * 60 * 60));
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            let timeText = '';
+            if (diffHours < 1) {
+                timeText = 'Az önce';
+            } else if (diffHours < 24) {
+                timeText = `${diffHours} saat önce`;
+            } else if (diffDays === 1) {
+                timeText = 'Dün';
+            } else {
+                timeText = `${diffDays} gün önce`;
+            }
+            
+            // Şehir adları
+            const cities = {
+                'istanbul': 'İstanbul',
+                'ankara': 'Ankara', 
+                'izmir': 'İzmir',
+                'bursa': 'Bursa',
+                'adana': 'Adana',
+                'antalya': 'Antalya'
+            };
+            
+            listingCard.innerHTML = `
+                <div class="listing-image">
+                    <img src="images/listings/user-listing-default.jpg" alt="${listing.title}" onerror="this.src='images/listings/laptop-fan.jpg'">
+                    <span class="listing-category">${getCategoryName(listing.category)}</span>
+                    <span style="position: absolute; top: 10px; right: 10px; background: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">BENİM İLANIM</span>
+                </div>
+                <div class="listing-content">
+                    <div class="listing-header">
+                        <h4>${listing.title}</h4>
+                        <span class="listing-price">${priceRange}</span>
+                    </div>
+                    <p class="listing-description">${listing.description}</p>
+                    <div class="listing-meta">
+                        <span><i class="fas fa-map-marker-alt"></i> ${cities[listing.city] || listing.city}, ${listing.district}</span>
+                        <span><i class="fas fa-clock"></i> ${timeText}</span>
+                    </div>
+                    <a href="#" class="listing-button">İncele</a>
+                </div>
+            `;
+            
+            // İlanı grid'in başına ekle
+            listingsGrid.insertBefore(listingCard, listingsGrid.firstChild);
+            
+            // İncele butonuna click event ekle
+            const viewButton = listingCard.querySelector('.listing-button');
+            viewButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.open(`listing-detail.html?id=${listing.id}&user=true`, '_blank');
+            });
+        });
+        
+        // İlan sayısını güncelle
+        const listingsCount = document.querySelector('.listings-count span');
+        if (listingsCount) {
+            const currentCount = parseInt(listingsCount.textContent) || 0;
+            listingsCount.textContent = currentCount + userListings.length;
+        }
+    }
+}
+
+function setupListingButtons() {
+    // Mevcut sistem ilanlarının incele butonlarını aktifleştir
+    const listingCards = document.querySelectorAll('.listing-card');
+    
+    listingCards.forEach((card, index) => {
+        const viewButton = card.querySelector('.listing-button');
+        const badge = card.querySelector('[style*="BENİM İLANIM"]');
+        
+        // Eğer "BENİM İLANIM" rozeti yoksa sistem ilanıdır
+        if (!badge && viewButton && !viewButton.dataset.eventAdded) {
+            viewButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Sistem ilanları için basit ID (index + 1)
+                const listingId = index + 1;
+                window.open(`listing-detail.html?id=${listingId}&user=false`, '_blank');
+            });
+            viewButton.dataset.eventAdded = 'true';
+        }
+    });
+}

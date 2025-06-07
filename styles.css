@@ -5,6 +5,122 @@
     font-family: 'Arial', sans-serif;
 }
 
+/* Genel input cursor düzeltmesi - Tüm site için */
+* input[type="text"],
+* input[type="email"], 
+* input[type="password"],
+* input[type="tel"],
+* input[type="number"],
+* input[type="search"],
+* input[type="url"],
+* textarea,
+* .form-control,
+.input-with-icon input,
+.search-bar input,
+input,
+textarea {
+    cursor: text !important;
+    caret-color: #000 !important;
+}
+
+* input[type="text"]:hover,
+* input[type="email"]:hover, 
+* input[type="password"]:hover,
+* input[type="tel"]:hover,
+* input[type="number"]:hover,
+* input[type="search"]:hover,
+* input[type="url"]:hover,
+* textarea:hover,
+* .form-control:hover,
+.input-with-icon input:hover,
+.search-bar input:hover,
+input:hover,
+textarea:hover {
+    cursor: text !important;
+}
+
+/* Spesifik sınıflar için ek kurallar */
+.login-form input,
+.login-form textarea,
+.form-group input,
+.form-group textarea {
+    cursor: text !important;
+    caret-color: #000 !important;
+}
+
+.login-form input:hover,
+.login-form textarea:hover,
+.form-group input:hover,
+.form-group textarea:hover {
+    cursor: text !important;
+}
+
+/* Body ve html için cursor reset */
+body, html {
+    cursor: default !important;
+}
+
+/* Özel siyah cursor görüntüsü */
+input[type="text"],
+input[type="email"], 
+input[type="password"],
+input[type="tel"],
+input[type="number"],
+input[type="search"],
+input[type="url"],
+textarea {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewport='0 0 20 20' style='fill:black;font-size:14px;'><text y='15'>|</text></svg>") 4 0, text !important;
+    caret-color: #000 !important;
+}
+
+/* Alternatif siyah cursor */
+input:not([type="button"]):not([type="submit"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]) {
+    cursor: text !important;
+    caret-color: #000 !important;
+    color: #000 !important;
+}
+
+/* Windows için özel cursor */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    input[type="text"],
+    input[type="email"], 
+    input[type="password"],
+    input[type="tel"],
+    input[type="number"],
+    textarea {
+        cursor: text !important;
+        caret-color: #000 !important;
+    }
+}
+
+/* Genel cursor override */
+input:not([type="button"]):not([type="submit"]):not([type="checkbox"]):not([type="radio"]) {
+    cursor: text !important;
+    caret-color: #000 !important;
+}
+
+/* En güçlü cursor kuralları */
+input[type] {
+    cursor: text !important;
+    caret-color: #000 !important;
+}
+
+input[type]:hover,
+input[type]:focus,
+input[type]:active {
+    cursor: text !important;
+}
+
+/* Universial selector ile tüm input'ları yakala */
+[type="text"], [type="email"], [type="password"], [type="tel"], [type="number"] {
+    cursor: text !important;
+    caret-color: #000 !important;
+}
+
+[type="text"]:hover, [type="email"]:hover, [type="password"]:hover, [type="tel"]:hover, [type="number"]:hover {
+    cursor: text !important;
+}
+
 body {
     background-color: #f8f4f1;
 }
@@ -64,6 +180,18 @@ nav ul {
 
 .red-button:hover {
     opacity: 0.7;
+}
+
+.orange-button {
+    background-color: #ff9800;
+    border: 2px solid #ff9800;
+    color: white;
+    border-radius: 8px;
+}
+
+.orange-button:hover {
+    background-color: #f57c00;
+    border-color: #f57c00;
 }
 
 /* Hero Section */

@@ -5,6 +5,41 @@
     font-family: 'Arial', sans-serif;
 }
 
+/* Cursor düzeltmesi - Login sayfası için */
+input[type="text"],
+input[type="email"], 
+input[type="password"],
+input[type="tel"],
+input[type="number"],
+input[type="search"],
+input[type="url"],
+textarea,
+.input-with-icon input {
+    cursor: text !important;
+    caret-color: #000 !important;
+}
+
+input[type="text"]:hover,
+input[type="email"]:hover, 
+input[type="password"]:hover,
+input[type="tel"]:hover,
+input[type="number"]:hover,
+input[type="search"]:hover,
+input[type="url"]:hover,
+textarea:hover,
+.input-with-icon input:hover {
+    cursor: text !important;
+}
+
+input {
+    cursor: text !important;
+    caret-color: #000 !important;
+}
+
+input:hover {
+    cursor: text !important;
+}
+
 body.login-page {
     background-color: #f8f4f1;
     display: flex;
@@ -187,6 +222,24 @@ input:focus {
 }
 
 .signup-link a:hover {
+    text-decoration: underline;
+}
+
+/* Basit signup text */
+.signup-text {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #666;
+}
+
+.signup-text a {
+    color: #e53935;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.signup-text a:hover {
     text-decoration: underline;
 }
 

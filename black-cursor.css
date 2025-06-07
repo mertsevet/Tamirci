@@ -1,0 +1,172 @@
+/* Black Cursor Fix - Dedicated CSS */
+
+/* Windows cursor sistem override */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    * {
+        cursor: url('data:image/cur;base64,AAACAAEAICAAAAAAAAAwAQAAFgAAACgAAAAgAAAAQAAAAAEAAQAAAAAAAAEAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////8AAAAHwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////8='), auto !important;
+    }
+    input[type="text"], input[type="email"], input[type="password"], textarea {
+        cursor: url('data:image/cur;base64,AAACAAEAICAAAAAAAAAwAQAAFgAAACgAAAAgAAAAQAAAAAEAAQAAAAAAAAEAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////8AAAAHwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////8='), text !important;
+    }
+}
+
+/* Global cursor reset */
+* {
+    cursor: inherit !important;
+}
+
+body {
+    cursor: default !important;
+}
+
+/* Butonlar için pointer cursor */
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+.btn,
+.button,
+a[href],
+[onclick],
+[role="button"] {
+    cursor: pointer !important;
+}
+
+/* Hover states for buttons */
+button:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+.btn:hover,
+.button:hover,
+a[href]:hover,
+[onclick]:hover,
+[role="button"]:hover {
+    cursor: pointer !important;
+}
+
+/* Text cursor for inputs - Normal text cursor siyah renk */
+input[type="text"],
+input[type="email"], 
+input[type="password"],
+input[type="tel"],
+input[type="number"],
+input[type="search"],
+input[type="url"],
+textarea,
+.form-control,
+.input-with-icon input {
+    cursor: text !important;
+    caret-color: #000 !important;
+    color: #333 !important;
+    -webkit-text-fill-color: #333 !important;
+}
+
+/* Hover state */
+input[type="text"]:hover,
+input[type="email"]:hover, 
+input[type="password"]:hover,
+input[type="tel"]:hover,
+input[type="number"]:hover,
+input[type="search"]:hover,
+input[type="url"]:hover,
+textarea:hover,
+.form-control:hover,
+.input-with-icon input:hover {
+    cursor: text !important;
+    caret-color: #000 !important;
+}
+
+/* Focus state */
+input[type="text"]:focus,
+input[type="email"]:focus, 
+input[type="password"]:focus,
+input[type="tel"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+input[type="url"]:focus,
+textarea:focus,
+.form-control:focus,
+.input-with-icon input:focus {
+    cursor: text !important;
+    caret-color: #000 !important;
+    outline-color: #e53935 !important;
+}
+
+/* Windows Chrome fix */
+@supports (-webkit-appearance: none) {
+    input[type="text"],
+    input[type="email"], 
+    input[type="password"],
+    input[type="tel"],
+    input[type="number"],
+    textarea {
+        cursor: text !important;
+        caret-color: #000 !important;
+    }
+}
+
+/* Firefox fix */
+@-moz-document url-prefix() {
+    input[type="text"],
+    input[type="email"], 
+    input[type="password"],
+    input[type="tel"],
+    input[type="number"],
+    textarea {
+        cursor: text !important;
+        caret-color: #000 !important;
+    }
+}
+
+/* Safari fix */
+@media not all and (min-resolution:.001dpcm) {
+    @supports (-webkit-appearance:none) {
+        input[type="text"],
+        input[type="email"], 
+        input[type="password"],
+        input[type="tel"],
+        input[type="number"],
+        textarea {
+            cursor: text !important;
+            caret-color: #000 !important;
+        }
+    }
+}
+
+/* Genel override */
+input:not([type="button"]):not([type="submit"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="image"]):not([type="reset"]):not([type="hidden"]) {
+    cursor: text !important;
+    caret-color: #000 !important;
+}
+
+/* Extra güçlü override */
+html input[type="text"],
+html input[type="email"], 
+html input[type="password"],
+html input[type="tel"],
+html input[type="number"],
+html textarea {
+    cursor: text !important;
+    caret-color: #000000 !important;
+}
+
+/* Son çare - tüm input elementler */
+input {
+    cursor: auto !important;
+}
+input[type="text"], input[type="email"], input[type="password"], input[type="tel"], input[type="number"], textarea {
+    cursor: text !important;
+}
+
+/* CSS Variables ile cursor override */
+:root {
+    --cursor-text: text;
+}
+
+/* Universal text cursor override */
+input[type="text"], input[type="email"], input[type="password"], input[type="tel"], input[type="number"], textarea,
+.form-control, .input-with-icon input {
+    cursor: var(--cursor-text) !important;
+    caret-color: #000000 !important;
+} 

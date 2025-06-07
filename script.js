@@ -14,11 +14,8 @@ document.addEventListener('DOMContentLoaded', function() {
     searchButton.addEventListener('click', function() {
         const searchValue = searchInput.value.trim();
         if (searchValue) {
-            // Arama işlemi burada yapılabilir
-            console.log('Arama yapıldı:', searchValue);
-            // Arama sonucunu göstermek için 
-            // window.location.href = 'arama-sonuclari.html?query=' + encodeURIComponent(searchValue);
-            alert('Aranan tamir hizmeti: ' + searchValue + '\nBu işlev henüz geliştirme aşamasında.');
+            // İlanlar sayfasına yönlendir ve arama terimini parametre olarak gönder
+            window.location.href = 'listings.html?search=' + encodeURIComponent(searchValue);
         } else {
             alert('Lütfen aramak istediğiniz hizmeti girin.');
         }
@@ -441,9 +438,11 @@ function updateHeaderForLoggedInUser(user) {
                         </div>
                     </div>
                     <ul>
-                        <li><a href="#" id="panel-link"><i class="fas fa-tachometer-alt"></i> Panel</a></li>
-                        <li><a href="#" id="profile-link"><i class="fas fa-user-cog"></i> Profil</a></li>
-                        <li><a href="#" id="notifications-link"><i class="fas fa-bell"></i> Bildirimler</a></li>
+                        <li><a href="profile.html#panel" id="panel-link"><i class="fas fa-tachometer-alt"></i> Panel</a></li>
+                        <li><a href="profile.html"><i class="fas fa-user-cog"></i> Profil</a></li>
+                        <li><a href="profile.html#chat" id="chat-link"><i class="fas fa-comments"></i> Sohbet</a></li>
+                        <li><a href="profile.html#offers" id="offers-link"><i class="fas fa-handshake"></i> Teklifler</a></li>
+                        <li><a href="profile.html#notifications" id="notifications-link"><i class="fas fa-bell"></i> Bildirimler</a></li>
                         <li class="divider"></li>
                         <li><a href="#" id="logout-button"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</a></li>
                     </ul>
@@ -490,22 +489,29 @@ function setupUserMenuEventListeners(userMenuItem, user) {
     // Panel butonuna tıklandığında
     const panelLink = userMenuItem.querySelector('#panel-link');
     panelLink.addEventListener('click', function(e) {
-        e.preventDefault();
-        createOrRedirectToPanel(e, user);
+        // Hash ile direct navigation, sayfa açıldığında otomatik sekme geçişi olacak
+        window.location.href = 'profile.html#panel';
     });
     
-    // Profil butonuna tıklandığında
-    const profileLink = userMenuItem.querySelector('#profile-link');
-    profileLink.addEventListener('click', function(e) {
-        e.preventDefault();
-        createProfileModal(user);
+    // Sohbet butonuna tıklandığında
+    const chatLink = userMenuItem.querySelector('#chat-link');
+    chatLink.addEventListener('click', function(e) {
+        // Hash ile direct navigation, sayfa açıldığında otomatik sekme geçişi olacak
+        window.location.href = 'profile.html#chat';
+    });
+    
+    // Teklifler butonuna tıklandığında
+    const offersLink = userMenuItem.querySelector('#offers-link');
+    offersLink.addEventListener('click', function(e) {
+        // Hash ile direct navigation, sayfa açıldığında otomatik sekme geçişi olacak
+        window.location.href = 'profile.html#offers';
     });
     
     // Bildirimler butonuna tıklandığında
     const notificationsLink = userMenuItem.querySelector('#notifications-link');
     notificationsLink.addEventListener('click', function(e) {
-        e.preventDefault();
-        alert('Şu anda yeni bildiriminiz bulunmamaktadır.');
+        // Hash ile direct navigation, sayfa açıldığında otomatik sekme geçişi olacak
+        window.location.href = 'profile.html#notifications';
     });
     
     // Çıkış yapma işlevi
