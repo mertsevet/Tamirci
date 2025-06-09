@@ -208,22 +208,92 @@ window.checkUserSession = function() {
 function createTestUser() {
     const testUser = {
         id: 999,
-        name: "Test Kullanıcı",
+        name: "Admin Test Kullanıcı",
+        firstName: "Admin",
+        lastName: "Test",
         email: "test@example.com",
         password: "test123",
-        role: "customer"
+        role: "admin", // Admin rolü
+        userType: "admin", // Admin kullanıcı tipi
+        permissions: {
+            canViewAllListings: true,
+            canEditAllListings: true,
+            canDeleteAllListings: true,
+            canManageUsers: true,
+            canViewStatistics: true,
+            canMakeOffers: true,
+            canReceiveOffers: true,
+            canChat: true,
+            canAccessAdminPanel: true
+        },
+        createdAt: new Date().toISOString()
     };
     
     const users = getLocalUsers();
-    if (!users.some(u => u.email === testUser.email)) {
+    const existingUserIndex = users.findIndex(u => u.email === testUser.email);
+    
+    if (existingUserIndex !== -1) {
+        // Mevcut kullanıcıyı admin yap
+        users[existingUserIndex] = { ...users[existingUserIndex], ...testUser };
+        console.log('Mevcut test kullanıcısı admin yapıldı');
+    } else {
+        // Yeni admin kullanıcı oluştur
         users.push(testUser);
-        saveLocalUsers(users);
-        console.log('Test kullanıcısı oluşturuldu');
+        console.log('Yeni admin test kullanıcısı oluşturuldu');
+    }
+    
+    saveLocalUsers(users);
+    
+    // Eğer şu anda bu kullanıcı ile giriş yapılmışsa, oturum bilgilerini güncelle
+    const currentUser = localStorage.getItem('user');
+    if (currentUser) {
+        const user = JSON.parse(currentUser);
+        if (user.email === testUser.email) {
+            const { password, ...userWithoutPassword } = testUser;
+            localStorage.setItem('user', JSON.stringify(userWithoutPassword));
+            console.log('Aktif oturum admin haklarıyla güncellendi');
+        }
     }
 }
 
 // Test kullanıcısı oluştur
 createTestUser();
+
+// Admin kontrol fonksiyonları
+window.isAdmin = function() {
+    const user = getCurrentUser();
+    return user && (user.role === 'admin' || user.userType === 'admin');
+};
+
+window.hasPermission = function(permission) {
+    const user = getCurrentUser();
+    if (!user) return false;
+    
+    // Admin kullanıcılar tüm yetkiye sahip
+    if (user.role === 'admin' || user.userType === 'admin') return true;
+    
+    // Spesifik yetki kontrolü
+    return user.permissions && user.permissions[permission] === true;
+};
+
+window.getCurrentUser = function() {
+    const userJSON = localStorage.getItem('user');
+    if (userJSON) {
+        try {
+            return JSON.parse(userJSON);
+        } catch (error) {
+            console.error('Kullanıcı bilgisi parse hatası:', error);
+            return null;
+        }
+    }
+    return null;
+};
+
+// Admin paneli erişim kontrolü
+window.checkAdminAccess = function() {
+    const user = getCurrentUser();
+    return user && (user.role === 'admin' || user.userType === 'admin' || hasPermission('canAccessAdminPanel'));
+};
 
 // Kullanıcı bilgilerini güncelle
 window.updateUserProfile = async function(userId, updatedData) {

@@ -443,6 +443,7 @@ function updateHeaderForLoggedInUser(user) {
                         <li><a href="profile.html#chat" id="chat-link"><i class="fas fa-comments"></i> Sohbet</a></li>
                         <li><a href="profile.html#offers" id="offers-link"><i class="fas fa-handshake"></i> Teklifler</a></li>
                         <li><a href="profile.html#notifications" id="notifications-link"><i class="fas fa-bell"></i> Bildirimler</a></li>
+                        ${user.role === 'admin' || user.userType === 'admin' ? '<li class="divider"></li><li><a href="#" id="admin-panel-link"><i class="fas fa-shield-alt"></i> Admin Paneli</a></li>' : ''}
                         <li class="divider"></li>
                         <li><a href="#" id="logout-button"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</a></li>
                     </ul>
@@ -513,6 +514,15 @@ function setupUserMenuEventListeners(userMenuItem, user) {
         // Hash ile direct navigation, sayfa açıldığında otomatik sekme geçişi olacak
         window.location.href = 'profile.html#notifications';
     });
+    
+    // Admin paneli butonuna tıklandığında (sadece admin kullanıcılar için)
+    const adminPanelLink = userMenuItem.querySelector('#admin-panel-link');
+    if (adminPanelLink) {
+        adminPanelLink.addEventListener('click', async function(e) {
+            e.preventDefault();
+                            createAdminPanelModal(user);
+        });
+    }
     
     // Çıkış yapma işlevi
     const logoutButton = userMenuItem.querySelector('#logout-button');
@@ -1226,4 +1236,684 @@ function createProfileModal(user) {
         }
     `;
     document.head.appendChild(styleElement);
+}
+
+// Admin Paneli Modal Fonksiyonu
+// Varsayılan resim alma fonksiyonu
+function getDefaultImage(searchTerm) {
+    const defaultImages = {
+        'iphone': '/images/listings/iphone-tamiri.jpg',
+        'washing': '/images/listings/camasir-makinesi.jpg', 
+        'macbook': '/images/listings/laptop-fan.jpg',
+        'tv': '/images/listings/samsung-tv.jpg',
+        'refrigerator': '/images/listings/buzdolabi.jpg',
+        'computer': '/images/listings/masaustu-pc.jpg'
+    };
+    
+    // Arama terimindeki anahtar kelimeye göre varsayılan resim döndür
+    for (const [key, image] of Object.entries(defaultImages)) {
+        if (searchTerm.toLowerCase().includes(key)) {
+            console.log('🖼️ Konuya uygun varsayılan resim kullanılıyor:', image);
+            return image;
+        }
+    }
+    
+    // Hiçbiri uymazsa laptop resmini döndür
+    console.log('🔄 Fallback resim kullanılıyor: laptop-fan.jpg');
+    return '/images/listings/laptop-fan.jpg';
+}
+
+function createAdminPanelModal(user) {
+    const modal = document.createElement('div');
+    modal.className = 'modal admin-panel-modal';
+    
+    // Tüm kullanıcıları al
+    const allUsers = JSON.parse(localStorage.getItem('local_users') || '[]');
+    const totalUsers = allUsers.length;
+    const totalTechnicians = allUsers.filter(u => u.role === 'technician' || u.userType === 'technician').length;
+    const totalCustomers = allUsers.filter(u => u.role === 'customer' || u.userType === 'customer').length;
+    const totalAdmins = allUsers.filter(u => u.role === 'admin' || u.userType === 'admin').length;
+    
+    // Tüm ilanları al (hem kullanıcı ilanları hem de mock veriler)
+    const userListings = JSON.parse(localStorage.getItem('user_listings') || '[]');
+    
+    // Mock ilanları için API resimlerini yükle
+    const mockListings = [];
+    
+    const listingTemplates = [
+        {
+            id: 1,
+            title: "iPhone 12 Pro Ekran Değişimi",
+            category: "Telefon",
+            city: "İstanbul",
+            createdAt: "2024-01-15",
+            user: "test@example.com",
+            searchTerm: "iphone"
+        },
+        {
+            id: 2,
+            title: "Bosch Çamaşır Makinesi Motor Tamiri",
+            category: "Beyaz Eşya",
+            city: "Ankara", 
+            createdAt: "2024-01-20",
+            user: "tech1@example.com",
+            searchTerm: "washing"
+        },
+        {
+            id: 3,
+            title: "MacBook Pro 13 Fan Temizliği",
+            category: "Bilgisayar",
+            city: "İzmir",
+            createdAt: "2024-01-25",
+            user: "test@example.com",
+            searchTerm: "macbook"
+        },
+        {
+            id: 4,
+            title: "Samsung 55Q90T TV Backlight Sorunu",
+            category: "Televizyon",
+            city: "Bursa",
+            createdAt: "2024-02-01",
+            user: "tech2@example.com",
+            searchTerm: "tv"
+        },
+        {
+            id: 5,
+            title: "Siemens Buzdolabı Termostat Değişimi",
+            category: "Beyaz Eşya", 
+            city: "Antalya",
+            createdAt: "2024-02-05",
+            user: "tech1@example.com",
+            searchTerm: "refrigerator"
+        },
+        {
+            id: 6,
+            title: "Gaming PC Grafik Kartı Tamiri",
+            category: "Bilgisayar",
+            city: "İstanbul",
+            createdAt: "2024-02-10",
+            user: "test@example.com",
+            searchTerm: "computer"
+        }
+    ];
+    
+    // Her ilan için varsayılan resim ata
+    for (const template of listingTemplates) {
+        const image = getDefaultImage(template.searchTerm);
+        mockListings.push({
+            ...template,
+            image: image
+        });
+    }
+    
+    // Tüm ilanları birleştir
+    const allListings = [...userListings, ...mockListings];
+    const totalListings = allListings.length;
+    
+    modal.innerHTML = `
+        <div class="modal-content admin-panel-content">
+            <span class="close-button">&times;</span>
+            <div class="admin-panel-header">
+                <div class="profile-avatar">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div>
+                    <h2>Admin Paneli</h2>
+                    <p>Hoş geldiniz, <strong>${user.firstName || user.name || 'Admin'}</strong>! Sistemin genel yönetimini buradan yapabilirsiniz.</p>
+                </div>
+            </div>
+            
+            <div class="admin-stats">
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>${totalUsers}</h3>
+                        <p>Toplam Kullanıcı</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>${totalTechnicians}</h3>
+                        <p>Tamirci</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>${totalCustomers}</h3>
+                        <p>Müşteri</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>${totalAdmins}</h3>
+                        <p>Admin</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>${totalListings}</h3>
+                        <p>Aktif İlan</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="admin-tabs">
+                <button class="admin-tab active" data-tab="users">Kullanıcı Yönetimi</button>
+                <button class="admin-tab" data-tab="listings">İlan Yönetimi</button>
+                <button class="admin-tab" data-tab="settings">Sistem Ayarları</button>
+            </div>
+            
+            <div class="admin-tab-content">
+                <div id="users-tab" class="tab-panel active">
+                    <h3>Kullanıcı Listesi</h3>
+                    <div class="users-table-container">
+                        <table class="users-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Ad Soyad</th>
+                                    <th>E-posta</th>
+                                    <th>Rol</th>
+                                    <th>Kayıt Tarihi</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${allUsers.map(u => `
+                                    <tr data-user-id="${u.id}">
+                                        <td>${u.id}</td>
+                                        <td>${u.firstName && u.lastName ? u.firstName + ' ' + u.lastName : u.name || 'Belirsiz'}</td>
+                                        <td>${u.email}</td>
+                                        <td>
+                                            <select class="role-select" data-user-id="${u.id}">
+                                                <option value="customer" ${(u.role === 'customer' || u.userType === 'customer') ? 'selected' : ''}>Müşteri</option>
+                                                <option value="technician" ${(u.role === 'technician' || u.userType === 'technician') ? 'selected' : ''}>Tamirci</option>
+                                                <option value="admin" ${(u.role === 'admin' || u.userType === 'admin') ? 'selected' : ''}>Admin</option>
+                                            </select>
+                                        </td>
+                                        <td>${u.createdAt ? new Date(u.createdAt).toLocaleDateString('tr-TR') : 'Belirsiz'}</td>
+                                        <td>
+                                            <button class="btn-edit-user" data-user-id="${u.id}">Düzenle</button>
+                                            ${u.id !== user.id ? `<button class="btn-delete-user" data-user-id="${u.id}">Sil</button>` : ''}
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div id="listings-tab" class="tab-panel">
+                    <h3>İlan Listesi</h3>
+                    <div class="listings-table-container">
+                        <table class="listings-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Resim</th>
+                                    <th>Başlık</th>
+                                    <th>Kategori</th>
+                                    <th>Şehir</th>
+                                    <th>Tarih</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${allListings.map(listing => `
+                                    <tr data-listing-id="${listing.id}">
+                                        <td>${listing.id}</td>
+                                        <td><img src="${listing.image || '/images/listings/laptop-fan.jpg'}" alt="${listing.title}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;"></td>
+                                        <td>${listing.title}</td>
+                                        <td>${listing.category}</td>
+                                        <td>${listing.city}</td>
+                                        <td>${new Date(listing.createdAt).toLocaleDateString('tr-TR')}</td>
+                                        <td>
+                                            <button class="btn-view-listing" data-listing-id="${listing.id}">Görüntüle</button>
+                                            <button class="btn-delete-listing" data-listing-id="${listing.id}">Sil</button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div id="settings-tab" class="tab-panel">
+                    <h3>Sistem Ayarları</h3>
+                    <div class="settings-panel">
+                        <div class="setting-group">
+                            <h4>Genel Ayarlar</h4>
+                            <label>
+                                <input type="checkbox" id="maintenance-mode"> Bakım Modu
+                                <small>Sistem bakım modunda açılır</small>
+                            </label>
+                            <label>
+                                <input type="checkbox" id="new-registrations" checked> Yeni Kayıtlar
+                                <small>Yeni kullanıcı kayıtlarına izin ver</small>
+                            </label>
+                        </div>
+                        
+                        <div class="setting-group">
+                            <h4>Veri Yönetimi</h4>
+                            <button class="btn-export-data">Verileri Dışa Aktar</button>
+                            <button class="btn-clear-data">Tüm Verileri Temizle</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Modal kapatma
+    const closeButton = modal.querySelector('.close-button');
+    closeButton.addEventListener('click', function() {
+        document.body.removeChild(modal);
+    });
+    
+    // Tab geçişleri
+    const tabButtons = modal.querySelectorAll('.admin-tab');
+    const tabPanels = modal.querySelectorAll('.tab-panel');
+    
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const targetTab = this.getAttribute('data-tab');
+            
+            // Aktif tab'ı kaldır
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabPanels.forEach(panel => panel.classList.remove('active'));
+            
+            // Yeni tab'ı aktif yap
+            this.classList.add('active');
+            document.getElementById(targetTab + '-tab').classList.add('active');
+        });
+    });
+    
+    // Rol değiştirme
+    const roleSelects = modal.querySelectorAll('.role-select');
+    roleSelects.forEach(select => {
+        select.addEventListener('change', function() {
+            const userId = parseInt(this.getAttribute('data-user-id'));
+            const newRole = this.value;
+            
+            // Kullanıcı rolünü güncelle
+            const users = JSON.parse(localStorage.getItem('local_users') || '[]');
+            const userIndex = users.findIndex(u => u.id === userId);
+            
+            if (userIndex !== -1) {
+                users[userIndex].role = newRole;
+                users[userIndex].userType = newRole;
+                localStorage.setItem('local_users', JSON.stringify(users));
+                
+                // Eğer mevcut kullanıcı ise oturum bilgilerini güncelle
+                if (userId === user.id) {
+                    const currentUser = JSON.parse(localStorage.getItem('user'));
+                    currentUser.role = newRole;
+                    currentUser.userType = newRole;
+                    localStorage.setItem('user', JSON.stringify(currentUser));
+                }
+                
+                alert('Kullanıcı rolü başarıyla güncellendi!');
+            }
+        });
+    });
+    
+    // Kullanıcı düzenleme
+    const editUserButtons = modal.querySelectorAll('.btn-edit-user');
+    editUserButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const userId = parseInt(this.getAttribute('data-user-id'));
+            const users = JSON.parse(localStorage.getItem('local_users') || '[]');
+            const userToEdit = users.find(u => u.id === userId);
+            
+            if (userToEdit) {
+                const newName = prompt('Yeni ad soyad:', userToEdit.firstName && userToEdit.lastName ? 
+                    userToEdit.firstName + ' ' + userToEdit.lastName : userToEdit.name || '');
+                
+                if (newName && newName.trim()) {
+                    const nameParts = newName.trim().split(' ');
+                    if (nameParts.length >= 2) {
+                        userToEdit.firstName = nameParts[0];
+                        userToEdit.lastName = nameParts.slice(1).join(' ');
+                    } else {
+                        userToEdit.name = newName.trim();
+                    }
+                    
+                    // Kullanıcı listesini güncelle
+                    const userIndex = users.findIndex(u => u.id === userId);
+                    users[userIndex] = userToEdit;
+                    localStorage.setItem('local_users', JSON.stringify(users));
+                    
+                    // Eğer mevcut kullanıcı ise oturum bilgilerini güncelle
+                    if (userId === user.id) {
+                        const currentUser = JSON.parse(localStorage.getItem('user'));
+                        if (nameParts.length >= 2) {
+                            currentUser.firstName = nameParts[0];
+                            currentUser.lastName = nameParts.slice(1).join(' ');
+                        } else {
+                            currentUser.name = newName.trim();
+                        }
+                        localStorage.setItem('user', JSON.stringify(currentUser));
+                    }
+                    
+                    // Tablodaki satırı güncelle
+                    const row = modal.querySelector(`tr[data-user-id="${userId}"]`);
+                    if (row) {
+                        const nameCell = row.children[1];
+                        nameCell.textContent = newName.trim();
+                    }
+                    
+                    alert('Kullanıcı bilgileri başarıyla güncellendi!');
+                }
+            }
+        });
+    });
+    
+    // Kullanıcı silme
+    const deleteUserButtons = modal.querySelectorAll('.btn-delete-user');
+    deleteUserButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const userId = parseInt(this.getAttribute('data-user-id'));
+            
+            if (confirm('Bu kullanıcıyı silmek istediğinize emin misiniz?')) {
+                const users = JSON.parse(localStorage.getItem('local_users') || '[]');
+                const filteredUsers = users.filter(u => u.id !== userId);
+                localStorage.setItem('local_users', JSON.stringify(filteredUsers));
+                
+                // Tablodan satırı kaldır
+                const row = modal.querySelector(`tr[data-user-id="${userId}"]`);
+                if (row) row.remove();
+                
+                alert('Kullanıcı başarıyla silindi!');
+            }
+        });
+    });
+    
+    // İlan görüntüleme
+    const viewListingButtons = modal.querySelectorAll('.btn-view-listing');
+    viewListingButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const listingId = this.getAttribute('data-listing-id');
+            window.open(`http://localhost:8002/listing-detail-new.html?id=${listingId}&user=true`, '_blank');
+        });
+    });
+    
+    // İlan silme
+    const deleteListingButtons = modal.querySelectorAll('.btn-delete-listing');
+    deleteListingButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const listingId = parseInt(this.getAttribute('data-listing-id'));
+            
+            if (confirm('Bu ilanı silmek istediğinize emin misiniz?')) {
+                const listings = JSON.parse(localStorage.getItem('user_listings') || '[]');
+                const filteredListings = listings.filter(l => l.id !== listingId);
+                localStorage.setItem('user_listings', JSON.stringify(filteredListings));
+                
+                // Tablodan satırı kaldır
+                const row = modal.querySelector(`tr[data-listing-id="${listingId}"]`);
+                if (row) row.remove();
+                
+                alert('İlan başarıyla silindi!');
+            }
+        });
+    });
+    
+    // Veri dışa aktarma
+    const exportButton = modal.querySelector('.btn-export-data');
+    exportButton.addEventListener('click', function() {
+        const data = {
+            users: JSON.parse(localStorage.getItem('local_users') || '[]'),
+            listings: JSON.parse(localStorage.getItem('user_listings') || '[]'),
+            exportDate: new Date().toISOString()
+        };
+        
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `tamirci-backup-${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+    });
+    
+    // Tüm verileri temizle
+    const clearDataButton = modal.querySelector('.btn-clear-data');
+    clearDataButton.addEventListener('click', function() {
+        if (confirm('TÜM VERİLERİ SİLMEK İSTEDİĞİNİZE EMİN MİSİNİZ? Bu işlem geri alınamaz!')) {
+            if (confirm('Son uyarı: Bu işlem tüm kullanıcıları, ilanları ve ayarları silecek!')) {
+                localStorage.removeItem('local_users');
+                localStorage.removeItem('user_listings');
+                localStorage.removeItem('user');
+                localStorage.removeItem('token');
+                
+                alert('Tüm veriler silindi! Sayfa yeniden yüklenecek.');
+                window.location.reload();
+            }
+        }
+    });
+    
+    // Admin paneli CSS stilleri - Profil tasarımı ile uyumlu
+    const adminStyleElement = document.createElement('style');
+    adminStyleElement.textContent = `
+        .admin-panel-modal .modal-content {
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .admin-panel-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .admin-panel-header .profile-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #e73c33;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 24px;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        .admin-panel-header h2 {
+            margin: 0;
+            color: #333;
+            font-size: 24px;
+        }
+        .admin-panel-header p {
+            margin: 5px 0 0 0;
+            color: #666;
+            font-size: 14px;
+        }
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: #f8f9fa;
+            padding: 25px 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #eee;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .stat-info h3 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+            font-weight: bold;
+        }
+        .stat-info p {
+            margin: 5px 0 0 0;
+            color: #666;
+            font-size: 12px;
+        }
+        .admin-tabs {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+        .admin-tab {
+            padding: 12px 20px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            color: #666;
+            font-weight: 500;
+        }
+        .admin-tab:hover {
+            color: #e73c33;
+        }
+        .admin-tab.active {
+            border-bottom-color: #e73c33;
+            color: #e73c33;
+        }
+        .tab-panel {
+            display: none;
+        }
+        .tab-panel.active {
+            display: block;
+        }
+        .tab-panel h3 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        .users-table-container, .listings-table-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .users-table, .listings-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+        }
+        .users-table th, .users-table td,
+        .listings-table th, .listings-table td {
+            padding: 12px 10px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+        .users-table th, .listings-table th {
+            background: #f8f9fa;
+            font-weight: 500;
+            color: #333;
+        }
+        .users-table tbody tr:hover,
+        .listings-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+        .role-select {
+            padding: 6px 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+            background: white;
+        }
+        .btn-edit-user, .btn-delete-user, .btn-view-listing, .btn-delete-listing {
+            padding: 6px 12px;
+            margin: 0 2px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .btn-edit-user, .btn-view-listing {
+            background: #e73c33;
+            color: white;
+        }
+        .btn-edit-user:hover, .btn-view-listing:hover {
+            background: #c5352e;
+        }
+        .btn-delete-user, .btn-delete-listing {
+            background: transparent;
+            color: #e73c33;
+            border: 1px solid #e73c33;
+        }
+        .btn-delete-user:hover, .btn-delete-listing:hover {
+            background: #e73c33;
+            color: white;
+        }
+        .settings-panel {
+            padding: 0;
+        }
+        .setting-group {
+            margin-bottom: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #f8f9fa;
+        }
+        .setting-group h4 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .setting-group label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #333;
+            cursor: pointer;
+        }
+        .setting-group label input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.1);
+        }
+        .setting-group small {
+            display: block;
+            color: #666;
+            margin-top: 5px;
+            font-size: 12px;
+            margin-left: 25px;
+        }
+        .btn-export-data, .btn-clear-data {
+            padding: 12px 20px;
+            margin: 0 10px 10px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .btn-export-data {
+            background: #e73c33;
+            color: white;
+        }
+        .btn-export-data:hover {
+            background: #c5352e;
+        }
+        .btn-clear-data {
+            background: transparent;
+            color: #e73c33;
+            border: 1px solid #e73c33;
+        }
+        .btn-clear-data:hover {
+            background: #e73c33;
+            color: white;
+        }
+    `;
+    document.head.appendChild(adminStyleElement);
 } 

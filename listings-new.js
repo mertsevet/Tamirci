@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Kullanıcı oturum kontrolü
+    checkUserSession();
+    
     // Sayfa yüklendiğinde çalışacak kodlar
     // Not: Filtreleme işlemleri artık filtreleme_yedek.js'den yönetiliyor
     // initializeFilters();
@@ -1119,12 +1122,18 @@ function loadUserListings() {
 }
 
 function setupListingButtons() {
+    console.log('=== setupListingButtons fonksiyonu çalışıyor ===');
+    
     // Mevcut sistem ilanlarının incele butonlarını aktifleştir
     const listingCards = document.querySelectorAll('.listing-card');
+    console.log('Toplam ilan kartı sayısı:', listingCards.length);
     
-    listingCards.forEach((card) => {
+    listingCards.forEach((card, index) => {
         const viewButton = card.querySelector('.listing-button');
         const badge = card.querySelector('[style*="BENİM İLANIM"]');
+        const dataId = card.getAttribute('data-id') || card.dataset.id;
+        
+        console.log(`İlan ${index + 1}: ID=${dataId}, Badge=${!!badge}, Button=${!!viewButton}`);
         
         // Eğer "BENİM İLANIM" rozeti yoksa sistem ilanıdır
         if (!badge && viewButton && !viewButton.dataset.eventAdded) {
@@ -1132,13 +1141,406 @@ function setupListingButtons() {
                 e.preventDefault();
                 // data-id attribute'undan gerçek ID'yi al
                 const listingId = card.getAttribute('data-id') || card.dataset.id;
+                console.log(`=== İlan tıklandı: ID=${listingId} ===`);
+                
                 if (listingId) {
-                    window.open(`listing-detail-new.html?id=${listingId}&user=false`, '_blank');
+                    const detailURL = `listing-detail-new.html?id=${listingId}&user=false`;
+                    console.log('Yönlendirilecek URL:', detailURL);
+                    window.open(detailURL, '_blank');
                 } else {
                     console.error('İlan ID\'si bulunamadı:', card);
                 }
             });
             viewButton.dataset.eventAdded = 'true';
+            console.log(`İlan ${index + 1} için event listener eklendi`);
         }
     });
+    
+    console.log('=== setupListingButtons tamamlandı ===');
 }
+
+// İlanlar için otomatik resim sistemi
+function getListingImage(category, title) {
+    // Kategori ve başlığa göre uygun resim döndür
+    const imageMappings = {
+        'telefon': '/images/listings/iphone-tamiri.jpg',
+        'bilgisayar': '/images/listings/laptop-fan.jpg',
+        'beyaz eşya': '/images/listings/camasir-makinesi.jpg',
+        'televizyon': '/images/listings/samsung-tv.jpg'
+    };
+    
+    // Başlık kontrolü
+    const titleLower = title.toLowerCase();
+    if (titleLower.includes('iphone') || titleLower.includes('telefon') || titleLower.includes('mobil')) {
+        return '/images/listings/iphone-tamiri.jpg';
+    }
+    if (titleLower.includes('macbook') || titleLower.includes('laptop') || titleLower.includes('bilgisayar') || titleLower.includes('pc')) {
+        return '/images/listings/laptop-fan.jpg';
+    }
+    if (titleLower.includes('çamaşır') || titleLower.includes('buzdolabı') || titleLower.includes('bulaşık')) {
+        if (titleLower.includes('buzdolabı')) {
+            return '/images/listings/buzdolabi.jpg';
+        }
+        return '/images/listings/camasir-makinesi.jpg';
+    }
+    if (titleLower.includes('tv') || titleLower.includes('televizyon') || titleLower.includes('samsung')) {
+        return '/images/listings/samsung-tv.jpg';
+    }
+    if (titleLower.includes('gaming') || titleLower.includes('masaüstü')) {
+        return '/images/listings/masaustu-pc.jpg';
+    }
+    
+    // Kategori kontrolü
+    const categoryLower = category.toLowerCase();
+    return imageMappings[categoryLower] || '/images/listings/laptop-fan.jpg';
+}
+
+// Mock ilanları için resimli veriler oluştur
+function createMockListings() {
+    const mockData = [
+        {
+            id: 1,
+            title: "iPhone 12 Pro Ekran Değişimi",
+            category: "Telefon",
+            description: "Ekranım kırıldı, değiştirilmesi gerekiyor. Orijinal parça kullanılmasını istiyorum.",
+            location: "İstanbul, Kadıköy",
+            price: "800",
+            urgency: "urgent",
+            user: "Ahmet Y.",
+            date: "2024-01-15"
+        },
+        {
+            id: 2,
+            title: "MacBook Pro 13 Fan Temizliği",
+            category: "Bilgisayar", 
+            description: "Laptopum çok ısınıyor ve fan sesi geliyor. Temizlik ve bakım gerekiyor.",
+            location: "Ankara, Çankaya",
+            price: "200",
+            urgency: "normal",
+            user: "Zeynep K.",
+            date: "2024-01-16"
+        },
+        {
+            id: 3,
+            title: "Samsung Q90T TV Backlight Sorunu",
+            category: "Televizyon",
+            description: "TV'min yarısı karanlık görünüyor. Backlight sorunu olduğunu düşünüyorum.",
+            location: "İzmir, Bornova",
+            price: "500",
+            urgency: "normal",
+            user: "Mehmet A.",
+            date: "2024-01-17"
+        },
+        {
+            id: 4,
+            title: "Bosch Çamaşır Makinesi Motor Tamiri",
+            category: "Beyaz Eşya",
+            description: "Çamaşır makinesi çalışmıyor, motor sorunu var gibi.",
+            location: "Bursa, Nilüfer",
+            price: "400",
+            urgency: "urgent",
+            user: "Fatma S.",
+            date: "2024-01-18"
+        },
+        {
+            id: 5,
+            title: "Gaming PC Grafik Kartı Tamiri",
+            category: "Bilgisayar",
+            description: "Oyun oynarken ekran donuyor. Grafik kartında sorun olabilir.",
+            location: "İstanbul, Beşiktaş",
+            price: "600",
+            urgency: "normal",
+            user: "Can D.",
+            date: "2024-01-19"
+        },
+        {
+            id: 6,
+            title: "Siemens Buzdolabı Termostat",
+            category: "Beyaz Eşya", 
+            description: "Buzdolabı soğutmuyor, termostat değişimi gerekiyor.",
+            location: "Antalya, Muratpaşa",
+            price: "250",
+            urgency: "urgent",
+            user: "Ayşe M.",
+            date: "2024-01-20"
+        }
+    ];
+    
+    // Her ilan için resim ekle
+    return mockData.map(listing => ({
+        ...listing,
+        image: getListingImage(listing.category, listing.title)
+    }));
+}
+
+// İlanları HTML'e dönüştür
+function renderListings(listings) {
+    const listingsGrid = document.querySelector('.listings-grid');
+    if (!listingsGrid) return;
+    
+    const listingsHTML = listings.map(listing => `
+        <div class="listing-card" data-category="bilgisayar" data-city="izmir" data-price="${listing.price}" data-id="${listing.id}">
+            <div class="listing-image">
+                <img src="${listing.image}" alt="${listing.title}" onerror="this.src='/images/listings/laptop-fan.jpg'">
+                <span class="listing-category">${listing.category}</span>
+            </div>
+            <div class="listing-content">
+                <div class="listing-header">
+                    <h4>${listing.title}</h4>
+                    <span class="listing-price">₺${listing.price}</span>
+                </div>
+                <p class="listing-description">${listing.description}</p>
+                <div class="listing-meta">
+                    <span><i class="fas fa-map-marker-alt"></i> ${listing.location}</span>
+                    <span><i class="fas fa-clock"></i> ${listing.date}</span>
+                </div>
+                <a href="#" class="listing-button btn-view-listing" data-id="${listing.id}">İncele</a>
+            </div>
+        </div>
+    `).join('');
+    
+    listingsGrid.innerHTML = listingsHTML;
+    
+    // İncele butonlarına event listener ekle
+    setupListingButtons();
+}
+
+// Kullanıcı oturum kontrolü
+function checkUserSession() {
+    const user = localStorage.getItem('user');
+    if (user) {
+        try {
+            const userData = JSON.parse(user);
+            console.log('listings-new.js: Kullanıcı oturumu bulundu:', userData);
+            updateHeaderForLoggedInUser(userData);
+        } catch (e) {
+            console.error('listings-new.js: User data parse error:', e);
+        }
+    } else {
+        console.log('listings-new.js: Kullanıcı oturumu bulunamadı');
+    }
+}
+
+// Header'ı giriş yapan kullanıcı için güncelle
+function updateHeaderForLoggedInUser(user) {
+    console.log('listings-new.js: updateHeaderForLoggedInUser çağrıldı, user:', user);
+    
+    try {
+        const nav = document.querySelector('.main-nav ul');
+        if (!nav) {
+            console.error('listings-new.js: Nav elementi bulunamadı');
+            return;
+        }
+
+        // Giriş ve kayıt butonlarını kaldır
+        const loginButton = document.querySelector('.login-btn');
+        if (loginButton) {
+            console.log('listings-new.js: Login butonu kaldırılıyor');
+            const loginLi = loginButton.closest('li');
+            if (loginLi) {
+                loginLi.remove();
+            }
+        }
+
+        const signupButton = document.querySelector('.signup-btn');
+        if (signupButton) {
+            console.log('listings-new.js: Signup butonu kaldırılıyor');
+            const signupLi = signupButton.closest('li');
+            if (signupLi) {
+                signupLi.remove();
+            }
+        }
+        
+        // Kullanıcı menüsünü ekle (eğer daha önce eklenmemişse)
+        if (!document.querySelector('.user-menu')) {
+            const userMenuItem = document.createElement('li');
+            userMenuItem.classList.add('user-menu');
+            
+            // Kullanıcı rolünü belirle
+            const role = user.role === 'technician' ? 'Tamirci' : 
+                        user.role === 'admin' ? 'Admin' : 'Müşteri';
+            
+            // Profil için baş harfler
+            let initials = '';
+            if (user.firstName && user.lastName) {
+                initials = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`;
+            } else if (user.name) {
+                const nameParts = user.name.split(' ');
+                if (nameParts.length > 1) {
+                    initials = `${nameParts[0].charAt(0)}${nameParts[nameParts.length - 1].charAt(0)}`;
+                } else {
+                    initials = nameParts[0].charAt(0);
+                }
+            } else {
+                initials = user.email.charAt(0).toUpperCase();
+            }
+            
+            // Tam isim oluştur
+            let fullName = '';
+            if (user.firstName && user.lastName) {
+                fullName = `${user.firstName} ${user.lastName}`;
+            } else if (user.name) {
+                fullName = user.name;
+            } else {
+                fullName = user.email.split('@')[0];
+            }
+            
+            // Kullanıcı menüsü HTML'i
+            userMenuItem.innerHTML = `
+                <div class="user-menu-trigger">
+                    <div class="user-avatar-small">
+                        <span>${initials}</span>
+                    </div>
+                    <span>${user.firstName || fullName.split(' ')[0]}</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="user-menu-dropdown">
+                    <div class="user-info">
+                        <div class="user-avatar-large">
+                            <span>${initials}</span>
+                        </div>
+                        <div class="user-details">
+                            <div class="user-name">${fullName}</div>
+                            <div class="user-role">${role}</div>
+                            <div class="user-email">${user.email}</div>
+                        </div>
+                    </div>
+                    <ul>
+                        <li><a href="profile.html#panel" id="panel-link"><i class="fas fa-tachometer-alt"></i> Panel</a></li>
+                        <li><a href="profile.html"><i class="fas fa-user-cog"></i> Profil</a></li>
+                        <li><a href="profile.html#chat" id="chat-link"><i class="fas fa-comments"></i> Sohbet</a></li>
+                        <li><a href="profile.html#offers" id="offers-link"><i class="fas fa-handshake"></i> Teklifler</a></li>
+                        <li><a href="profile.html#notifications" id="notifications-link"><i class="fas fa-bell"></i> Bildirimler</a></li>
+                        ${user.role === 'admin' || user.userType === 'admin' ? '<li class="divider"></li><li><a href="#" id="admin-panel-link"><i class="fas fa-shield-alt"></i> Admin Paneli</a></li>' : ''}
+                        <li class="divider"></li>
+                        <li><a href="#" id="logout-button"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</a></li>
+                    </ul>
+                </div>
+            `;
+            
+            // Menüyü nav içine ekle (ilk sıraya)
+            if (nav.children.length > 0) {
+                nav.insertBefore(userMenuItem, nav.firstChild);
+            } else {
+                nav.appendChild(userMenuItem);
+            }
+            
+            console.log('listings-new.js: Kullanıcı menüsü eklendi');
+            
+            // Event listeners ekle
+            setupUserMenuEventListeners(userMenuItem, user);
+        } else {
+            console.log('listings-new.js: Kullanıcı menüsü zaten mevcut');
+        }
+    } catch (error) {
+        console.error('listings-new.js: updateHeaderForLoggedInUser hatası:', error);
+    }
+}
+
+// Kullanıcı menüsü için event listener'ları ekle
+function setupUserMenuEventListeners(userMenuItem, user) {
+    // Menü açma/kapama
+    const userMenuTrigger = userMenuItem.querySelector('.user-menu-trigger');
+    const userMenuDropdown = userMenuItem.querySelector('.user-menu-dropdown');
+    
+    userMenuTrigger.addEventListener('click', function(e) {
+        e.preventDefault();
+        userMenuDropdown.classList.toggle('active');
+    });
+    
+    // Sayfa herhangi bir yerine tıklandığında menüyü kapat
+    document.addEventListener('click', function(event) {
+        if (!userMenuItem.contains(event.target)) {
+            userMenuDropdown.classList.remove('active');
+        }
+    });
+    
+    // Panel butonuna tıklandığında
+    const panelLink = userMenuItem.querySelector('#panel-link');
+    panelLink.addEventListener('click', function(e) {
+        window.location.href = 'profile.html#panel';
+    });
+    
+    // Sohbet butonuna tıklandığında
+    const chatLink = userMenuItem.querySelector('#chat-link');
+    chatLink.addEventListener('click', function(e) {
+        window.location.href = 'profile.html#chat';
+    });
+    
+    // Teklifler butonuna tıklandığında
+    const offersLink = userMenuItem.querySelector('#offers-link');
+    offersLink.addEventListener('click', function(e) {
+        window.location.href = 'profile.html#offers';
+    });
+    
+    // Bildirimler butonuna tıklandığında
+    const notificationsLink = userMenuItem.querySelector('#notifications-link');
+    notificationsLink.addEventListener('click', function(e) {
+        window.location.href = 'profile.html#notifications';
+    });
+    
+    // Admin paneli butonuna tıklandığında (sadece admin kullanıcılar için)
+    const adminPanelLink = userMenuItem.querySelector('#admin-panel-link');
+    if (adminPanelLink) {
+        adminPanelLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            // script.js'den admin panel fonksiyonunu çağır
+            if (typeof createAdminPanelModal === 'function') {
+                createAdminPanelModal(user);
+            } else {
+                console.error('createAdminPanelModal fonksiyonu bulunamadı');
+            }
+        });
+    }
+    
+    // Çıkış yapma işlevi
+    const logoutButton = userMenuItem.querySelector('#logout-button');
+    logoutButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Local storage'dan kullanıcı bilgilerini temizle
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        
+        // Sayfayı yenile
+        window.location.reload();
+    });
+}
+
+// Sayfa yüklendiğinde çalışacak fonksiyonlar
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('=== Listings sayfa yükleniyor ===');
+    
+    // Kullanıcı oturumunu kontrol et
+    checkUserSession();
+    
+    // Mock ilanları yükle ve göster
+    const mockListings = createMockListings();
+    renderListings(mockListings);
+    
+    // Filtre sistemini başlat
+    initializeFilters();
+    
+    // URL'den arama parametresini kontrol et
+    checkURLSearchParameter();
+    
+    // jQuery'yi yükle ve filtreleme sistemini başlat
+    if (typeof $ === 'undefined') {
+        const script = document.createElement('script');
+        script.src = 'https://code.jquery.com/jquery-3.6.0.min.js';
+        script.onload = function() {
+            // jQuery yüklendiğinde filtreleme sistemini başlat
+            if (typeof loadFilterSystem === 'function') {
+                loadFilterSystem();
+            }
+        };
+        document.head.appendChild(script);
+    } else {
+        // jQuery zaten yüklü, filtreleme sistemini başlat
+        if (typeof loadFilterSystem === 'function') {
+            loadFilterSystem();
+        }
+    }
+    
+    console.log('=== Listings sayfa yükleme tamamlandı ===');
+});

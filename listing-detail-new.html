@@ -825,18 +825,28 @@
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            loadListingDetail();
+            console.log('🔄 DOM yüklendi, 500ms bekleniyor...');
             
-            // Test için basit buton kontrolleri
-            console.log('Sohbet butonu:', document.querySelector('.chat-button'));
-            console.log('Teklif butonu:', document.querySelector('.offer-button'));
+            // DOM tamamen yüklenene kadar bekle
+            setTimeout(function() {
+                console.log('🚀 setTimeout tamamlandı, loadListingDetail başlatılıyor...');
+                loadListingDetail();
+                
+                // Test için basit buton kontrolleri
+                console.log('Sohbet butonu:', document.querySelector('.chat-button'));
+                console.log('Teklif butonu:', document.querySelector('.offer-button'));
+            }, 500);
         });
 
         function loadListingDetail() {
+            console.log('🚀 loadListingDetail başlatıldı');
+            
             // URL'den ilan ID'sini al
             const urlParams = new URLSearchParams(window.location.search);
             const listingId = urlParams.get('id');
             const isUserListing = urlParams.get('user') === 'true';
+            
+            console.log('🔗 URL Parametreleri - ID:', listingId, 'User:', isUserListing, 'Current URL:', window.location.href);
 
             if (!listingId) {
                 alert('İlan bulunamadı!');
@@ -870,11 +880,11 @@
             document.title = `${listing.title} - TAMIRCI`;
 
             // İlan bilgilerini doldur
-            fillListingDetails(listing, isUserListing);
+            fillListingDetails(listing, isUserListing, listingId);
         }
 
-        function fillListingDetails(listing, isUserListing) {
-            console.log('🔍 fillListingDetails çalıştırılıyor:', listing);
+        function fillListingDetails(listing, isUserListing, listingId) {
+            console.log('🔍 fillListingDetails çalıştırılıyor:', listing, 'ListingId:', listingId);
             // Kategori isimleri
             const categoryNames = {
                 'ev_aletleri': 'Ev Aletleri',
@@ -899,15 +909,20 @@
                 'antalya': 'Antalya'
             };
 
-            // Temel bilgileri doldur
-            document.getElementById('listingTitle').textContent = listing.title;
-            document.getElementById('categoryBadge').textContent = categoryNames[listing.category] || listing.category;
-            document.getElementById('listingDescription').textContent = listing.description;
+            // Temel bilgileri doldur  
+            const titleElement = document.getElementById('listingTitle');
+            const categoryElement = document.getElementById('categoryBadge');
+            const descriptionElement = document.getElementById('listingDescription');
+            
+            if (titleElement) titleElement.textContent = listing.title;
+            if (categoryElement) categoryElement.textContent = categoryNames[listing.category] || listing.category;
+            if (descriptionElement) descriptionElement.textContent = listing.description;
 
             // Konum bilgisi
             const cityName = cityNames[listing.city] || listing.city;
             const locationText = listing.district ? `${cityName}, ${listing.district}` : cityName;
-            document.getElementById('locationInfo').textContent = locationText;
+            const locationElement = document.getElementById('locationInfo');
+            if (locationElement) locationElement.textContent = locationText;
 
             // Fiyat bilgisi
             let priceText = '';
@@ -922,7 +937,8 @@
             } else {
                 priceText = 'Belirtilmedi';
             }
-            document.getElementById('priceAmount').textContent = priceText;
+            const priceElement = document.getElementById('priceAmount');
+            if (priceElement) priceElement.textContent = priceText;
 
             // Zaman bilgisi
             if (listing.createdAt) {
@@ -942,16 +958,21 @@
                 } else {
                     timeText = `${diffDays} gün önce`;
                 }
-                document.getElementById('timeInfo').textContent = timeText;
-                document.getElementById('publishDate').textContent = createdDate.toLocaleDateString('tr-TR');
+                const timeElement = document.getElementById('timeInfo');
+                const publishElement = document.getElementById('publishDate');
+                if (timeElement) timeElement.textContent = timeText;
+                if (publishElement) publishElement.textContent = createdDate.toLocaleDateString('tr-TR');
             } else if (listing.time) {
-                document.getElementById('timeInfo').textContent = listing.time;
-                document.getElementById('publishDate').textContent = listing.time;
+                const timeElement = document.getElementById('timeInfo');
+                const publishElement = document.getElementById('publishDate');
+                if (timeElement) timeElement.textContent = listing.time;
+                if (publishElement) publishElement.textContent = listing.time;
             }
 
             // Fotoğraf sayısı
             const photoCount = listing.photos || 1;
-            document.getElementById('photoCount').textContent = photoCount;
+            const photoElement = document.getElementById('photoCount');
+            if (photoElement) photoElement.textContent = photoCount;
 
             // Satıcı bilgilerini doldur
             let sellerName;
@@ -972,39 +993,79 @@
                 sellerName = sellerNames[parseInt(listingId) % sellerNames.length];
             }
             
+            // Güvenlik kontrolü
+            if (!sellerName) {
+                sellerName = 'Anonim Kullanıcı';
+            }
+            
+            console.log('👤 Satıcı adı belirlendi:', sellerName);
             const sellerInitial = sellerName.charAt(0).toUpperCase();
-            document.getElementById('sellerName').textContent = sellerName;
-            document.getElementById('sellerAvatar').textContent = sellerInitial;
+            const sellerNameElement = document.getElementById('sellerName');
+            const sellerAvatarElement = document.getElementById('sellerAvatar');
+            if (sellerNameElement) sellerNameElement.textContent = sellerName;
+            if (sellerAvatarElement) sellerAvatarElement.textContent = sellerInitial;
 
             // Konum detaylarını doldur
-            document.querySelector('#locationDetail').textContent = locationText;
+            const locationDetailElement = document.querySelector('#locationDetail');
+            if (locationDetailElement) locationDetailElement.textContent = locationText;
 
             // Görüntülenme sayısını doldur
-            document.getElementById('viewCount').textContent = `${Math.floor(Math.random() * 50) + 1} kez`;
+            const viewCountElement = document.getElementById('viewCount');
+            if (viewCountElement) viewCountElement.textContent = `${Math.floor(Math.random() * 50) + 1} kez`;
 
             // Resmi güncelle
             if (listing.image) {
                 const imagePath = `images/listings/${listing.image}`;
                 console.log('🖼️ Resim güncelleniyor:', imagePath);
-                document.getElementById('listingImage').src = imagePath;
-                document.getElementById('thumbnail1').src = imagePath;
-                document.getElementById('thumbnail2').src = imagePath;
-                document.getElementById('thumbnail3').src = imagePath;
-                document.getElementById('thumbnail4').src = imagePath;
+                
+                const listingImage = document.getElementById('listingImage');
+                const thumbnail1 = document.getElementById('thumbnail1');
+                const thumbnail2 = document.getElementById('thumbnail2');
+                const thumbnail3 = document.getElementById('thumbnail3');
+                const thumbnail4 = document.getElementById('thumbnail4');
+                
+                if (listingImage) listingImage.src = imagePath;
+                if (thumbnail1) thumbnail1.src = imagePath;
+                if (thumbnail2) thumbnail2.src = imagePath;
+                if (thumbnail3) thumbnail3.src = imagePath;
+                if (thumbnail4) thumbnail4.src = imagePath;
             }
 
             // Marka, model ve özellik bilgilerini güncelle
-            if (listing.brand) {
-                console.log('🏷️ Marka güncelleniyor:', listing.brand);
-                document.getElementById('brandName').textContent = listing.brand;
+            console.log('🔧 Element güncellemeleri başlıyor...');
+            
+            const brandElement = document.getElementById('brandName');
+            const modelElement = document.getElementById('modelName');
+            const featureElement = document.getElementById('featureInfo');
+            
+            console.log('📋 Element kontrolleri:', {
+                brandElement: !!brandElement,
+                modelElement: !!modelElement,
+                featureElement: !!featureElement
+            });
+            
+            if (listing.brand && brandElement) {
+                console.log('🏷️ Marka güncelleniyor:', listing.brand, 'Önceki değer:', brandElement.textContent);
+                brandElement.textContent = listing.brand;
+                console.log('🏷️ Marka güncellendi, Yeni değer:', brandElement.textContent);
+            } else {
+                console.log('❌ Marka güncellenemedi - Brand:', listing.brand, 'Element:', !!brandElement);
             }
-            if (listing.model) {
-                console.log('📱 Model güncelleniyor:', listing.model);
-                document.getElementById('modelName').textContent = listing.model;
+            
+            if (listing.model && modelElement) {
+                console.log('📱 Model güncelleniyor:', listing.model, 'Önceki değer:', modelElement.textContent);
+                modelElement.textContent = listing.model;
+                console.log('📱 Model güncellendi, Yeni değer:', modelElement.textContent);
+            } else {
+                console.log('❌ Model güncellenemedi - Model:', listing.model, 'Element:', !!modelElement);
             }
-            if (listing.feature) {
-                console.log('⚙️ Özellik güncelleniyor:', listing.feature);
-                document.getElementById('featureInfo').textContent = listing.feature;
+            
+            if (listing.feature && featureElement) {
+                console.log('⚙️ Özellik güncelleniyor:', listing.feature, 'Önceki değer:', featureElement.textContent);
+                featureElement.textContent = listing.feature;
+                console.log('⚙️ Özellik güncellendi, Yeni değer:', featureElement.textContent);
+            } else {
+                console.log('❌ Özellik güncellenemedi - Feature:', listing.feature, 'Element:', !!featureElement);
             }
 
             // Buton davranışlarını ayarla
@@ -1034,6 +1095,8 @@
         }
 
         function createMockListing(id) {
+            console.log('🔍 createMockListing çağrıldı, ID:', id, 'Type:', typeof id);
+            
             // Varsayılan ilanlar için mock data oluştur - listings.html'deki tüm ilanları kapsar
             const mockListings = [
                 {
@@ -1220,8 +1283,14 @@
 
             // ID'yi number'a çevir ki karşılaştırma doğru çalışsın
             const numericId = parseInt(id);
+            console.log('🔍 Aranacak ID:', numericId);
             const foundListing = mockListings.find(l => l.id === numericId);
-            return foundListing || mockListings[0];
+            console.log('🔍 Bulunan ilan:', foundListing ? foundListing.title : 'Bulunamadı');
+            
+            const result = foundListing || mockListings[0];
+            console.log('🔍 Döndürülen ilan:', result.title, 'Brand:', result.brand, 'Model:', result.model);
+            
+            return result;
         }
 
         function deleteListing(listingId) {
