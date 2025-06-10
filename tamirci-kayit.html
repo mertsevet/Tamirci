@@ -350,6 +350,43 @@
             border-color: #c8e1fb;
             color: #1a73e8;
         }
+
+        /* Loading animasyonu ve disabled durum stilleri */
+        .login-button {
+            position: relative;
+        }
+
+        .login-button:disabled {
+            background-color: #ccc !important;
+            cursor: not-allowed !important;
+            opacity: 0.6;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+            vertical-align: middle;
+            display: none;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .login-button.loading .spinner {
+            display: inline-block;
+        }
+
+        .login-button.loading {
+            background-color: #999 !important;
+            cursor: not-allowed !important;
+        }
     </style>
 </head>
 <body class="login-page">
@@ -520,6 +557,20 @@
             const form = document.getElementById('technicianRegisterForm');
             const submitButton = document.querySelector('.login-button');
             
+            // Debug: Buton durumunu kontrol et
+            console.log('Tamirci kayıt: Buton durumu:', {
+                disabled: submitButton.disabled,
+                innerHTML: submitButton.innerHTML,
+                className: submitButton.className,
+                style: submitButton.style.cssText
+            });
+            
+            // Butonun aktif olduğundan emin ol
+            submitButton.disabled = false;
+            submitButton.style.backgroundColor = '';
+            submitButton.style.cursor = '';
+            console.log('Tamirci kayıt: Buton aktif hale getirildi');
+            
             // Form gönderme
             form.addEventListener('submit', async function(event) {
                 event.preventDefault();
@@ -604,6 +655,7 @@
                         phone,
                         password, // Güvenli olmasa da test amaçlı şifreyi localStorage'da saklıyoruz
                         role: 'technician',
+                        userType: 'tamirci', // Türkçe kullanıcı tipi eklendi
                         expertise,
                         createdAt: new Date().toISOString()
                     };
@@ -629,8 +681,33 @@
                     const userToStore = { ...userData };
                     delete userToStore.password; // Şifreyi client tarafında saklamayalım
                     
+                    // Debug: Kullanıcı verisini kontrol et
+                    console.log('🔥 Tamirci kayıt - userData:', userData);
+                    console.log('🔥 Tamirci kayıt - userToStore:', userToStore);
+                    console.log('🔥 Tamirci kayıt - userType:', userToStore.userType);
+                    console.log('🔥 Tamirci kayıt - role:', userToStore.role);
+                    
                     localStorage.setItem('token', token);
                     localStorage.setItem('user', JSON.stringify(userToStore));
+                    
+                    // Ekstra: local_users'a da ekle (auth.js ile uyumlu olması için)
+                    const localUsers = JSON.parse(localStorage.getItem('local_users') || '[]');
+                    
+                    // Aynı email'le kayıtlı kullanıcı varsa güncelle, yoksa ekle
+                    const existingUserIndex = localUsers.findIndex(u => u.email === userToStore.email);
+                    if (existingUserIndex !== -1) {
+                        localUsers[existingUserIndex] = userToStore;
+                        console.log('🔥 Mevcut kullanıcı güncellendi');
+                    } else {
+                        localUsers.push(userToStore);
+                        console.log('🔥 Yeni kullanıcı eklendi');
+                    }
+                    
+                    localStorage.setItem('local_users', JSON.stringify(localUsers));
+                    
+                    console.log('🔥 localStorage.setItem tamamlandı');
+                    console.log('🔥 Kontrol - localStorage user:', localStorage.getItem('user'));
+                    console.log('🔥 Kontrol - localStorage local_users:', localStorage.getItem('local_users'));
                     
                     // Başarılı mesajı
                     showSuccessAlert('Kaydınız başarıyla tamamlandı! Profiliniz incelendikten sonra onaylanacaktır.');

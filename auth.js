@@ -132,7 +132,9 @@ window.loginUser = async function(email, password) {
             localStorage.setItem('user', JSON.stringify(userWithoutPassword));
             localStorage.setItem('token', generateToken());
             
-            console.log('Giriş başarılı, kullanıcı bilgileri:', userWithoutPassword);
+            console.log('🔥 Giriş başarılı, kullanıcı bilgileri:', userWithoutPassword);
+            console.log('🔥 UserType:', userWithoutPassword.userType);
+            console.log('🔥 Role:', userWithoutPassword.role);
             
             return { success: true, user: userWithoutPassword };
         }

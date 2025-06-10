@@ -223,6 +223,17 @@
         .login-button.loading .spinner {
             display: inline-block;
         }
+
+        .login-button:disabled {
+            background-color: #ccc !important;
+            cursor: not-allowed !important;
+            opacity: 0.6;
+        }
+
+        .login-button.loading {
+            background-color: #999 !important;
+            cursor: not-allowed !important;
+        }
         
         /* Alert stilleri */
         .alert {
@@ -348,6 +359,14 @@
             // Form elemanları
             const form = document.getElementById('registerForm');
             const submitButton = document.querySelector('.login-button');
+            
+            // Debug: Buton durumunu kontrol et
+            console.log('Müşteri kayıt: Buton durumu:', {
+                disabled: submitButton.disabled,
+                innerHTML: submitButton.innerHTML,
+                className: submitButton.className,
+                style: submitButton.style.cssText
+            });
             
             // Şifre eşleşme kontrolü
             form.addEventListener('submit', async function(event) {

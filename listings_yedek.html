@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TAMIRCI - İlanlar</title>
-    <link rel="stylesheet" href="styles.css?v=3.8">
-    <link rel="stylesheet" href="black-cursor.css?v=3.8">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="black-cursor.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -107,7 +107,7 @@
                     <div class="listings-top-bar">
                         <div class="listings-search">
                             <input type="text" id="searchInput" placeholder="İlanlarda ara...">
-                            <button class="search-button"><i class="fas fa-search"></i> Ara</button>
+                            <button class="search-button"><i class="fas fa-search"></i></button>
                         </div>
                         <div class="listings-sort-container">
                             <label for="listings-sort">Sırala:</label>
@@ -120,8 +120,11 @@
                         </div>
                     </div>
                     
-                    <div class="filter-tags-container" style="display: none;">
+                    <div class="filter-tags-container">
                         <div class="active-filters">
+                            <span class="filter-tag">Bilgisayar <i class="fas fa-times"></i></span>
+                            <span class="filter-tag">İstanbul <i class="fas fa-times"></i></span>
+                            <span class="filter-tag">₺100 - ₺1000 <i class="fas fa-times"></i></span>
                             <span class="filter-tag clear-all">Tümünü Temizle</span>
                         </div>
                     </div>
@@ -473,10 +476,10 @@
         </div>
     </footer>
 
-    <!-- FILTRELEME SISTEMİ SADECE CSS İÇİN AKTİF -->
-    <script src="filtreleme_yedek.js?v=3.8"></script>
-    <script src="auth.js?v=3.8"></script>
-    <script src="listings-new.js?v=3.8"></script>
+    <!-- FILTRELEME SISTEMİ GEÇİCİ OLARAK DEVRE DIŞI -->
+    <!-- <script src="filtreleme_yedek.js?v=1.6"></script> -->
+    <script src="auth.js?v=1.6"></script>
+    <script src="listings-new.js?v=1.6"></script>
     
     <script>
     // Kullanıcı oturumunu kontrol et

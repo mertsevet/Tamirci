@@ -237,6 +237,13 @@
         }
 
 
+        .action-buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
         .chat-button, .offer-button {
             width: 100%;
             padding: 12px;
@@ -245,7 +252,6 @@
             font-size: 14px;
             font-weight: bold;
             cursor: pointer;
-            margin-bottom: 10px;
             transition: all 0.2s;
         }
 
@@ -263,6 +269,7 @@
         .offer-button {
             background: #ff4757;
             color: white;
+            display: none; /* Başlangıçta gizli, JavaScript ile gösterilecek */
         }
 
         .offer-button:hover {
@@ -654,12 +661,14 @@
                                     </div>
                                 </div>
                                 
-                                <button class="chat-button" onclick="openChatModal()">
-                                    <i class="fas fa-comment"></i> Sohbet Et
-                                </button>
-                                <button class="offer-button" onclick="checkAndOpenOffer()">
-                                    <i class="fas fa-handshake"></i> Teklif Ver
-                                </button>
+                                <div class="action-buttons-container">
+                                    <button class="chat-button" onclick="openChatModal()">
+                                        <i class="fas fa-comment"></i> Sohbet Et
+                                    </button>
+                                    <button class="offer-button" onclick="checkAndOpenOffer()">
+                                        <i class="fas fa-handshake"></i> Teklif Ver
+                                    </button>
+                                </div>
 
                                 <div class="location-links">
                                     <a href="#" class="location-link">
@@ -1027,9 +1036,10 @@
                         deleteListing(listing.id);
                     }
                 };
-            } else {
+                                        } else {
                 // Sistem ilanı - kullanıcı tipini kontrol et
-                setTimeout(checkUserTypeAndSetupButtons, 100);
+                // Hemen kontrol et, timeout kullanma
+                checkUserTypeAndSetupButtons();
             }
         }
 
@@ -1234,28 +1244,147 @@
         }
 
         function checkUserTypeAndSetupButtons() {
-            // Kullanıcı bilgilerini localStorage'dan al
-            const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
-            const userType = loggedInUser.userType;
-
-            // Teklif ver butonu - sadece tamirci üyeler için göster
-            if (userType !== 'tamirci') {
-                // Müşteri ise teklif ver butonunu gizle
-                const offerButton = document.querySelector('.offer-button');
-                if (offerButton) {
-                    offerButton.style.display = 'none';
+            // Kullanıcı bilgilerini localStorage'dan al - farklı key'leri kontrol et
+            let loggedInUser = JSON.parse(localStorage.getItem('user') || '{}');
+            if (!loggedInUser.userType) {
+                loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+            }
+            
+            console.log('🔍 localStorage.getItem("user"):', localStorage.getItem('user'));
+            console.log('🔍 localStorage.getItem("loggedInUser"):', localStorage.getItem('loggedInUser'));
+            console.log('🔍 localStorage.getItem("token"):', localStorage.getItem('token'));
+            console.log('🔍 localStorage.getItem("registered_users"):', localStorage.getItem('registered_users'));
+            console.log('🔍 localStorage.getItem("local_users"):', localStorage.getItem('local_users'));
+            
+            // Eğer user bilgisi yoksa farklı key'leri deneyelim
+            if (!loggedInUser.userType && !loggedInUser.role) {
+                // registered_users'dan kontrol et
+                const registeredUsers = JSON.parse(localStorage.getItem('registered_users') || '[]');
+                const localUsers = JSON.parse(localStorage.getItem('local_users') || '[]');
+                console.log('🔍 Kayıtlı kullanıcılar:', registeredUsers);
+                console.log('🔍 Local kullanıcılar:', localUsers);
+                
+                // Token varsa eşleşen kullanıcıyı bul
+                const token = localStorage.getItem('token');
+                if (token && localUsers.length > 0) {
+                    // En son giriş yapan kullanıcıyı al (geçici çözüm)
+                    loggedInUser = localUsers[localUsers.length - 1];
+                    console.log('🔍 Local users\'dan alınan kullanıcı:', loggedInUser);
                 }
             }
+            
+            // userType'ı yeniden hesapla
+            let userType = loggedInUser.userType || loggedInUser.role;
+            if (!userType && loggedInUser.email) {
+                // Eğer expertise varsa tamirci
+                if (loggedInUser.expertise && loggedInUser.expertise.length > 0) {
+                    userType = 'tamirci';
+                    console.log('🔍 Expertise\'e göre tamirci olarak belirlendi');
+                }
+                // Eğer role technician ise
+                if (loggedInUser.role === 'technician') {
+                    userType = 'tamirci';
+                    console.log('🔍 Role\'e göre tamirci olarak belirlendi');
+                }
+            }
+            
+            console.log('checkUserTypeAndSetupButtons - Kullanıcı bilgileri:', {
+                user: loggedInUser,
+                userType: userType,
+                role: loggedInUser.role
+            });
+
+            // Teklif ver butonu - sadece tamirci üyeler için göster
+            const offerButton = document.querySelector('.offer-button');
+            console.log('🔍 Debug - Buton elementi:', offerButton);
+            console.log('🔍 Debug - Kullanıcı tipi:', userType);
+            console.log('🔍 Debug - userType === "tamirci"?', userType === 'tamirci');
+            console.log('🔍 Debug - userType === "technician"?', userType === 'technician');
+            
+            // TEST: Butonun her zaman görünür olması için
+            if (offerButton) {
+                offerButton.style.display = 'block';
+                console.log('🧪 TEST - Buton her zaman görünür yapıldı');
+                console.log('🧪 Kullanıcı tipine göre karar:', {
+                    userType: userType,
+                    'tamirci eşit mi?': userType === 'tamirci',
+                    'technician eşit mi?': userType === 'technician',
+                    'Tamirci eşit mi?': userType === 'Tamirci'
+                });
+            } else {
+                console.log('❌ Offer button elementi bulunamadı!');
+            }
+            
+            // // Farklı tamirci tiplerini kontrol et
+            // if (userType === 'tamirci' || userType === 'technician' || userType === 'Tamirci') {
+            //     // Tamirci ise butonu göster
+            //     if (offerButton) {
+            //         offerButton.style.display = 'block';
+            //         console.log('✅ Teklif Ver butonu gösterildi - Kullanıcı tipi:', userType);
+            //     } else {
+            //         console.log('❌ Offer button elementi bulunamadı!');
+            //     }
+            // } else {
+            //     // Müşteri ise teklif ver butonunu gizle
+            //     if (offerButton) {
+            //         offerButton.style.display = 'none';
+            //         console.log('❌ Teklif Ver butonu gizlendi - Kullanıcı tipi:', userType);
+            //     }
+            // }
         }
 
         function checkAndOpenOffer() {
-            // Kullanıcı bilgilerini localStorage'dan al
-            const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
-            const userType = loggedInUser.userType;
+            console.log('🔥 checkAndOpenOffer() çağrıldı');
+            
+            // Aynı logikle kullanıcı bilgilerini al
+            let loggedInUser = JSON.parse(localStorage.getItem('user') || '{}');
+            if (!loggedInUser.userType) {
+                loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+            }
+            
+            // Eğer user bilgisi yoksa farklı key'leri deneyelim
+            if (!loggedInUser.userType && !loggedInUser.role) {
+                // local_users'dan kontrol et
+                const localUsers = JSON.parse(localStorage.getItem('local_users') || '[]');
+                console.log('🔥 checkAndOpenOffer - local_users:', localUsers);
+                
+                // Token varsa eşleşen kullanıcıyı bul
+                const token = localStorage.getItem('token');
+                if (token && localUsers.length > 0) {
+                    // En son giriş yapan kullanıcıyı al (geçici çözüm)
+                    loggedInUser = localUsers[localUsers.length - 1];
+                    console.log('🔥 checkAndOpenOffer - Local users\'dan alınan kullanıcı:', loggedInUser);
+                }
+            }
+            
+            // userType'ı yeniden hesapla
+            let userType = loggedInUser.userType || loggedInUser.role;
+            if (!userType && loggedInUser.email) {
+                // Eğer expertise varsa tamirci
+                if (loggedInUser.expertise && loggedInUser.expertise.length > 0) {
+                    userType = 'tamirci';
+                    console.log('🔥 checkAndOpenOffer - Expertise\'e göre tamirci olarak belirlendi');
+                }
+                // Eğer role technician ise
+                if (loggedInUser.role === 'technician') {
+                    userType = 'tamirci';
+                    console.log('🔥 checkAndOpenOffer - Role\'e göre tamirci olarak belirlendi');
+                }
+            }
+            
+            console.log('🔥 checkAndOpenOffer - Final userType:', userType);
+            console.log('🔥 checkAndOpenOffer - userType === "tamirci"?', userType === 'tamirci');
+            console.log('🔥 checkAndOpenOffer - Kullanıcı bilgileri:', {
+                user: loggedInUser,
+                userType: userType,
+                role: loggedInUser.role
+            });
 
-            if (userType === 'tamirci') {
+            if (userType === 'tamirci' || userType === 'technician' || userType === 'Tamirci') {
+                console.log('✅ Teklif modalı açılıyor');
                 openOfferModal();
             } else {
+                console.log('❌ Tamirci değil, alert gösteriliyor. UserType:', userType);
                 alert('Teklif vermek için tamirci üyesi olmanız gerekiyor!');
             }
         }

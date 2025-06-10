@@ -1,4 +1,4 @@
-// Sayfa yüklendiğinde çalışacak
+// Sayfa yüklendiğinde çalışacak - Son güncelleme: 12:13
 document.addEventListener('DOMContentLoaded', function() {
     // API URL
     const API_URL = 'http://localhost:3001';
@@ -7,42 +7,47 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Sayfa yüklendi, kullanıcı oturumu kontrol ediliyor...');
     checkUserSession();
 
-    // Arama çubuğu işlevselliği
+    // Arama çubuğu işlevselliği (sadece anasayfada)
     const searchInput = document.querySelector('.search-bar input');
     const searchButton = document.querySelector('.search-button');
     
-    searchButton.addEventListener('click', function() {
-        const searchValue = searchInput.value.trim();
-        if (searchValue) {
-            // İlanlar sayfasına yönlendir ve arama terimini parametre olarak gönder
-            window.location.href = 'listings.html?search=' + encodeURIComponent(searchValue);
-        } else {
-            alert('Lütfen aramak istediğiniz hizmeti girin.');
-        }
-    });
-    
-    // Enter tuşu ile arama yapma
-    searchInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            searchButton.click();
-        }
-    });
-    
-    // Servis ikonlarına tıklama işlevselliği
-    const serviceIcons = document.querySelectorAll('.service-icon');
-    serviceIcons.forEach(icon => {
-        icon.addEventListener('click', function() {
-            const service = this.querySelector('span').textContent;
-            console.log(`${service} seçildi`);
-            alert(`${service} kategorisindeki tamirciler listeleniyor...`);
-            // Gerçek uygulamada ilgili servis sayfasına yönlendirme yapılabilir
-            // window.location.href = 'tamirciler.html?kategori=' + encodeURIComponent(service);
+    if (searchInput && searchButton) {
+        searchButton.addEventListener('click', function() {
+            const searchValue = searchInput.value.trim();
+            if (searchValue) {
+                // İlanlar sayfasına yönlendir ve arama terimini parametre olarak gönder
+                window.location.href = 'listings.html?search=' + encodeURIComponent(searchValue);
+            } else {
+                alert('Lütfen aramak istediğiniz hizmeti girin.');
+            }
         });
-    });
+        
+        // Enter tuşu ile arama yapma
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchButton.click();
+            }
+        });
+    }
+    
+    // Servis ikonlarına tıklama işlevselliği (sadece anasayfada)
+    const serviceIcons = document.querySelectorAll('.service-icon');
+    if (serviceIcons.length > 0) {
+        serviceIcons.forEach(icon => {
+            icon.addEventListener('click', function() {
+                const service = this.querySelector('span').textContent;
+                console.log(`${service} seçildi`);
+                alert(`${service} kategorisindeki tamirciler listeleniyor...`);
+                // Gerçek uygulamada ilgili servis sayfasına yönlendirme yapılabilir
+                // window.location.href = 'tamirciler.html?kategori=' + encodeURIComponent(service);
+            });
+        });
+    }
     
     // Sayfa kaydırma animasyonu
     function smoothScroll(target, duration) {
         const targetElement = document.querySelector(target);
+        if (!targetElement) return; // Element yoksa fonksiyonu sonlandır
         const targetPosition = targetElement.getBoundingClientRect().top;
         const startPosition = window.pageYOffset;
         let startTime = null;
