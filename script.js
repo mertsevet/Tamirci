@@ -44,6 +44,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Ana sayfadaki öne çıkan ilanlar için İncele butonları
+    setupFeaturedListingsButtons();
+    
     // Sayfa kaydırma animasyonu
     function smoothScroll(target, duration) {
         const targetElement = document.querySelector(target);
@@ -1922,3 +1925,44 @@ function createAdminPanelModal(user) {
     `;
     document.head.appendChild(adminStyleElement);
 } 
+
+// Ana sayfadaki öne çıkan ilanlar için İncele butonları
+function setupFeaturedListingsButtons() {
+    console.log('🔍 Ana sayfa için İncele butonları ayarlanıyor...');
+    
+    // Sadece .featured-listings içindeki butonları seç
+    const featuredSection = document.querySelector('.featured-listings');
+    if (!featuredSection) {
+        console.log('❌ Featured listings section bulunamadı');
+        return;
+    }
+    
+    // Global event delegation for featured listings
+    featuredSection.addEventListener('click', function(event) {
+        // Sadece "İncele" butonlarını yakala
+        if (event.target.classList.contains('listing-button') || 
+            (event.target.tagName === 'A' && event.target.textContent.trim() === 'İncele')) {
+            
+            event.preventDefault();
+            
+            // En yakın listing card'ı bul
+            const listingCard = event.target.closest('.listing-card');
+            if (listingCard) {
+                const listingId = listingCard.getAttribute('data-id');
+                console.log(`🔥 Ana sayfa İncele butonuna tıklandı - Listing ID: ${listingId}`);
+                
+                if (listingId) {
+                    const detailUrl = `listing-detail-new.html?id=${listingId}&user=false`;
+                    console.log(`🔍 Yönlendiriliyor: ${detailUrl}`);
+                    window.location.href = detailUrl;
+                } else {
+                    console.error('❌ Listing ID bulunamadı!');
+                }
+            } else {
+                console.error('❌ Listing card bulunamadı!');
+            }
+        }
+    });
+    
+    console.log('✅ Ana sayfa İncele butonları başarıyla ayarlandı');
+}
