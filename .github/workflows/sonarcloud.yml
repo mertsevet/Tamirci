@@ -1,0 +1,34 @@
+name: SonarCloud Analysis
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  sonarcloud:
+    name: SonarCloud Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=mertsevet_Tamirci
+            -Dsonar.organization=mertsevet
+            -Dsonar.sources=.
+            -Dsonar.exclusions=**/*.jpg,**/*.png,**/*.gif,**/*.svg,**/*.ico,**/*.pdf,**/*.mp4,**/*.avi
+            -Dsonar.javascript.file.suffixes=.js
+            -Dsonar.css.file.suffixes=.css
+            -Dsonar.html.file.suffixes=.html
+            -Dsonar.python.file.suffixes=.py 
